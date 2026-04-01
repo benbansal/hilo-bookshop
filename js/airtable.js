@@ -19,8 +19,8 @@ async function airtableFetch(table, params = {}) {
     const res = await fetch(url.toString());
 
     if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(`API error ${res.status}: ${err.error || res.statusText}`);
+      const text = await res.text();
+      throw new Error(`API error ${res.status}: ${text}`);
     }
 
     const data = await res.json();
@@ -38,9 +38,9 @@ export async function getBooks(options = {}) {
   };
 
   if (options.featured) {
-    params.filterByFormula = `AND({Featured}=TRUE(), {In Stock}=TRUE())`;
+    params.filterByFormula = `AND({Featured}, {In Stock})`;
   } else if (options.inStock) {
-    params.filterByFormula = `{In Stock}=TRUE()`;
+    params.filterByFormula = `{In Stock}`;
   } else if (options.thread) {
     params.filterByFormula = `FIND("${options.thread}", ARRAYJOIN({Thread}))`;
   } else if (options.category) {
@@ -67,8 +67,8 @@ export async function getEvents(options = {}) {
   const params = {
     sort: JSON.stringify([{ field: 'Date', direction: 'asc' }]),
     filterByFormula: options.past
-      ? `AND({Active}=TRUE(), {Date}, {Date} < TODAY())`
-      : `AND({Active}=TRUE(), {Date}, {Date} >= TODAY())`,
+      ? `AND({Active}, {Date}, {Date} < TODAY())`
+      : `AND({Active}, {Date}, {Date} >= TODAY())`,
   };
 
   if (options.maxRecords) params.maxRecords = options.maxRecords;
@@ -84,9 +84,9 @@ export async function getObjects(options = {}) {
   };
 
   if (options.featured) {
-    params.filterByFormula = `AND({Featured}=TRUE(), {Available}=TRUE())`;
+    params.filterByFormula = `AND({Featured}, {Available})`;
   } else if (options.available) {
-    params.filterByFormula = `{Available}=TRUE()`;
+    params.filterByFormula = `{Available}`;
   }
 
   if (options.maxRecords) params.maxRecords = options.maxRecords;
@@ -99,7 +99,7 @@ export async function getObjects(options = {}) {
 export async function getThreads(options = {}) {
   const params = {
     sort: JSON.stringify([{ field: 'Number', direction: 'asc' }]),
-    filterByFormula: `{Published}=TRUE()`,
+    filterByFormula: `{Published}`,
   };
 
   if (options.maxRecords) params.maxRecords = options.maxRecords;
