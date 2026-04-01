@@ -1,341 +1,590 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <title>Hilo — Independent Bookshop in Buenos Aires</title>
-  <meta
-    name="description"
-    content="Hilo is an independent bookshop in Buenos Aires with books, objects, editorial threads, and events."
-  />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap"
-    rel="stylesheet"
-  />
-
-  <link rel="stylesheet" href="/styles.css" />
-</head>
-<body><!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hilo — An Independent Bookshop · Buenos Aires</title>
-  <meta
-    name="description"
-    content="An independent bookshop in Buenos Aires with books, objects, threads, and events."
-  />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap"
-    rel="stylesheet"
-  />
-  <link rel="stylesheet" href="/styles.css" />
+  <meta name="description" content="A curated bookshop in Buenos Aires organised around threads of connected thinking. Political economy, urbanism, architecture, current affairs.">
+  <link rel="stylesheet" href="css/style.css">
+ <style>
+  /* ── Homepage-specific styles: warmer / tighter / more tactile ── */
+
+  .hero {
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    min-height: 320px;
+    border-bottom: 1px solid var(--border);
+    background: #f7f2eb;
+  }
+
+  .hero-text {
+    padding: 44px 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: 1px solid var(--border);
+  }
+
+  .hero-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .hero-statement {
+    font-family: var(--serif);
+    font-size: 32px;
+    font-weight: 300;
+    line-height: 1.16;
+    color: var(--ink);
+    margin-bottom: 18px;
+    max-width: 10ch;
+  }
+
+  .hero-statement em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-body {
+    font-size: 13px;
+    line-height: 1.72;
+    color: var(--muted);
+    max-width: 410px;
+  }
+
+  .hero-image {
+    background: #1c1712;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    padding: 22px;
+    min-height: 320px;
+  }
+
+  .hero-image img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.72;
+  }
+
+  .hero-image-caption {
+    position: relative;
+    z-index: 1;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.48);
+  }
+
+  /* ── Sections ── */
+
+  .threads-section,
+  .acquisitions-section,
+  .event-panel,
+  .objects-panel {
+    padding: 40px 40px;
+  }
+
+  .threads-section,
+  .acquisitions-section {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .split-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+    background: #f7f2eb;
+  }
+
+  .event-panel {
+    border-right: 1px solid var(--border);
+  }
+
+  .section-label {
+    margin-bottom: 18px;
+  }
+
+  /* ── Latest Thread ── */
+
+  .thread-feature {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+
+  .thread-number {
+    font-family: var(--serif);
+    font-size: 62px;
+    font-weight: 300;
+    color: #ddd3c7;
+    line-height: 0.95;
+  }
+
+  .thread-title {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 300;
+    line-height: 1.14;
+    margin-bottom: 12px;
+    max-width: 18ch;
+  }
+
+  .thread-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .thread-excerpt {
+    font-size: 13px;
+    line-height: 1.72;
+    color: var(--muted);
+    margin-bottom: 18px;
+    max-width: 58ch;
+  }
+
+  .thread-books {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+
+  /* ── Recent Acquisitions ── */
+
+  .books-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+  }
+
+  .book-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .book-cover {
+    position: relative;
+    aspect-ratio: 0.72;
+    overflow: hidden;
+    border-radius: 2px;
+    background: #e7ddd1;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    margin-bottom: 10px;
+  }
+
+  .book-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+  }
+
+  .book-card:hover .book-cover img {
+    transform: scale(1.025);
+  }
+
+  .book-cover-fallback {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #d8cbbb 0%, #efe5da 100%);
+  }
+
+  .book-cover-text {
+    display: none;
+  }
+
+  .book-meta-title {
+    font-family: var(--serif);
+    font-size: 20px;
+    line-height: 1.15;
+    margin-bottom: 3px;
+  }
+
+  .book-meta-author {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .book-note {
+    font-size: 12px;
+    line-height: 1.62;
+    color: var(--muted);
+  }
+
+  /* ── Event ── */
+
+  .event-date {
+    font-family: var(--serif);
+    font-size: 44px;
+    font-weight: 300;
+    color: #ddd3c7;
+    line-height: 0.95;
+    margin-bottom: 3px;
+  }
+
+  .event-month {
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+
+  .event-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 10px;
+    max-width: 20ch;
+  }
+
+  .event-details {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.68;
+    margin-bottom: 18px;
+    max-width: 46ch;
+  }
+
+  /* ── Objects ── */
+
+  .objects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .object-item {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .object-item img,
+  .object-item > div {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 2px;
+    overflow: hidden;
+    background: #ddd3c7;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    transition: transform 0.35s ease;
+  }
+
+  .object-item:hover img,
+  .object-item:hover > div {
+    transform: scale(1.03);
+  }
+
+  .object-caption {
+    margin-top: 6px;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Loading / empty states ── */
+
+  .loading-state,
+  .empty-state {
+    font-size: 12px;
+    color: var(--muted);
+    padding: 8px 0;
+  }
+
+  /* ── Responsive ── */
+
+  @media (max-width: 980px) {
+    .books-row {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .objects-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 760px) {
+    .hero,
+    .split-section {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-text,
+    .event-panel {
+      border-right: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-text,
+    .threads-section,
+    .acquisitions-section,
+    .event-panel,
+    .objects-panel {
+      padding: 28px 22px;
+    }
+
+    .hero-statement {
+      font-size: 28px;
+      max-width: none;
+    }
+
+    .thread-feature {
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    .thread-number {
+      font-size: 42px;
+    }
+
+    .books-row {
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .objects-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .books-row,
+    .objects-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
 </head>
 <body>
-  <div class="site-shell">
-    <header class="site-header">
-      <div class="container header-row">
-        <a class="brand" href="/" aria-label="Hilo home">
-          <span class="brand-mark">Hilo</span>
-          <span class="brand-sub">Buenos Aires</span>
-        </a>
 
-        <nav class="site-nav" aria-label="Primary">
-          <a href="/threads.html">Threads</a>
-          <a href="/books.html">Catalogue</a>
-          <a href="/objects.html">Objects</a>
-          <a href="/events.html">Events</a>
-          <a href="/about.html">About</a>
-        </nav>
+<!-- ── Navigation ── -->
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-main">Hilo</span>
+    <span class="nav-logo-sub">An independent bookshop · Buenos Aires</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="threads.html">Threads</a></li>
+    <li><a href="catalogue.html">Catalogue</a></li>
+    <li><a href="objects.html">Objects</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+</nav>
 
-        <a class="header-link" href="/books.html">Browse books</a>
-      </div>
-    </header>
-
-    <main>
-      <section class="hero">
-        <div class="container hero-grid">
-          <div class="hero-copy">
-            <p class="kicker">Buenos Aires — Est. 2026</p>
-            <h1>Books for slow browsing, close reading, and connected thinking.</h1>
-            <p class="hero-text">
-              A curated independent bookshop with titles in political economy,
-              urbanism, architecture, and current affairs. Every book chosen
-              personally. Every blurb written with care.
-            </p>
-
-            <div class="hero-actions">
-              <a class="btn btn-primary" href="/books.html">Browse books</a>
-              <a class="btn btn-secondary" href="/threads.html">Read threads</a>
-            </div>
-          </div>
-
-          <aside class="hero-panel" aria-label="About the shop">
-            <figure class="hero-image-wrap">
-              <img
-                src="/images/hero-bookshop.jpg"
-                alt="Hilo bookshop, Buenos Aires"
-              />
-            </figure>
-
-            <div class="hero-notes">
-              <div class="hero-note">
-                <span class="note-label">Neighbourhood</span>
-                <span class="note-value">Palermo</span>
-              </div>
-              <div class="hero-note">
-                <span class="note-label">Focus</span>
-                <span class="note-value">Books, objects, editorial threads</span>
-              </div>
-              <div class="hero-note">
-                <span class="note-label">Mood</span>
-                <span class="note-value">Calm, curious, tactile</span>
-              </div>
-            </div>
-          </aside>
-        </div>
-      </section>
-
-      <section class="section intro-strip">
-        <div class="container intro-strip-grid">
-          <p>
-            A bookshop for people who like to browse by subject, follow
-            footnotes, and leave with something unexpected.
-          </p>
-          <p>
-            Part reading room, part editorial project, part neighbourhood shelf.
-          </p>
-        </div>
-      </section>
-
-      <section class="section feature-section">
-        <div class="container">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">Journal</p>
-              <h2>Latest thread</h2>
-            </div>
-            <a class="section-link" href="/threads.html">View all</a>
-          </div>
-
-          <article class="feature-card">
-            <div class="feature-card-body">
-              <p class="meta">Thread · Essay</p>
-              <h3>
-                <a href="/threads/sample-thread.html">
-                  Notes on cities, shelves, and the pace of attention
-                </a>
-              </h3>
-              <p>
-                A short editorial reflection on browsing, urban life, and why
-                bookshops still matter as places to think in public.
-              </p>
-              <a class="text-link" href="/threads/sample-thread.html">Read thread</a>
-            </div>
-
-            <div class="feature-card-image">
-              <img
-                src="/images/thread-placeholder.jpg"
-                alt="Latest editorial thread"
-              />
-            </div>
-          </article>
-
-          <!--
-            Replace the article above with your dynamic thread card if your JS injects it.
-            Example:
-            <div id="latest-thread"></div>
-          -->
-        </div>
-      </section>
-
-      <section class="section two-column-section">
-        <div class="container two-column-grid">
-          <div>
-            <div class="section-heading">
-              <div>
-                <p class="eyebrow">Objects</p>
-                <h2>Small things with presence</h2>
-              </div>
-              <a class="section-link" href="/objects.html">View all</a>
-            </div>
-
-            <div class="mini-grid">
-              <article class="mini-card">
-                <img src="/images/object-1.jpg" alt="Object one" />
-                <div class="mini-card-body">
-                  <h3><a href="/objects/sample-object.html">Notebook, linen spine</a></h3>
-                  <p>Quiet materials for desks, shelves, and reading corners.</p>
-                </div>
-              </article>
-
-              <article class="mini-card">
-                <img src="/images/object-2.jpg" alt="Object two" />
-                <div class="mini-card-body">
-                  <h3><a href="/objects/sample-object-2.html">Brass bookmark</a></h3>
-                  <p>Small tools that make reading feel ceremonial again.</p>
-                </div>
-              </article>
-            </div>
-
-            <!-- Optional dynamic mount point:
-            <div id="homepage-objects"></div>
-            -->
-          </div>
-
-          <div>
-            <div class="section-heading">
-              <div>
-                <p class="eyebrow">Catalogue</p>
-                <h2>Recent acquisitions</h2>
-              </div>
-              <a class="section-link" href="/books.html">View all</a>
-            </div>
-
-            <div class="book-list">
-              <article class="book-row">
-                <img src="/images/book-1.jpg" alt="Book cover" />
-                <div>
-                  <p class="meta">Political economy</p>
-                  <h3><a href="/books/sample-book.html">The Price of the State</a></h3>
-                  <p>Money, crisis, and institutions in late modern capitalism.</p>
-                </div>
-              </article>
-
-              <article class="book-row">
-                <img src="/images/book-2.jpg" alt="Book cover" />
-                <div>
-                  <p class="meta">Urbanism</p>
-                  <h3><a href="/books/sample-book-2.html">Streets of Assembly</a></h3>
-                  <p>Infrastructure, conflict, and the life of public space.</p>
-                </div>
-              </article>
-
-              <article class="book-row">
-                <img src="/images/book-3.jpg" alt="Book cover" />
-                <div>
-                  <p class="meta">Architecture</p>
-                  <h3><a href="/books/sample-book-3.html">Forms of Nearness</a></h3>
-                  <p>Buildings, domesticity, and the politics of material culture.</p>
-                </div>
-              </article>
-            </div>
-
-            <!-- Optional dynamic mount point:
-            <div id="recent-books"></div>
-            -->
-          </div>
-        </div>
-      </section>
-
-      <section class="section shelves-section">
-        <div class="container">
-          <div class="section-heading">
-            <div>
-              <p class="eyebrow">Browse</p>
-              <h2>Browse by shelf</h2>
-            </div>
-          </div>
-
-          <div class="shelf-grid">
-            <a class="shelf-card" href="/books.html?shelf=political-economy">
-              <span class="shelf-title">Political economy</span>
-              <span class="shelf-text">States, markets, money, crisis</span>
-            </a>
-
-            <a class="shelf-card" href="/books.html?shelf=urbanism">
-              <span class="shelf-title">Urbanism</span>
-              <span class="shelf-text">City life, housing, infrastructure</span>
-            </a>
-
-            <a class="shelf-card" href="/books.html?shelf=architecture">
-              <span class="shelf-title">Architecture</span>
-              <span class="shelf-text">Buildings, form, modernity, space</span>
-            </a>
-
-            <a class="shelf-card" href="/books.html?shelf=current-affairs">
-              <span class="shelf-title">Current affairs</span>
-              <span class="shelf-text">Power, conflict, institutions, change</span>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section class="section events-newsletter">
-        <div class="container events-newsletter-grid">
-          <div class="events-block">
-            <div class="section-heading">
-              <div>
-                <p class="eyebrow">In the shop</p>
-                <h2>Events</h2>
-              </div>
-              <a class="section-link" href="/events.html">View all</a>
-            </div>
-
-            <article class="event-card">
-              <p class="meta">Next gathering</p>
-              <h3><a href="/events/sample-event.html">Reading night: cities and memory</a></h3>
-              <p>Thursday evening in Palermo. A small-format conversation around urban writing.</p>
-            </article>
-
-            <!-- Optional dynamic mount point:
-            <div id="next-event"></div>
-            -->
-          </div>
-
-          <div class="newsletter-block">
-            <p class="eyebrow">Letter from the editor</p>
-            <h2>New threads, new arrivals.</h2>
-            <p>
-              Once a month: what arrived, what we are reading, and what is on next.
-              No noise, no hard sell.
-            </p>
-
-            <form class="newsletter-form" action="/subscribe" method="post">
-              <label class="sr-only" for="email">Email address</label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Your email"
-                required
-              />
-              <button type="submit" class="btn btn-primary">Subscribe</button>
-            </form>
-          </div>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="container footer-grid">
-        <div>
-          <a class="brand footer-brand" href="/">Hilo</a>
-          <p class="footer-copy">
-            Independent bookshop and editorial project in Buenos Aires.
-          </p>
-        </div>
-
-        <nav class="footer-nav" aria-label="Footer">
-          <a href="/threads.html">Threads</a>
-          <a href="/books.html">Catalogue</a>
-          <a href="/objects.html">Objects</a>
-          <a href="/events.html">Events</a>
-          <a href="/about.html">About</a>
-        </nav>
-
-        <div class="footer-meta">
-          <p>Buenos Aires, Argentina</p>
-          <p><a href="https://hilobookshop.com/">hilobookshop.com</a></p>
-        </div>
-      </div>
-    </footer>
+<!-- ── Hero ── -->
+<div class="hero">
+  <div class="hero-text">
+    <div class="hero-eyebrow">Buenos Aires — Est. 2026</div>
+    <h1 class="hero-statement">
+      A curated bookshop<br>
+      organised around <em>threads</em><br>
+      of connected thinking.
+    </h1>
+    <p class="hero-body">
+      300–500 titles in political economy, urbanism, architecture,
+      and current affairs. Every book chosen personally. Every blurb
+      written by the editor. A space for slow reading in a fast city.
+    </p>
   </div>
+  <div class="hero-image">
+    <!-- Replace with a real shop or Buenos Aires photograph -->
+    <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0f0d0b 0%,#1e1a14 50%,#2a2418 100%);"></div>
+    <div class="hero-image-caption">Palermo, Buenos Aires</div>
+  </div>
+</div>
+
+<!-- ── Latest Thread ── -->
+<section class="threads-section">
+  <div class="section-label">Latest thread</div>
+  <div id="thread-feature">
+    <div class="loading-state">Loading thread…</div>
+  </div>
+</section>
+
+<!-- ── Recent Acquisitions ── -->
+<section class="acquisitions-section">
+  <div class="section-label">Recent acquisitions</div>
+  <div id="books-row" class="books-row">
+    <!-- Populated by JS -->
+  </div>
+</section>
+
+<!-- ── Next Event + Objects ── -->
+<div class="split-section">
+
+  <div class="event-panel">
+    <div class="section-label">Next event</div>
+    <div id="event-feature">
+      <div class="loading-state">Loading event…</div>
+    </div>
+  </div>
+
+  <div class="objects-panel">
+    <div class="section-label">Objects</div>
+    <div id="objects-grid" class="objects-grid"></div>
+    <a href="objects.html" class="link-accent">View all objects →</a>
+  </div>
+
+</div>
+
+<!-- ── Newsletter ── -->
+<div class="newsletter-section">
+  <div>
+    <div class="newsletter-heading">New threads, new arrivals.</div>
+    <p class="newsletter-sub">
+      A monthly letter from the editor. What arrived, what we're reading,
+      what's on next. No noise.
+    </p>
+  </div>
+  <!-- Replace href with your Substack embed URL -->
+  <form class="newsletter-form"
+        action="https://hilobookshop.substack.com/api/v1/free?nojs=true"
+        method="post" target="_blank">
+    <input class="newsletter-input" type="email" name="email"
+           placeholder="your@email.com" required>
+    <button class="newsletter-btn" type="submit">Subscribe</button>
+  </form>
+</div>
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <a href="index.html" class="footer-logo">Hilo.</a>
+  <ul class="footer-links">
+    <li><a href="threads.html">Threads</a></li>
+    <li><a href="catalogue.html">Catalogue</a></li>
+    <li><a href="objects.html">Objects</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="https://instagram.com/hilobookshop" target="_blank" rel="noopener">Instagram</a></li>
+    <li><a href="about.html#contact">Contact</a></li>
+  </ul>
+  <div class="footer-address">Buenos Aires, Argentina<br>hilobookshop.com</div>
+</footer>
+
+<!-- ── Scripts ── -->
+<script type="module">
+  import { getThreads, getBooks, getEvents, getObjects, formatDateShort, formatPrice } from './js/airtable.js';
+
+  /* ── Latest thread ── */
+  async function loadThread() {
+    const el = document.getElementById('thread-feature');
+    try {
+      const threads = await getThreads({ maxRecords: 1 });
+      if (!threads.length) { el.innerHTML = '<div class="empty-state">No threads yet.</div>'; return; }
+      const t = threads[0];
+      el.innerHTML = `
+        <div class="thread-feature">
+          <div class="thread-number">${String(t.Number || 1).padStart(2,'0')}</div>
+          <div>
+            <h2 class="thread-title">${t.Title || ''}</h2>
+            <p class="thread-excerpt">${t.Intro || ''}</p>
+            <div class="thread-books">
+              ${(t.Books || []).slice(0,6).map(() => '').join('')}
+            </div>
+            <a href="thread.html?slug=${t.Slug}" class="link-accent">Read the thread →</a>
+          </div>
+        </div>`;
+    } catch(e) {
+      el.innerHTML = '<div class="empty-state">Unable to load thread.</div>';
+    }
+  }
+
+  /* ── Featured books ── */
+  async function loadBooks() {
+    const el = document.getElementById('books-row');
+    try {
+      const books = await getBooks({ featured: true, maxRecords: 4 });
+      if (!books.length) { el.innerHTML = '<div class="empty-state">No featured books yet.</div>'; return; }
+      el.innerHTML = books.map(b => `
+        <a href="catalogue.html?book=${b.id}" class="book-card">
+          <div class="book-cover">
+            ${b['Cover URL']
+              ? `<img src="${b['Cover URL']}" alt="${b.Title}" loading="lazy">`
+              : `<div class="book-cover-fallback"></div>`}
+            <div class="book-cover-text">
+              <div class="book-cover-title">${b.Title || ''}</div>
+              <div class="book-cover-author">${b.Author || ''}</div>
+            </div>
+          </div>
+          <div class="book-meta-title">${b.Title || ''}</div>
+          <div class="book-meta-author">${b.Author || ''}</div>
+          ${b.Blurb ? `<div class="book-note">${b.Blurb.substring(0,120)}…</div>` : ''}
+        </a>`).join('');
+    } catch(e) {
+      el.innerHTML = '<div class="empty-state">Unable to load books.</div>';
+    }
+  }
+
+  /* ── Next event ── */
+  async function loadEvent() {
+    const el = document.getElementById('event-feature');
+    try {
+      const events = await getEvents({ maxRecords: 1 });
+      if (!events.length) {
+        el.innerHTML = '<div class="empty-state">No upcoming events. Check back soon.</div>';
+        return;
+      }
+      const ev = events[0];
+      const { day, month, year } = formatDateShort(ev.Date);
+      el.innerHTML = `
+        <div class="event-date">${day}</div>
+        <div class="event-month">${month} ${year}</div>
+        <div class="event-title">${ev.Title || ''}</div>
+        <div class="event-details">
+          ${ev.Description ? ev.Description.substring(0,200) + '…' : ''}
+          ${ev.Venue ? `<br><br>${ev.Venue}` : ''}
+          ${ev.Time ? ` · ${ev.Time}` : ''}
+          ${ev.Capacity ? ` · ${ev.Capacity} places` : ''}
+        </div>
+        ${ev['Ticket URL']
+          ? `<a href="${ev['Ticket URL']}" class="btn" target="_blank" rel="noopener">Reserve a place →</a>`
+          : ev.Free
+            ? `<a href="events.html" class="btn">Free — see details →</a>`
+            : `<a href="events.html" class="btn">See all events →</a>`}`;
+    } catch(e) {
+      el.innerHTML = '<div class="empty-state">Unable to load events.</div>';
+    }
+  }
+
+  /* ── Featured objects ── */
+  async function loadObjects() {
+    const el = document.getElementById('objects-grid');
+    try {
+      const objects = await getObjects({ featured: true, maxRecords: 3 });
+      if (!objects.length) return;
+      el.innerHTML = objects.map(o => `
+        <a href="objects.html" class="object-item">
+          ${o['Photo URL']
+            ? `<img src="${o['Photo URL']}" alt="${o.Name}" loading="lazy">`
+            : `<div style="width:100%;height:100%;background:var(--border);"></div>`}
+          <div class="object-caption">${o.Origin || o.Name || ''}</div>
+        </a>`).join('');
+    } catch(e) {
+      // Objects section fails silently — not critical
+    }
+  }
+
+  /* ── Init ── */
+  loadThread();
+  loadBooks();
+  loadEvent();
+  loadObjects();
+</script>
+
 </body>
 </html>
