@@ -6,113 +6,239 @@
   <title>Objects — Hilo Bookshop</title>
   <meta name="description" content="Japanese studio ceramics at Hilo Bookshop — Mino, Bizen, Shigaraki. Sourced directly from kilns in Japan.">
   <link rel="stylesheet" href="css/style.css">
+
   <style>
-    .objects-intro {
-      padding: 40px 48px;
-      border-bottom: 1px solid var(--border);
-      max-width: 640px;
+    :root {
+      --objects-paper: #f3ede4;
+      --objects-paper-warm: #efe5d8;
+      --objects-line: rgba(60, 45, 32, 0.14);
+      --objects-line-strong: rgba(60, 45, 32, 0.22);
+      --objects-shadow-soft: 0 8px 18px rgba(28, 20, 14, 0.06);
+      --objects-brown: #6f5640;
     }
 
-    .objects-intro p {
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.42), transparent 30%),
+        var(--objects-paper);
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+      padding: 18px 40px 16px;
+      border-bottom: 1px solid var(--objects-line);
+      background: rgba(243, 237, 228, 0.92);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .nav-logo {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      text-decoration: none;
+      color: inherit;
+      min-width: 0;
+    }
+
+    .nav-logo-main {
       font-family: var(--serif);
-      font-size: 17px;
-      font-weight: 300;
-      font-style: italic;
-      line-height: 1.75;
+      font-size: 34px;
+      line-height: 0.95;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+    }
+
+    .nav-logo-sub {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       color: var(--muted);
     }
 
-    .objects-main { padding: 52px 48px; }
+    .nav-links {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin: 0;
+      padding: 0;
+    }
 
-    /* Masonry-style grid */
+    .nav-links a {
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--accent);
+    }
+
+    .objects-page-header {
+      border-bottom: 1px solid var(--objects-line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0)),
+        rgba(255,255,255,0.10);
+    }
+
+    .objects-page-header-inner {
+      max-width: 980px;
+      padding: 34px 40px 38px;
+    }
+
+    .objects-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .objects-title {
+      font-family: var(--serif);
+      font-size: clamp(34px, 5vw, 56px);
+      font-weight: 300;
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+      margin: 0 0 16px;
+      color: var(--ink);
+    }
+
+    .objects-intro {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--muted);
+      max-width: 72ch;
+    }
+
+    .objects-intro p {
+      margin: 0 0 16px;
+    }
+
+    .objects-main {
+      padding: 34px 40px 44px;
+      border-bottom: 1px solid var(--objects-line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)),
+        var(--objects-paper);
+    }
+
     .objects-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 32px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 28px 22px;
+      align-items: start;
     }
 
     .object-card {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      cursor: pointer;
+      display: block;
+      text-decoration: none;
+      color: inherit;
     }
 
     .object-photo {
-      width: 100%;
-      aspect-ratio: 1;
-      background: var(--border);
-      border-radius: 2px;
-      overflow: hidden;
       position: relative;
+      width: 100%;
+      overflow: hidden;
+      border-radius: 2px;
+      background: linear-gradient(135deg, #d8cbbb 0%, #efe5da 100%);
+      box-shadow: var(--objects-shadow-soft);
+      border: 1px solid rgba(70, 50, 35, 0.06);
+      margin-bottom: 12px;
+      aspect-ratio: 0.9;
     }
 
-    /* Every third card is taller for visual rhythm */
+    .object-card:nth-child(3n + 2) .object-photo {
+      aspect-ratio: 0.76;
+    }
+
     .object-card:nth-child(3n) .object-photo {
-      aspect-ratio: 3/4;
+      aspect-ratio: 1.14;
     }
 
     .object-photo img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.5s ease;
+      display: block;
+      transition: transform 0.45s ease;
     }
 
-    .object-card:hover .object-photo img { transform: scale(1.04); }
+    .object-card:hover .object-photo img {
+      transform: scale(1.035);
+    }
 
     .object-photo-placeholder {
-      position: absolute;
-      inset: 0;
+      width: 100%;
+      height: 100%;
       background: linear-gradient(135deg, #c8bfb0, #b0a898);
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .object-sold-badge {
       position: absolute;
       top: 12px;
       right: 12px;
-      background: rgba(0,0,0,0.6);
-      color: rgba(255,255,255,0.7);
+      background: rgba(40, 30, 20, 0.58);
+      color: rgba(255,255,255,0.82);
       font-size: 9px;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
-      padding: 4px 8px;
+      padding: 5px 8px 4px;
       border-radius: 2px;
+      backdrop-filter: blur(3px);
     }
 
-    .object-info {}
+    .object-info {
+      padding-right: 8px;
+    }
 
     .object-name {
       font-family: var(--serif);
-      font-size: 18px;
+      font-size: 21px;
       font-weight: 300;
+      line-height: 1.08;
+      letter-spacing: -0.01em;
       color: var(--ink);
-      margin-bottom: 4px;
+      margin-bottom: 5px;
     }
 
     .object-origin {
-      font-size: 11px;
-      color: var(--muted);
-      letter-spacing: 0.06em;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--objects-brown);
       margin-bottom: 8px;
     }
 
     .object-description {
-      font-size: 12px;
+      font-size: 13px;
       line-height: 1.7;
       color: var(--muted);
-      font-style: italic;
-      font-family: var(--serif);
       margin-bottom: 10px;
+      display: -webkit-box;
+      -webkit-line-clamp: 4;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
-    .object-footer {
+    .object-meta {
       display: flex;
+      flex-wrap: wrap;
       justify-content: space-between;
-      align-items: center;
+      gap: 8px 16px;
+      align-items: baseline;
     }
 
     .object-price {
@@ -124,30 +250,159 @@
 
     .object-status {
       font-size: 10px;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--muted);
     }
 
-    .object-status.available { color: var(--accent); }
+    .object-status.available {
+      color: var(--accent);
+    }
 
-    /* Enquire link */
     .objects-enquire {
-      margin-top: 64px;
-      padding-top: 40px;
-      border-top: 1px solid var(--border);
+      margin-top: 52px;
+      padding-top: 24px;
+      border-top: 1px solid var(--objects-line);
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-end;
+      gap: 24px;
     }
 
     .objects-enquire-text {
       font-family: var(--serif);
-      font-size: 20px;
+      font-size: 24px;
       font-weight: 300;
-      line-height: 1.4;
+      line-height: 1.25;
       color: var(--muted);
-      max-width: 480px;
+      max-width: 24ch;
+      margin: 0;
+    }
+
+    .loading-state,
+    .empty-state {
+      font-size: 12px;
+      color: var(--muted);
+      padding: 8px 0;
+      grid-column: 1 / -1;
+    }
+
+    .footer {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 24px;
+      align-items: start;
+      padding: 26px 40px 30px;
+      background: #eee4d7;
+      border-top: 1px solid var(--objects-line);
+    }
+
+    .footer-logo {
+      font-family: var(--serif);
+      font-size: 30px;
+      line-height: 1;
+      text-decoration: none;
+      color: var(--ink);
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin: 4px 0 0;
+      padding: 0;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .footer-links a:hover {
+      color: var(--ink);
+    }
+
+    .footer-address {
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    @media (max-width: 980px) {
+      .objects-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .object-card:nth-child(3n + 2) .object-photo,
+      .object-card:nth-child(3n) .object-photo {
+        aspect-ratio: 0.9;
+      }
+
+      .object-card:nth-child(2n) .object-photo {
+        aspect-ratio: 1.12;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px 22px 14px;
+      }
+
+      .nav-links {
+        gap: 10px 14px;
+      }
+
+      .objects-page-header-inner,
+      .objects-main {
+        padding: 24px 22px 28px;
+      }
+
+      .objects-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px 14px;
+      }
+
+      .object-name {
+        font-size: 18px;
+      }
+
+      .objects-enquire {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 18px;
+      }
+
+      .objects-enquire-text {
+        font-size: 20px;
+        max-width: none;
+      }
+
+      .footer {
+        grid-template-columns: 1fr;
+        padding: 22px;
+      }
+
+      .footer-address {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .objects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .object-photo,
+      .object-card:nth-child(2n) .object-photo {
+        aspect-ratio: 0.95;
+      }
     }
   </style>
 </head>
@@ -167,32 +422,35 @@
   </ul>
 </nav>
 
-<div class="page-header">
-  <div class="page-header-eyebrow">Japanese studio ceramics</div>
-  <h1 class="page-header-title">Objects</h1>
-</div>
+<header class="objects-page-header">
+  <div class="objects-page-header-inner">
+    <div class="objects-eyebrow">Japanese studio ceramics</div>
+    <h1 class="objects-title">Objects</h1>
+    <div class="objects-intro">
+      <p>
+        Alongside the books, Hilo carries a rotating selection of Japanese studio ceramics,
+        sourced through direct kiln relationships in Mino, Bizen, and Shigaraki.
+      </p>
+      <p>
+        Objects for daily use, chosen with the same attention as the books: tactile,
+        durable, quietly distinctive.
+      </p>
+    </div>
+  </div>
+</header>
 
-<div class="objects-intro">
-  <p>
-    Alongside the books, Hilo carries a rotating selection of Japanese studio ceramics —
-    sourced with direct kiln relationships in Mino, Bizen, and Shigaraki. Objects that
-    reward the same kind of slow attention the books ask of their readers.
-  </p>
-</div>
-
-<div class="objects-main">
+<main class="objects-main">
   <div class="objects-grid" id="objects-grid">
-    <div class="loading-state" style="grid-column:1/-1">Loading objects…</div>
+    <div class="loading-state">Loading objects…</div>
   </div>
 
   <div class="objects-enquire">
     <p class="objects-enquire-text">
-      All pieces are available for in-store viewing.<br>
-      Enquire about availability, shipping, or commissions.
+      All pieces are available for in-store viewing. Enquire about availability, shipping, or commissions.
     </p>
     <a href="about.html#contact" class="btn">Get in touch →</a>
   </div>
-</div>
+</main>
 
 <footer class="footer">
   <a href="index.html" class="footer-logo">Hilo.</a>
@@ -210,37 +468,59 @@
 <script type="module">
   import { getObjects, formatPrice } from './js/airtable.js';
 
+  function escapeHtml(str = '') {
+    return String(str)
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#39;');
+  }
+
+  function truncate(text = '', max = 140) {
+    const clean = String(text).trim();
+    if (!clean) return '';
+    if (clean.length <= max) return clean;
+    return clean.slice(0, max).replace(/\s+\S*$/, '') + '…';
+  }
+
   async function init() {
     const el = document.getElementById('objects-grid');
+
     try {
-      const objects = await getObjects({ available: false }); // show all, including sold
+      const objects = await getObjects({ available: false });
+
       if (!objects.length) {
-        el.innerHTML = '<div class="empty-state" style="grid-column:1/-1">No objects in stock right now. Check back soon.</div>';
+        el.innerHTML = '<div class="empty-state">No objects in stock right now. Check back soon.</div>';
         return;
       }
 
       el.innerHTML = objects.map(o => `
-        <div class="object-card">
+        <article class="object-card">
           <div class="object-photo">
             ${o['Photo URL']
-              ? `<img src="${o['Photo URL']}" alt="${o.Name || ''}" loading="lazy">`
+              ? `<img src="${o['Photo URL']}" alt="${escapeHtml(o.Name || '')}" loading="lazy">`
               : `<div class="object-photo-placeholder"></div>`}
             ${!o.Available ? `<div class="object-sold-badge">Sold</div>` : ''}
           </div>
+
           <div class="object-info">
-            <div class="object-name">${o.Name || ''}</div>
-            ${o.Origin ? `<div class="object-origin">${o.Origin}</div>` : ''}
-            ${o.Description ? `<div class="object-description">${o.Description}</div>` : ''}
-            <div class="object-footer">
-              <div class="object-price">${o.Price ? formatPrice(o.Price) : ''}</div>
+            <div class="object-name">${escapeHtml(o.Name || '')}</div>
+            ${o.Origin ? `<div class="object-origin">${escapeHtml(o.Origin)}</div>` : ''}
+            ${o.Description ? `<div class="object-description">${escapeHtml(truncate(o.Description, 160))}</div>` : ''}
+
+            <div class="object-meta">
+              <div class="object-price">${o.Price ? escapeHtml(formatPrice(o.Price)) : ''}</div>
               <div class="object-status ${o.Available ? 'available' : ''}">
                 ${o.Available ? 'Available' : 'Sold'}
               </div>
             </div>
           </div>
-        </div>`).join('');
-    } catch(e) {
-      el.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Unable to load objects.</div>';
+        </article>
+      `).join('');
+    } catch (e) {
+      console.error('Objects page error:', e);
+      el.innerHTML = '<div class="empty-state">Unable to load objects.</div>';
     }
   }
 
