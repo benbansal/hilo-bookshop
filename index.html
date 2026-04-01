@@ -1,13 +1,22 @@
 <main>
+
+  <!-- ===================================================== -->
+  <!-- HERO -->
+  <!-- ===================================================== -->
+
   <section class="hero">
     <div class="container hero-grid">
+
       <div class="hero-copy">
         <p class="eyebrow">Books • Threads • Objects</p>
-        <h1>Hello, bookshop.</h1>
+
+        <h1>Hello,<br>bookshop.</h1>
+
         <p>
-          Discover books, objects, and editorial threads curated with the feeling
-          of browsing a real shelf.
+          A small, curated collection of books, objects and editorial threads.
+          Designed to feel like browsing a real shelf.
         </p>
+
         <div class="hero-actions">
           <a class="btn" href="/books.html">Browse books</a>
           <a class="btn-secondary" href="/threads.html">Read threads</a>
@@ -15,86 +24,194 @@
       </div>
 
       <article class="hero-card">
-        <img src="YOUR_FEATURED_IMAGE" alt="Featured thread or featured book" />
+        <img src="YOUR_FEATURED_IMAGE" alt="Featured thread or book">
         <div class="hero-card-body">
-          <h3>Featured thread title</h3>
-          <p>A short two-line introduction. Keep it tight on mobile.</p>
+          <p class="card-kicker">Featured thread</p>
+          <h3>Thread title goes here</h3>
+          <p>One strong sentence introducing the idea.</p>
         </div>
       </article>
+
     </div>
   </section>
 
-  <section class="section">
+  <!-- ===================================================== -->
+  <!-- FEATURE STRIP (EVENT + THREAD) -->
+  <!-- ===================================================== -->
+
+  <section class="section section-tight">
     <div class="container">
+
       <div class="feature-strip">
+
         <article class="feature-box">
           <h3>Next event</h3>
-          <p>Date, place, one-line teaser.</p>
+          <p>
+            Date, location, and a one-line description of what’s happening.
+          </p>
           <a class="btn-secondary" href="/events.html">View event</a>
         </article>
+
         <article class="feature-box">
           <h3>Current thread</h3>
-          <p>One idea, one image, one clear call to action.</p>
+          <p>
+            One idea, one image, one clear editorial hook.
+          </p>
           <a class="btn-secondary" href="/threads.html">Read now</a>
         </article>
+
       </div>
+
     </div>
   </section>
 
+  <!-- ===================================================== -->
+  <!-- FEATURED BOOKS -->
+  <!-- ===================================================== -->
+
   <section class="section">
     <div class="container">
+
       <div class="section-head">
         <h2>Featured books</h2>
         <a href="/books.html">View all</a>
       </div>
+
       <div class="rail">
-        <!-- repeat card -->
+
+        <!-- Repeat dynamically -->
         <article class="card">
           <div class="card-media">
-            <img src="BOOK_IMAGE" alt="Book title cover" />
+            <img src="BOOK_IMAGE" alt="Book title">
           </div>
+
           <div class="card-body">
             <div class="card-kicker">History</div>
-            <h3 class="card-title">Book title</h3>
-            <div class="card-meta">$34 • In stock</div>
+
+            <h3 class="card-title">
+              Book title that wraps to two lines max
+            </h3>
+
+            <div class="card-meta">
+              $34 • In stock
+            </div>
+
             <div class="card-actions">
               <a class="btn-secondary" href="/book.html?id=123">Details</a>
               <button class="btn">Buy</button>
             </div>
           </div>
         </article>
+
       </div>
+
     </div>
   </section>
 
+  <!-- ===================================================== -->
+  <!-- OBJECTS (SECONDARY RAIL) -->
+  <!-- ===================================================== -->
+
+  <section class="section section-tight">
+    <div class="container">
+
+      <div class="section-head">
+        <h2>Objects</h2>
+        <a href="/objects.html">View all</a>
+      </div>
+
+      <div class="rail">
+
+        <article class="card">
+          <div class="card-media">
+            <img src="OBJECT_IMAGE" alt="Object">
+          </div>
+
+          <div class="card-body">
+            <div class="card-kicker">Print</div>
+            <h3 class="card-title">Object name</h3>
+            <div class="card-meta">$18</div>
+          </div>
+        </article>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================================================== -->
+  <!-- CATEGORY NAV -->
+  <!-- ===================================================== -->
+
   <section class="section">
     <div class="container">
+
       <div class="section-head">
         <h2>Browse by shelf</h2>
       </div>
+
       <div class="category-grid">
+
         <a class="category-link" href="/books.html?category=History">
           <strong>History</strong>
           <span>Political, cultural, global</span>
         </a>
+
         <a class="category-link" href="/books.html?category=Science">
           <strong>Science</strong>
           <span>Ideas, discovery, ecology</span>
         </a>
+
         <a class="category-link" href="/books.html?category=Fiction">
           <strong>Fiction</strong>
           <span>Novels, stories, voices</span>
         </a>
+
         <a class="category-link" href="/objects.html">
           <strong>Objects</strong>
           <span>Printed things and more</span>
         </a>
+
       </div>
+
     </div>
   </section>
+
+  <!-- ===================================================== -->
+  <!-- NEWSLETTER (OPTIONAL BUT STRONGLY RECOMMENDED) -->
+  <!-- ===================================================== -->
+
+  <section class="newsletter-section">
+    <div class="container">
+
+      <div>
+        <h3 class="newsletter-heading">
+          Occasional notes from the shop
+        </h3>
+        <p class="newsletter-sub">
+          New arrivals, events, and editorial threads — sent occasionally.
+        </p>
+      </div>
+
+      <form class="newsletter-form">
+        <input
+          type="email"
+          placeholder="Your email"
+          class="newsletter-input"
+        >
+        <button class="newsletter-btn">Subscribe</button>
+      </form>
+
+    </div>
+  </section>
+
+  <!-- ===================================================== -->
+  <!-- MOBILE STICKY BAR -->
+  <!-- ===================================================== -->
 
   <div class="mobile-sticky-bar">
     <a class="btn-secondary" href="/threads.html">Threads</a>
     <a class="btn" href="/books.html">Browse books</a>
   </div>
+
 </main>
