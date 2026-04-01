@@ -1233,7 +1233,7 @@ return merged.slice(0, 12);
     try {
       const [threads, books] = await Promise.all([
         getThreads({ maxRecords: 20 }),
-        getBooks({ maxRecords: 200 })
+        getBooks({ maxRecords: 500 })
       ]);
 
       allThreads = Array.isArray(threads) ? threads : [];
