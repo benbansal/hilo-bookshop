@@ -229,55 +229,250 @@
       return clean.slice(0, max).trimEnd() + '…';
     }
 
-    async function loadThreadBox() {
-      const el = document.getElementById('thread-box');
+<script type="module">
+  import {
+    getThreads,
+    getBooks,
+    getEvents,
+    getObjects
+  } from '/js/airtable.js';
 
-      try {
-        const threads = await getThreads({ maxRecords: 1 });
+  function escapeHtml(str = '') {
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
 
-        if (!threads.length) {
-          el.innerHTML = `
-            <div class="thread-panel-inner">
-              <div class="thread-number">01</div>
-              <div class="thread-main">
-                <h3>Current thread</h3>
-                <p>No thread is live yet. Check back soon.</p>
-                <a class="btn-secondary" href="/threads.html">Browse threads</a>
-              </div>
-            </div>
-          `;
-          return;
-        }
+  function truncate(text = '', max = 140) {
+    const clean = String(text).trim();
+    if (clean.length <= max) return clean;
+    return clean.slice(0, max).trimEnd() + '…';
+  }
 
-        const t = threads[0];
-        const title = escapeHtml(t.Title || 'Latest thread');
-        const intro = escapeHtml(t.Intro || t.Description || '');
-        const slug = encodeURIComponent(t.Slug || '');
-        const number = String(t.Number || 1).padStart(2, '0');
+  async function loadThreadBox() {
+    const el = document.getElementById('thread-box');
 
-        el.innerHTML = `
-          <div class="thread-panel-inner">
-            <div class="thread-number">${number}</div>
-            <div class="thread-main">
-              <h3>${title}</h3>
-              <p>${intro}</p>
-              <a class="btn-secondary" href="/thread.html?slug=${slug}">Read now</a>
-            </div>
-          </div>
-        `;
-      } catch (err) {
+    try {
+      const threads = await getThreads({ maxRecords: 1 });
+
+      if (!threads.length) {
         el.innerHTML = `
           <div class="thread-panel-inner">
             <div class="thread-number">01</div>
             <div class="thread-main">
               <h3>Current thread</h3>
-              <p>Unable to load the latest editorial feature.</p>
-              <a class="btn-secondary" href="/threads.html">View threads</a>
+              <p>No thread is live yet. Check back soon.</p>
+              <a class="btn-secondary" href="/threads.html">Browse threads</a>
             </div>
           </div>
         `;
+        return;
       }
+
+      const t = threads[0];
+      const title = escapeHtml(t.Title || 'Latest thread');
+      const intro = escapeHtml(t.Intro || t.Description || '');
+      const slug = encodeURIComponent(t.Slug || '');
+      const number = String(t.Number || 1).padStart(2, '0');
+
+      let linkedBooks = [];
+      try {
+        const allBooks = await getBooks({ maxRecords: 100 });
+        const threadBooks = Array.isArray(t.Books) ? t.Books : [];
+        linkedBooks = allBooks.filter(b => threadBooks.includes(b.id)).slice(0, 8);
+      } catch (e) {
+        linkedBooks = [];
+      }
+
+      const booksMarkup = linkedBooks.length
+        ? `
+          <div class="thread-books-strip">
+            ${linkedBooks.map((b) => {
+              const bookTitle = escapeHtml(b.Title || 'Untitled');
+              const bookAuthor = escapeHtml(b.Author || '');
+              const image = b['Cover URL'] || '';
+              const url = \`/catalogue.html?book=\${encodeURIComponent(b.id)}\`;
+
+              return `
+                <a class="thread-book-thumb" href="${url}" aria-label="${bookTitle}">
+                  <div class="thread-book-cover">
+                    ${image
+                      ? `<img src="${image}" alt="${bookTitle}" loading="lazy">`
+                      : `<div class="thread-book-cover-fallback"></div>`}
+                  </div>
+                  <div class="thread-book-meta">
+                    <div class="thread-book-title">${bookTitle}</div>
+                    <div class="thread-book-author">${bookAuthor}</div>
+                  </div>
+                </a>
+              `;
+            }).join('')}
+          </div>
+        `
+        : '';
+
+      el.innerHTML = `
+        <div class="thread-panel-inner">
+          <div class="thread-number">${number}</div>
+          <div class="thread-main">
+            <h3>${title}</h3>
+            <p>${intro}</p>
+            ${booksMarkup}
+            <a class="btn-secondary" href="/thread.html?slug=${slug}">Read now</a>
+          </div>
+        </div>
+      `;
+    } catch (err) {
+      el.innerHTML = `
+        <div class="thread-panel-inner">
+          <div class="thread-number">01</div>
+          <div class="thread-main">
+            <h3>Current thread</h3>
+            <p>Unable to load the latest editorial feature.</p>
+            <a class="btn-secondary" href="/threads.html">View threads</a>
+          </div>
+        </div>
+      `;
     }
+  }
+
+  async function loadEventBox() {
+    const el = document.getElementById('event-box');
+
+    try {
+      const events = await getEvents({ maxRecords: 1 });
+
+      if (!events.length) {
+        el.innerHTML = `
+          <h3>Next event</h3>
+          <p>No upcoming events right now. Check back soon.</p>
+          <a class="btn-secondary" href="/events.html">View events</a>
+        `;
+        return;
+      }
+
+      const ev = events[0];
+      const title = escapeHtml(ev.Title || 'Upcoming event');
+      const venue = ev.Venue ? escapeHtml(ev.Venue) : '';
+      const date = ev.Date ? escapeHtml(ev.Date) : '';
+      const desc = escapeHtml(truncate(ev.Description || '', 120));
+      const ticketUrl = ev['Ticket URL'] || '/events.html';
+
+      el.innerHTML = `
+        <h3>${title}</h3>
+        <p>
+          ${date}${venue ? ` · ${venue}` : ''}<br>
+          ${desc}
+        </p>
+        <a class="btn-secondary" href="${ticketUrl}">View event</a>
+      `;
+    } catch (err) {
+      el.innerHTML = `
+        <h3>Next event</h3>
+        <p>Unable to load event details.</p>
+        <a class="btn-secondary" href="/events.html">View events</a>
+      `;
+    }
+  }
+
+  async function loadBooks() {
+    const el = document.getElementById('books-rail');
+
+    try {
+      const books = await getBooks({ featured: true, maxRecords: 4 });
+
+      if (!books.length) {
+        el.innerHTML = `<div class="empty-state">No featured books yet.</div>`;
+        return;
+      }
+
+      el.innerHTML = books.map((b) => {
+        const title = escapeHtml(b.Title || 'Untitled');
+        const author = escapeHtml(b.Author || '');
+        const category = escapeHtml(b.Category || b.Section || 'Book');
+        const image = b['Cover URL'] || '';
+        const url = `/catalogue.html?book=${encodeURIComponent(b.id)}`;
+        const price = b.Price ? `$${escapeHtml(String(b.Price))}` : '';
+        const stock = b['In Stock'] ? 'In stock' : '';
+        const meta = [price, stock].filter(Boolean).join(' • ');
+
+        return `
+          <article class="card">
+            <div class="card-media">
+              ${image
+                ? `<img src="${image}" alt="${title}" loading="lazy">`
+                : `<div style="width:100%;height:100%;background:#e8e1d7;"></div>`}
+            </div>
+
+            <div class="card-body">
+              <div class="card-kicker">${category}</div>
+              <h3 class="card-title">${title}</h3>
+              <div class="card-meta">${meta}</div>
+
+              <div class="card-actions">
+                <a class="btn-secondary" href="${url}">Details</a>
+                <a class="btn" href="${url}">View book</a>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    } catch (err) {
+      el.innerHTML = `<div class="empty-state">Unable to load books.</div>`;
+    }
+  }
+
+  async function loadObjects() {
+    const el = document.getElementById('objects-rail');
+
+    try {
+      const objects = await getObjects({ featured: true, maxRecords: 4 });
+
+      if (!objects.length) {
+        el.innerHTML = `<div class="empty-state">No featured objects yet.</div>`;
+        return;
+      }
+
+      el.innerHTML = objects.map((o) => {
+        const name = escapeHtml(o.Name || 'Object');
+        const type = escapeHtml(o.Type || 'Object');
+        const image = o['Photo URL'] || '';
+        const price = o.Price ? `$${escapeHtml(String(o.Price))}` : '';
+        const url = `/objects.html`;
+
+        return `
+          <article class="card">
+            <div class="card-media">
+              ${image
+                ? `<img src="${image}" alt="${name}" loading="lazy">`
+                : `<div style="width:100%;height:100%;background:#e8e1d7;"></div>`}
+            </div>
+
+            <div class="card-body">
+              <div class="card-kicker">${type}</div>
+              <h3 class="card-title">${name}</h3>
+              <div class="card-meta">${price}</div>
+
+              <div class="card-actions">
+                <a class="btn-secondary" href="${url}">View object</a>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    } catch (err) {
+      el.innerHTML = `<div class="empty-state">Unable to load objects.</div>`;
+    }
+  }
+
+  loadThreadBox();
+  loadEventBox();
+  loadBooks();
+  loadObjects();
+</script>
 
     async function loadEventBox() {
       const el = document.getElementById('event-box');
