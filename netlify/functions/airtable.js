@@ -6,54 +6,64 @@ exports.handler = async function(event) {
     const baseId = process.env.AIRTABLE_BASE_ID;
 
     if (!token || !baseId) {
-          return {
-                  statusCode: 500,
-                  body: JSON.stringify({ error: 'Airtable credentials not configured' })
-          };
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: 'Airtable credentials not configured' })
+        };
     }
 
     const params = event.queryStringParameters || {};
     const table  = params.table;
 
     if (!table) {
-          return {
-                  statusCode: 400,
-                  body: JSON.stringify({ error: 'Missing table parameter' })
-          };
+        return {
+            statusCode: 400,
+            body: JSON.stringify({ error: 'Missing table parameter' })
+        };
     }
 
-    // Build Airtable URL — pass all params except 'table' directly
+    // 🔧 FIX: normalize Airtable formulas (checkbox = TRUE())
+    if (params.filterByFormula) {
+        params.filterByFormula = params.filterByFormula
+            // Replace =1 with =TRUE()
+            .replace(/=\s*1/g, '=TRUE()')
+            // Replace =0 with =FALSE() (just in case)
+            .replace(/=\s*0/g, '=FALSE()');
+    }
+
+    // Build Airtable URL
     const airtableBase = `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(table)}`;
     const queryParts = [];
 
     Object.entries(params).forEach(([k, v]) => {
-          if (k !== 'table') {
-                  queryParts.push(`${encodeURIComponent(k)}=${encodeURIComponent(v)}`);
-          }
+        if (k !== 'table') {
+            queryParts.push(`${encodeURIComponent(k)}=${encodeURIComponent(v)}`);
+        }
     });
 
     const url = queryParts.length
-      ? `${airtableBase}?${queryParts.join('&')}`
-          : airtableBase;
+        ? `${airtableBase}?${queryParts.join('&')}`
+        : airtableBase;
 
     try {
-          const res  = await fetch(url, {
-                  headers: { Authorization: `Bearer ${token}` }
-          });
-          const data = await res.json();
+        const res  = await fetch(url, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
 
-      return {
-              statusCode: res.status,
-              headers: {
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*'
-              },
-              body: JSON.stringify(data)
-      };
+        const data = await res.json();
+
+        return {
+            statusCode: res.status,
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
+            body: JSON.stringify(data)
+        };
     } catch (err) {
-          return {
-                  statusCode: 500,
-                  body: JSON.stringify({ error: err.message })
-          };
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: err.message })
+        };
     }
 };
