@@ -463,7 +463,7 @@
 </footer>
 
 <script type="module">
-  import { getThread, getBook, formatPrice } from './js/airtable.js';
+  import { getThread, getBooks, formatPrice } from './js/airtable.js';
 
   function escapeHtml(str = '') {
     return String(str)
@@ -481,6 +481,22 @@
       .filter(Boolean)
       .map(p => `<p>${escapeHtml(p)}</p>`)
       .join('');
+  }
+
+  function normalize(value = '') {
+    return String(value)
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/&/g, ' and ')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
+  }
+
+  function arrayify(value) {
+    if (Array.isArray(value)) return value.filter(Boolean);
+    if (value == null || value === '') return [];
+    return [value];
   }
 
   function getBookCover(book) {
@@ -507,6 +523,205 @@
     return book['In Stock'] ? 'in-stock' : 'out-stock';
   }
 
+  function getThreadTitleCandidates(thread) {
+    const candidates = new Set();
+
+    [
+      thread.Title,
+      thread.Slug,
+      thread.Name,
+      thread['Thread'],
+      thread['Thread Title'],
+      thread['Short Title'],
+      thread['Display Title'],
+      thread['Category'],
+      thread['Theme']
+    ].forEach(value => {
+      if (value) candidates.add(normalize(value));
+    });
+
+    return [...candidates].filter(Boolean);
+  }
+
+  function getPossibleThreadBookRefs(thread) {
+    const possibleFields = [
+      'Books',
+      'Book',
+      'Related Books',
+      'Book Objects',
+      'Books Data',
+      'Titles',
+      'Linked Books',
+      'Featured Books',
+      'Books Linked',
+      'Books in Thread',
+      'Thread Books',
+      'Selected Books'
+    ];
+
+    const refs = [];
+
+    for (const field of possibleFields) {
+      const value = thread[field];
+      if (Array.isArray(value)) refs.push(...value);
+    }
+
+    return refs;
+  }
+
+  function resolveThreadLinkedBooks(thread, books) {
+    const refs = getPossibleThreadBookRefs(thread);
+    if (!refs.length) return [];
+
+    const byId = new Map(books.map(book => [String(book.id), book]));
+    const byTitle = new Map(
+      books
+        .map(book => [normalize(book.Title || ''), book])
+        .filter(([key]) => key)
+    );
+
+    const resolved = [];
+
+    for (const ref of refs) {
+      if (!ref) continue;
+
+      if (typeof ref === 'object' && !Array.isArray(ref)) {
+        const resolvedBook = {
+          id: ref.id || `embedded-${Math.random().toString(36).slice(2)}`,
+          Title: ref.Title || ref.title || '',
+          Author: ref.Author || ref.author || '',
+          Slug: ref.Slug || ref.slug || '',
+          Publisher: ref.Publisher || '',
+          Year: ref.Year || '',
+          Price: ref.Price || '',
+          ISBN: ref.ISBN || '',
+          Blurb: ref.Blurb || '',
+          'In Stock': ref['In Stock'],
+          'Cover URL': ref['Cover URL'] || ref.cover || ref.image || ref['Photo URL'] || ''
+        };
+        resolved.push(resolvedBook);
+        continue;
+      }
+
+      const refString = String(ref).trim();
+
+      if (byId.has(refString)) {
+        resolved.push(byId.get(refString));
+        continue;
+      }
+
+      const normalizedRef = normalize(refString);
+      if (byTitle.has(normalizedRef)) {
+        resolved.push(byTitle.get(normalizedRef));
+        continue;
+      }
+    }
+
+    const deduped = [];
+    const seen = new Set();
+
+    for (const book of resolved) {
+      const key = String(book.id || normalize(book.Title || ''));
+      if (!seen.has(key)) {
+        seen.add(key);
+        deduped.push(book);
+      }
+    }
+
+    return deduped;
+  }
+
+  function bookContainsThreadReference(book, threadCandidates, threadId) {
+    const possibleLinkFields = [
+      'Thread',
+      'Threads',
+      'Thread Title',
+      'Thread Titles',
+      'Related Thread',
+      'Related Threads',
+      'Shelf',
+      'Shelves',
+      'Topic',
+      'Topics',
+      'Category',
+      'Categories',
+      'Theme',
+      'Themes',
+      'Section',
+      'Sections',
+      'Collection',
+      'Collections',
+      'Cluster',
+      'Clusters',
+      'Tag',
+      'Tags',
+      'Keywords',
+      'Homepage Thread',
+      'Homepage Threads'
+    ];
+
+    for (const field of possibleLinkFields) {
+      const values = arrayify(book[field]);
+
+      for (const value of values) {
+        const normalizedValue = normalize(value);
+        if (!normalizedValue) continue;
+
+        for (const candidate of threadCandidates) {
+          if (
+            normalizedValue === candidate ||
+            normalizedValue.includes(candidate) ||
+            candidate.includes(normalizedValue)
+          ) {
+            return true;
+          }
+        }
+      }
+    }
+
+    const possibleIdFields = [
+      'Thread ID',
+      'Thread IDs',
+      'Thread Record ID',
+      'Thread Record IDs',
+      'Related Thread ID',
+      'Related Thread IDs',
+      'Thread Link',
+      'Thread Links',
+      'Thread Ref',
+      'Thread Refs'
+    ];
+
+    for (const field of possibleIdFields) {
+      const values = arrayify(book[field]).map(String);
+      if (values.includes(String(threadId))) return true;
+    }
+
+    return false;
+  }
+
+  function deriveThreadBooks(thread, books) {
+    const threadCandidates = getThreadTitleCandidates(thread);
+    const linkedBooks = resolveThreadLinkedBooks(thread, books);
+
+    const matchedBooks = books.filter(book =>
+      bookContainsThreadReference(book, threadCandidates, thread.id)
+    );
+
+    const merged = [];
+    const seen = new Set();
+
+    [...linkedBooks, ...matchedBooks].forEach(book => {
+      const key = String(book.id || normalize(book.Title || ''));
+      if (!seen.has(key) && (book.Title || getBookCover(book))) {
+        seen.add(key);
+        merged.push(book);
+      }
+    });
+
+    return merged.slice(0, 100);
+  }
+
   async function init() {
     const params = new URLSearchParams(window.location.search);
     const slug = params.get('slug');
@@ -521,7 +736,10 @@
     const booksCountEl = document.getElementById('thread-books-count');
 
     try {
-      const thread = await getThread(slug);
+      const [thread, allBooks] = await Promise.all([
+        getThread(slug),
+        getBooks({ maxRecords: 500 })
+      ]);
 
       document.title = `${thread.Title || 'Thread'} — Hilo Bookshop`;
 
@@ -541,19 +759,7 @@
         </div>
       `;
 
-      const bookIds = Array.isArray(thread.Books) ? thread.Books : [];
-
-      if (!bookIds.length) {
-        booksCountEl.textContent = '0 books';
-        booksListEl.innerHTML = '<div class="empty-state">No books linked yet.</div>';
-        return;
-      }
-
-      const books = await Promise.all(
-        bookIds.map(id => getBook(id).catch(() => null))
-      );
-
-      const validBooks = books.filter(Boolean);
+      const validBooks = deriveThreadBooks(thread, Array.isArray(allBooks) ? allBooks : []);
 
       booksCountEl.textContent = `${validBooks.length} ${validBooks.length === 1 ? 'book' : 'books'}`;
 
@@ -607,11 +813,11 @@
       `;
       booksCountEl.textContent = '';
       booksListEl.innerHTML = '';
+      console.error('Thread page error:', e);
     }
   }
 
   init();
 </script>
-
 </body>
 </html>
