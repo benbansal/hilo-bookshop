@@ -31,21 +31,44 @@ exports.handler = async function(event) {
   }
 
   const airtableBase = `https://api.airtable.com/v0/${baseId}/${encodeURIComponent(table)}`;
-  const queryParts = [];
+  const search = new URLSearchParams();
 
-  Object.entries(params).forEach(([k, v]) => {
-    if (k !== 'table') {
-      queryParts.push(`${encodeURIComponent(k)}=${encodeURIComponent(v)}`);
+  for (const [k, v] of Object.entries(params)) {
+    if (k === 'table' || v == null || v === '') continue;
+
+    if (k === 'sort') {
+      try {
+        const sortArray = JSON.parse(v);
+        if (Array.isArray(sortArray)) {
+          sortArray.forEach((item, i) => {
+            if (item.field) search.append(`sort[${i}][field]`, item.field);
+            if (item.direction) search.append(`sort[${i}][direction]`, item.direction);
+          });
+        }
+      } catch (e) {
+        return {
+          statusCode: 400,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          },
+          body: JSON.stringify({ error: 'Invalid sort parameter' })
+        };
+      }
+    } else {
+      search.append(k, v);
     }
-  });
+  }
 
-  const url = queryParts.length
-    ? `${airtableBase}?${queryParts.join('&')}`
+  const url = search.toString()
+    ? `${airtableBase}?${search.toString()}`
     : airtableBase;
 
   try {
     const res = await fetch(url, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     });
 
     const text = await res.text();
