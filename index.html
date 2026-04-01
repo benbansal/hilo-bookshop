@@ -1,214 +1,162 @@
 <main>
 
-  <!-- ===================================================== -->
   <!-- HERO -->
-  <!-- ===================================================== -->
-
-  <section class="hero">
+  <section class="hero hero-editorial">
     <div class="container hero-grid">
 
       <div class="hero-copy">
-        <p class="eyebrow">Books • Threads • Objects</p>
+        <p class="eyebrow">Buenos Aires — Est. 2026</p>
 
-        <h1>Hello,<br>bookshop.</h1>
+        <h1>
+          A curated bookshop<br>
+          organised around <em>threads</em><br>
+          of connected thinking.
+        </h1>
 
-        <p>
-          A small, curated collection of books, objects and editorial threads.
-          Designed to feel like browsing a real shelf.
+        <p class="hero-intro">
+          300–500 titles in political economy, urbanism, architecture,
+          and current affairs. Every book chosen personally. Every blurb
+          written by the editor. A space for slow reading in a fast city.
         </p>
 
         <div class="hero-actions">
           <a class="btn" href="/books.html">Browse books</a>
-          <a class="btn-secondary" href="/threads.html">Read threads</a>
+          <a class="btn-secondary" href="/threads.html">Read the latest thread</a>
         </div>
       </div>
 
-      <article class="hero-card">
-        <img src="YOUR_FEATURED_IMAGE" alt="Featured thread or book">
-        <div class="hero-card-body">
-          <p class="card-kicker">Featured thread</p>
-          <h3>Thread title goes here</h3>
-          <p>One strong sentence introducing the idea.</p>
+      <figure class="hero-visual">
+        <img src="YOUR_FEATURED_IMAGE" alt="Hilo bookshop, Buenos Aires">
+        <figcaption>Palermo, Buenos Aires</figcaption>
+      </figure>
+
+    </div>
+  </section>
+
+  <!-- LATEST THREAD -->
+  <section class="section section-feature">
+    <div class="container">
+      <div class="section-label-row">
+        <p class="section-label">Latest thread</p>
+        <a href="/threads.html" class="section-link">View all</a>
+      </div>
+
+      <div class="thread-feature">
+        <div class="thread-number">01</div>
+
+        <div class="thread-main">
+          <h2 class="thread-title">
+            Thread title with one <em>editorial hook</em>
+          </h2>
+
+          <p class="thread-excerpt">
+            A sharper, more essay-like introduction goes here. This should feel
+            like the opening paragraph of a journal piece, not a blog teaser.
+          </p>
+
+          <div class="thread-actions">
+            <a class="btn-secondary" href="/thread.html?slug=example">Read the thread</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RECENT ACQUISITIONS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>Recent acquisitions</h2>
+        <a href="/books.html">View all</a>
+      </div>
+
+      <div class="rail">
+        <!-- dynamic cards -->
+      </div>
+    </div>
+  </section>
+
+  <!-- EVENT + OBJECTS -->
+  <section class="section split-section">
+    <div class="container split-grid">
+
+      <article class="feature-panel">
+        <p class="section-label">Next event</p>
+        <div class="event-date-block">
+          <div class="event-day">12</div>
+          <div class="event-month">May 2026</div>
+        </div>
+        <h3>Conversation, reading, launch, or salon title</h3>
+        <p>
+          Date, place, and one compact description with enough intrigue to click.
+        </p>
+        <a class="btn-secondary" href="/events.html">View event</a>
+      </article>
+
+      <article class="feature-panel">
+        <div class="section-head section-head-compact">
+          <p class="section-label">Objects</p>
+          <a href="/objects.html">View all</a>
+        </div>
+
+        <div class="objects-mini-grid">
+          <!-- 2–3 featured objects -->
         </div>
       </article>
 
     </div>
   </section>
 
-  <!-- ===================================================== -->
-  <!-- FEATURE STRIP (EVENT + THREAD) -->
-  <!-- ===================================================== -->
-
-  <section class="section section-tight">
-    <div class="container">
-
-      <div class="feature-strip">
-
-        <article class="feature-box">
-          <h3>Next event</h3>
-          <p>
-            Date, location, and a one-line description of what’s happening.
-          </p>
-          <a class="btn-secondary" href="/events.html">View event</a>
-        </article>
-
-        <article class="feature-box">
-          <h3>Current thread</h3>
-          <p>
-            One idea, one image, one clear editorial hook.
-          </p>
-          <a class="btn-secondary" href="/threads.html">Read now</a>
-        </article>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ===================================================== -->
-  <!-- FEATURED BOOKS -->
-  <!-- ===================================================== -->
-
+  <!-- SHELVES -->
   <section class="section">
     <div class="container">
-
-      <div class="section-head">
-        <h2>Featured books</h2>
-        <a href="/books.html">View all</a>
-      </div>
-
-      <div class="rail">
-
-        <!-- Repeat dynamically -->
-        <article class="card">
-          <div class="card-media">
-            <img src="BOOK_IMAGE" alt="Book title">
-          </div>
-
-          <div class="card-body">
-            <div class="card-kicker">History</div>
-
-            <h3 class="card-title">
-              Book title that wraps to two lines max
-            </h3>
-
-            <div class="card-meta">
-              $34 • In stock
-            </div>
-
-            <div class="card-actions">
-              <a class="btn-secondary" href="/book.html?id=123">Details</a>
-              <button class="btn">Buy</button>
-            </div>
-          </div>
-        </article>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ===================================================== -->
-  <!-- OBJECTS (SECONDARY RAIL) -->
-  <!-- ===================================================== -->
-
-  <section class="section section-tight">
-    <div class="container">
-
-      <div class="section-head">
-        <h2>Objects</h2>
-        <a href="/objects.html">View all</a>
-      </div>
-
-      <div class="rail">
-
-        <article class="card">
-          <div class="card-media">
-            <img src="OBJECT_IMAGE" alt="Object">
-          </div>
-
-          <div class="card-body">
-            <div class="card-kicker">Print</div>
-            <h3 class="card-title">Object name</h3>
-            <div class="card-meta">$18</div>
-          </div>
-        </article>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ===================================================== -->
-  <!-- CATEGORY NAV -->
-  <!-- ===================================================== -->
-
-  <section class="section">
-    <div class="container">
-
       <div class="section-head">
         <h2>Browse by shelf</h2>
       </div>
 
       <div class="category-grid">
-
-        <a class="category-link" href="/books.html?category=History">
-          <strong>History</strong>
-          <span>Political, cultural, global</span>
+        <a class="category-link" href="/books.html?category=Political%20Economy">
+          <strong>Political economy</strong>
+          <span>States, markets, money, crisis</span>
         </a>
 
-        <a class="category-link" href="/books.html?category=Science">
-          <strong>Science</strong>
-          <span>Ideas, discovery, ecology</span>
+        <a class="category-link" href="/books.html?category=Urbanism">
+          <strong>Urbanism</strong>
+          <span>City life, housing, infrastructure</span>
         </a>
 
-        <a class="category-link" href="/books.html?category=Fiction">
-          <strong>Fiction</strong>
-          <span>Novels, stories, voices</span>
+        <a class="category-link" href="/books.html?category=Architecture">
+          <strong>Architecture</strong>
+          <span>Buildings, form, modernity, space</span>
         </a>
 
-        <a class="category-link" href="/objects.html">
-          <strong>Objects</strong>
-          <span>Printed things and more</span>
+        <a class="category-link" href="/books.html?category=Current%20Affairs">
+          <strong>Current affairs</strong>
+          <span>Power, conflict, institutions, change</span>
         </a>
-
       </div>
-
     </div>
   </section>
 
-  <!-- ===================================================== -->
-  <!-- NEWSLETTER (OPTIONAL BUT STRONGLY RECOMMENDED) -->
-  <!-- ===================================================== -->
-
+  <!-- NEWSLETTER -->
   <section class="newsletter-section">
-    <div class="container">
-
+    <div class="container newsletter-grid">
       <div>
-        <h3 class="newsletter-heading">
-          Occasional notes from the shop
-        </h3>
+        <h3 class="newsletter-heading">New threads, new arrivals.</h3>
         <p class="newsletter-sub">
-          New arrivals, events, and editorial threads — sent occasionally.
+          A monthly letter from the editor. What arrived, what we’re reading,
+          and what’s on next. No noise.
         </p>
       </div>
 
       <form class="newsletter-form">
-        <input
-          type="email"
-          placeholder="Your email"
-          class="newsletter-input"
-        >
+        <input type="email" placeholder="Your email" class="newsletter-input">
         <button class="newsletter-btn">Subscribe</button>
       </form>
-
     </div>
   </section>
 
-  <!-- ===================================================== -->
   <!-- MOBILE STICKY BAR -->
-  <!-- ===================================================== -->
-
   <div class="mobile-sticky-bar">
     <a class="btn-secondary" href="/threads.html">Threads</a>
     <a class="btn" href="/books.html">Browse books</a>
