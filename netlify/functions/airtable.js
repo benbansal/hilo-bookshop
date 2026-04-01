@@ -1,6 +1,3 @@
-// Netlify serverless function — Airtable proxy
-// Credentials live in Netlify environment variables, never in code.
-
 exports.handler = async function(event) {
     const token  = process.env.AIRTABLE_TOKEN;
     const baseId = process.env.AIRTABLE_BASE_ID;
@@ -22,13 +19,17 @@ exports.handler = async function(event) {
         };
     }
 
-    // 🔧 FIX: normalize Airtable formulas (checkbox = TRUE())
+    // 🔧 FIX 1: checkbox normalization
     if (params.filterByFormula) {
         params.filterByFormula = params.filterByFormula
-            // Replace =1 with =TRUE()
             .replace(/=\s*1/g, '=TRUE()')
-            // Replace =0 with =FALSE() (just in case)
             .replace(/=\s*0/g, '=FALSE()');
+    }
+
+    // 🔧 FIX 2: fix invalid IS_BEFORE formula (Events table)
+    if (params.filterByFormula && params.filterByFormula.includes('IS_BEFORE')) {
+        params.filterByFormula = params.filterByFormula
+            .replace(/NOT\s*\(\s*IS_BEFORE\s*\(\s*\{Date\}\s*,\s*TODAY\(\)\s*\)\s*\)/g, '{Date} >= TODAY()');
     }
 
     // Build Airtable URL
