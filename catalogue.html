@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catalogue — Hilo Bookshop</title>
+  <meta name="description" content="Browse the full Hilo catalogue — curated books in political economy, urbanism, architecture, and current affairs.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .catalogue-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: calc(100vh - 120px);
+    }
+
+    /* ── Sidebar filters ── */
+    .catalogue-sidebar {
+      padding: 40px 32px;
+      border-right: 1px solid var(--border);
+      position: sticky;
+      top: 86px;
+      height: calc(100vh - 86px);
+      overflow-y: auto;
+    }
+
+    .filter-group { margin-bottom: 32px; }
+
+    .filter-label {
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .filter-options { display: flex; flex-direction: column; gap: 6px; }
+
+    .filter-btn {
+      font-size: 12px;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      text-align: left;
+      padding: 4px 0;
+      font-family: var(--sans);
+      font-weight: 300;
+      transition: color 0.2s;
+    }
+
+    .filter-btn:hover { color: var(--ink); }
+
+    .filter-btn.active {
+      color: var(--accent);
+      font-weight: 400;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 8px 0;
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 300;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      background: transparent;
+      color: var(--ink);
+      outline: none;
+    }
+
+    .search-input::placeholder { color: var(--muted); }
+    .search-input:focus { border-bottom-color: var(--ink); }
+
+    /* ── Main grid ── */
+    .catalogue-main { padding: 40px 48px; }
+
+    .catalogue-meta {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      margin-bottom: 32px;
+    }
+
+    .catalogue-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px 24px;
+    }
+
+    /* ── Book modal overlay ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--paper);
+      max-width: 760px;
+      width: 100%;
+      max-height: 85vh;
+      overflow-y: auto;
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 0;
+    }
+
+    .modal-cover {
+      aspect-ratio: 2/3;
+      background: #2a2520;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .modal-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .modal-cover-fallback {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, #1e2a3a, #2a3a4a);
+    }
+
+    .modal-body { padding: 36px; }
+
+    .modal-tags { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+
+    .modal-title {
+      font-family: var(--serif);
+      font-size: 26px;
+      font-weight: 300;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    .modal-author {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    .modal-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 20px 0;
+    }
+
+    .modal-editor-label {
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .modal-blurb {
+      font-family: var(--serif);
+      font-size: 15px;
+      line-height: 1.8;
+      font-style: italic;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .modal-sig {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      margin-bottom: 24px;
+    }
+
+    .modal-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .modal-meta-item {}
+    .modal-meta-label {
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 2px;
+    }
+    .modal-meta-val { font-size: 13px; color: var(--ink); }
+
+    .modal-actions { display: flex; gap: 10px; align-items: center; }
+
+    .modal-price {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 300;
+      margin-right: 8px;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--muted);
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-main">Hilo</span>
+    <span class="nav-logo-sub">An independent bookshop · Buenos Aires</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="threads.html">Threads</a></li>
+    <li><a href="catalogue.html" class="active">Catalogue</a></li>
+    <li><a href="objects.html">Objects</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-eyebrow">Every book chosen personally</div>
+  <h1 class="page-header-title">Catalogue</h1>
+</div>
+
+<div class="catalogue-layout">
+
+  <!-- ── Sidebar ── -->
+  <aside class="catalogue-sidebar">
+    <div class="filter-group">
+      <span class="filter-label">Search</span>
+      <input class="search-input" type="search" id="search-input"
+             placeholder="Title, author…" autocomplete="off">
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Category</span>
+      <div class="filter-options" id="category-filters">
+        <button class="filter-btn active" data-filter="all">All books</button>
+        <button class="filter-btn" data-filter="Political Economy">Political Economy</button>
+        <button class="filter-btn" data-filter="Urbanism">Urbanism</button>
+        <button class="filter-btn" data-filter="Architecture">Architecture</button>
+        <button class="filter-btn" data-filter="Current Affairs">Current Affairs</button>
+        <button class="filter-btn" data-filter="German">German language</button>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Availability</span>
+      <div class="filter-options">
+        <button class="filter-btn active" id="stock-all" data-stock="all">All titles</button>
+        <button class="filter-btn" id="stock-yes" data-stock="in-stock">In stock</button>
+        <button class="filter-btn" id="stock-order" data-stock="order">Order in</button>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Browse by thread</span>
+      <div class="filter-options" id="thread-filters">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <main class="catalogue-main">
+    <div class="catalogue-meta" id="catalogue-meta">Loading catalogue…</div>
+    <div class="catalogue-grid" id="catalogue-grid">
+      <div class="loading-state" style="grid-column:1/-1">Loading books…</div>
+    </div>
+  </main>
+
+</div>
+
+<!-- ── Book Modal ── -->
+<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true">
+  <div class="modal" id="modal-content">
+    <!-- Populated by JS -->
+  </div>
+</div>
+
+<!-- ── Footer ── -->
+<footer class="footer">
+  <a href="index.html" class="footer-logo">Hilo.</a>
+  <ul class="footer-links">
+    <li><a href="threads.html">Threads</a></li>
+    <li><a href="catalogue.html">Catalogue</a></li>
+    <li><a href="objects.html">Objects</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="https://instagram.com/hilobookshop" target="_blank" rel="noopener">Instagram</a></li>
+    <li><a href="about.html#contact">Contact</a></li>
+  </ul>
+  <div class="footer-address">Buenos Aires, Argentina<br>hilobookshop.com</div>
+</footer>
+
+<script type="module">
+  import { getBooks, getThreads, formatPrice } from './js/airtable.js';
+
+  let allBooks = [];
+  let activeCategory = 'all';
+  let activeStock = 'all';
+  let searchQuery = '';
+
+  /* ── Load everything ── */
+  async function init() {
+    const [books, threads] = await Promise.all([
+      getBooks(),
+      getThreads()
+    ]);
+
+    allBooks = books;
+    renderThreadFilters(threads);
+    renderGrid();
+    checkUrlParams();
+  }
+
+  /* ── Thread filters ── */
+  function renderThreadFilters(threads) {
+    const el = document.getElementById('thread-filters');
+    el.innerHTML = threads.map(t => `
+      <button class="filter-btn" data-thread="${t.id}">${t.Title}</button>
+    `).join('');
+
+    el.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeCategory = 'thread:' + btn.dataset.thread;
+        renderGrid();
+      });
+    });
+  }
+
+  /* ── Category filters ── */
+  document.querySelectorAll('[data-filter]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-filter]').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('[data-thread]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeCategory = btn.dataset.filter;
+      renderGrid();
+    });
+  });
+
+  /* ── Stock filters ── */
+  document.querySelectorAll('[data-stock]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-stock]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeStock = btn.dataset.stock;
+      renderGrid();
+    });
+  });
+
+  /* ── Search ── */
+  document.getElementById('search-input').addEventListener('input', e => {
+    searchQuery = e.target.value.toLowerCase();
+    renderGrid();
+  });
+
+  /* ── Render grid ── */
+  function renderGrid() {
+    let books = allBooks.filter(b => {
+      const matchCat = activeCategory === 'all'
+        ? true
+        : activeCategory.startsWith('thread:')
+          ? (b.Thread || []).includes(activeCategory.replace('thread:', ''))
+          : b.Category === activeCategory;
+
+      const matchStock = activeStock === 'all'
+        ? true
+        : activeStock === 'in-stock'
+          ? b['In Stock']
+          : !b['In Stock'];
+
+      const matchSearch = !searchQuery
+        ? true
+        : (b.Title || '').toLowerCase().includes(searchQuery) ||
+          (b.Author || '').toLowerCase().includes(searchQuery);
+
+      return matchCat && matchStock && matchSearch;
+    });
+
+    const meta = document.getElementById('catalogue-meta');
+    meta.textContent = `${books.length} ${books.length === 1 ? 'title' : 'titles'}`;
+
+    const grid = document.getElementById('catalogue-grid');
+    if (!books.length) {
+      grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1">No books match this filter.</div>';
+      return;
+    }
+
+    grid.innerHTML = books.map(b => `
+      <button class="book-card" data-id="${b.id}" style="background:none;border:none;text-align:left;cursor:pointer;">
+        <div class="book-cover">
+          ${b['Cover URL']
+            ? `<img src="${b['Cover URL']}" alt="${b.Title}" loading="lazy">`
+            : `<div class="book-cover-fallback"></div>`}
+          <div class="book-cover-text">
+            <div class="book-cover-title">${b.Title || ''}</div>
+            <div class="book-cover-author">${b.Author || ''}</div>
+          </div>
+        </div>
+        <div class="book-meta-title">${b.Title || ''}</div>
+        <div class="book-meta-author">${b.Author || ''}</div>
+        ${b['In Stock']
+          ? `<span class="book-tag">In stock</span>`
+          : `<span class="book-tag" style="color:var(--accent);border-color:var(--accent);">Order in · 4–6 wks</span>`}
+      </button>`).join('');
+
+    grid.querySelectorAll('.book-card').forEach(card => {
+      card.addEventListener('click', () => openModal(card.dataset.id));
+    });
+  }
+
+  /* ── Modal ── */
+  function openModal(bookId) {
+    const b = allBooks.find(x => x.id === bookId);
+    if (!b) return;
+    const overlay = document.getElementById('modal-overlay');
+    const content = document.getElementById('modal-content');
+
+    content.style.position = 'relative';
+    content.innerHTML = `
+      <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+      <div class="modal-cover">
+        ${b['Cover URL']
+          ? `<img src="${b['Cover URL']}" alt="${b.Title}">`
+          : `<div class="modal-cover-fallback"></div>`}
+      </div>
+      <div class="modal-body">
+        <div class="modal-tags">
+          ${b.Category ? `<span class="book-tag">${b.Category}</span>` : ''}
+          ${b['In Stock']
+            ? `<span class="book-tag">In stock</span>`
+            : `<span class="book-tag" style="color:var(--accent);border-color:var(--accent);">Order in · 4–6 weeks</span>`}
+        </div>
+        <h2 class="modal-title">${b.Title || ''}</h2>
+        <div class="modal-author">${b.Author || ''}${b.Publisher ? ` — ${b.Publisher}` : ''}</div>
+        <hr class="modal-divider">
+        ${b.Blurb ? `
+          <div class="modal-editor-label">Editor's note</div>
+          <div class="modal-blurb">${b.Blurb}</div>
+          <div class="modal-sig">— B.B.</div>
+        ` : ''}
+        <div class="modal-meta">
+          ${b.Year ? `<div class="modal-meta-item"><div class="modal-meta-label">Year</div><div class="modal-meta-val">${b.Year}</div></div>` : ''}
+          ${b.ISBN ? `<div class="modal-meta-item"><div class="modal-meta-label">ISBN</div><div class="modal-meta-val">${b.ISBN}</div></div>` : ''}
+        </div>
+        <div class="modal-actions">
+          <span class="modal-price">${b.Price ? formatPrice(b.Price) : ''}</span>
+          ${b['In Stock']
+            ? `<a href="about.html#contact" class="btn btn-primary">Reserve for pickup →</a>`
+            : `<a href="about.html#contact" class="btn">Order in — enquire →</a>`}
+        </div>
+      </div>`;
+
+    overlay.classList.add('open');
+    document.getElementById('modal-close').addEventListener('click', closeModal);
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+  }
+
+  document.getElementById('modal-overlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeModal();
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  /* ── URL params (deep link to a book) ── */
+  function checkUrlParams() {
+    const params = new URLSearchParams(window.location.search);
+    const bookId = params.get('book');
+    if (bookId) openModal(bookId);
+  }
+
+  init().catch(console.error);
+</script>
+
+</body>
+</html>

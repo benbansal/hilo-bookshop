@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About — Hilo Bookshop</title>
+  <meta name="description" content="About Hilo — an independent bookshop in Buenos Aires built around threads of connected thinking.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Main grid: portrait sidebar + bio ── */
+    .about-main {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .about-sidebar {
+      padding: 52px 40px;
+      border-right: 1px solid var(--border);
+    }
+
+    .about-portrait {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: #1a1612;
+      border-radius: 2px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      padding: 16px;
+      margin-bottom: 28px;
+    }
+
+    .about-portrait img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .about-portrait-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, #0f0d0b 0%, #2a2418 100%);
+    }
+
+    .about-portrait-caption {
+      position: relative;
+      z-index: 1;
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+
+    .about-details { display: flex; flex-direction: column; gap: 16px; }
+
+    .about-detail-row { border-top: 1px solid var(--border); padding-top: 14px; }
+
+    .about-detail-label {
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .about-detail-val { font-size: 13px; color: var(--ink); line-height: 1.5; }
+
+    /* ── Bio content ── */
+    .about-content { padding: 52px 56px; }
+
+    .about-name {
+      font-family: var(--serif);
+      font-size: 44px;
+      font-weight: 300;
+      line-height: 1.05;
+      margin-bottom: 6px;
+    }
+
+    .about-role {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 40px;
+    }
+
+    .about-body {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      margin-bottom: 44px;
+    }
+
+    .about-body p {
+      font-size: 14px;
+      line-height: 1.95;
+      color: var(--muted);
+    }
+
+    .about-body p strong { color: var(--ink); font-weight: 400; }
+
+    .about-pullquote {
+      border-left: 2px solid var(--accent);
+      padding-left: 24px;
+      margin: 8px 0;
+    }
+
+    .about-pullquote p {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.5;
+      color: var(--ink) !important;
+    }
+
+    .about-links-heading {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .about-links { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    .about-link {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 10px 18px;
+      border: 1px solid var(--border);
+      color: var(--ink);
+      text-decoration: none;
+      transition: border-color 0.2s;
+    }
+
+    .about-link:hover { border-color: var(--ink); }
+
+    .about-link.primary {
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+    }
+
+    .about-link.primary:hover { opacity: 0.75; }
+
+    /* ── Three pillars ── */
+    .pillars-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pillar { padding: 44px 48px; }
+    .pillar + .pillar { border-left: 1px solid var(--border); }
+
+    .pillar-label {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+    }
+
+    .pillar-heading {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 300;
+      margin-bottom: 14px;
+      line-height: 1.2;
+    }
+
+    .pillar-text {
+      font-size: 13px;
+      line-height: 1.85;
+      color: var(--muted);
+    }
+
+    /* ── Contact ── */
+    .contact-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .contact-col { padding: 44px 48px; }
+    .contact-col + .contact-col { border-left: 1px solid var(--border); }
+
+    .contact-label {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .contact-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .contact-item { margin-bottom: 20px; }
+
+    .contact-item-label {
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .contact-item-val { font-size: 14px; color: var(--ink); line-height: 1.5; }
+    .contact-item-val a { color: var(--accent); text-decoration: none; }
+    .contact-item-val a:hover { text-decoration: underline; }
+
+    /* ── Order form ── */
+    .order-form {
+      padding: 52px 48px;
+      border-bottom: 1px solid var(--border);
+      max-width: 640px;
+    }
+
+    .order-form-title {
+      font-family: var(--serif);
+      font-size: 28px;
+      font-weight: 300;
+      margin-bottom: 8px;
+    }
+
+    .order-form-sub {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .form-row { margin-bottom: 20px; }
+
+    .form-label {
+      display: block;
+      font-size: 9px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      padding: 12px 0;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 300;
+      border: none;
+      border-bottom: 1px solid var(--border);
+      background: transparent;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus { border-bottom-color: var(--ink); }
+
+    .form-textarea { min-height: 100px; resize: vertical; }
+
+    .form-input::placeholder,
+    .form-textarea::placeholder { color: var(--muted); }
+
+    .form-note {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-main">Hilo</span>
+    <span class="nav-logo-sub">An independent bookshop · Buenos Aires</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="threads.html">Threads</a></li>
+    <li><a href="catalogue.html">Catalogue</a></li>
+    <li><a href="objects.html">Objects</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="about.html" class="active">About</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-eyebrow">The editor & the shop</div>
+  <h1 class="page-header-title">About Hilo</h1>
+</div>
+
+<!-- ── Bio ── -->
+<div class="about-main">
+  <div class="about-sidebar">
+    <div class="about-portrait">
+      <div class="about-portrait-bg"></div>
+      <!-- Replace with: <img src="assets/portrait.jpg" alt="[Your name]"> -->
+      <div class="about-portrait-caption">Buenos Aires, 2026</div>
+    </div>
+    <div class="about-details">
+      <div class="about-detail-row">
+        <div class="about-detail-label">Based in</div>
+        <div class="about-detail-val">Buenos Aires, Argentina</div>
+      </div>
+      <div class="about-detail-row">
+        <div class="about-detail-label">Previously</div>
+        <div class="about-detail-val">Tokyo · Sydney · Bangkok</div>
+      </div>
+      <div class="about-detail-row">
+        <div class="about-detail-label">Background</div>
+        <div class="about-detail-val">Analyst, researcher, platform builder</div>
+      </div>
+      <div class="about-detail-row">
+        <div class="about-detail-label">Also</div>
+        <div class="about-detail-val">International consulting — UN, World Bank and multilateral clients</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="about-content">
+    <!-- !! Replace all placeholder text below with your own words !! -->
+    <div class="about-name">[Your name]</div>
+    <div class="about-role">Editor & founder, Hilo</div>
+
+    <div class="about-body">
+      <p>
+        Hilo is an independent bookshop in Buenos Aires built around the idea that
+        <strong>books are most useful when they talk to each other.</strong> The shop carries
+        300–500 titles organised into thematic threads — curated reading sequences in
+        political economy, urbanism, architecture, current affairs, and the German-language
+        tradition. Every book is chosen personally. Every blurb is written by the editor.
+      </p>
+
+      <div class="about-pullquote">
+        <p>
+          "A physical bookshop is the direct answer to the compression of thinking — a
+          space engineered for serendipity, where the threads become reading lists."
+        </p>
+      </div>
+
+      <p>
+        [Your biographical paragraph — background, previous projects, how you arrived at
+        this point, why Buenos Aires, why books.]
+      </p>
+
+      <p>
+        Hilo is the latest in a series of platforms built around the same instinct:
+        that <strong>convening people around ideas is the most interesting thing one can do.</strong>
+        The shop also carries a selection of <strong>Japanese studio ceramics</strong> sourced
+        directly from kilns in Mino, Bizen, and Shigaraki.
+      </p>
+    </div>
+
+    <div class="about-links-heading">Further</div>
+    <div class="about-links">
+      <a href="#" class="about-link primary">Read the manifesto</a>
+      <a href="#" class="about-link">Consulting work</a>
+      <a href="https://instagram.com/hilobookshop" target="_blank" rel="noopener" class="about-link">Instagram</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── Three pillars ── -->
+<div class="pillars-section">
+  <div class="pillar">
+    <div class="pillar-label">The books</div>
+    <div class="pillar-heading">Curated, not comprehensive</div>
+    <p class="pillar-text">
+      300–500 titles, every one chosen deliberately. The shop does not try to stock
+      everything — it stocks the right things, organised into threads that make the
+      connections between books visible.
+    </p>
+  </div>
+  <div class="pillar">
+    <div class="pillar-label">The events</div>
+    <div class="pillar-heading">Ticketed seminars, 10–20 guests</div>
+    <p class="pillar-text">
+      Regular talks tied directly to the threads — in-person or remote speakers,
+      wine and cheese, 20 places. One free or pay-what-you-can event per month
+      in Spanish on locally relevant topics.
+    </p>
+  </div>
+  <div class="pillar">
+    <div class="pillar-label">The objects</div>
+    <div class="pillar-heading">Japanese studio ceramics</div>
+    <p class="pillar-text">
+      30–60 pieces at any time, sourced with direct kiln relationships in Mino,
+      Bizen, and Shigaraki. Objects that earn their place alongside books.
+      Priced at USD 80–120 retail.
+    </p>
+  </div>
+</div>
+
+<!-- ── Contact ── -->
+<div class="contact-section" id="contact">
+  <div class="contact-col">
+    <div class="contact-label">Find us</div>
+    <div class="contact-item">
+      <div class="contact-item-label">Address</div>
+      <div class="contact-item-val">
+        Palermo, Buenos Aires<br>
+        <span style="font-size:12px;color:var(--muted);">Exact address on opening</span>
+      </div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-item-label">Opening hours</div>
+      <div class="contact-item-val">Tue–Sat, 11am–7pm</div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-item-label">Special orders</div>
+      <div class="contact-item-val">4–6 week lead time — use the form below</div>
+    </div>
+  </div>
+  <div class="contact-col">
+    <div class="contact-label">Get in touch</div>
+    <div class="contact-item">
+      <div class="contact-item-label">General</div>
+      <div class="contact-item-val"><a href="mailto:hello@hilobookshop.com">hello@hilobookshop.com</a></div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-item-label">Events & speaker enquiries</div>
+      <div class="contact-item-val"><a href="mailto:events@hilobookshop.com">events@hilobookshop.com</a></div>
+    </div>
+    <div class="contact-item">
+      <div class="contact-item-label">Instagram</div>
+      <div class="contact-item-val"><a href="https://instagram.com/hilobookshop" target="_blank" rel="noopener">@hilobookshop</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Special order / contact form (Tally embed) ── -->
+<div class="order-form">
+  <h2 class="order-form-title">Special order or enquiry</h2>
+  <p class="order-form-sub">
+    Can't find a book in the catalogue, or want to reserve something for pickup?
+    Use this form and we'll be in touch within 48 hours.
+  </p>
+  <!--
+    Replace the form below with your Tally embed code.
+    Get it from: tally.so → New form → Share → Embed
+    It will look like:
+    <iframe data-tally-src="https://tally.so/embed/XXXXXX" ...></iframe>
+    <script src="https://tally.so/widgets/embed.js"></script>
+
+    For now, a simple mailto form is shown as placeholder:
+  -->
+  <form action="mailto:hello@hilobookshop.com" method="get" enctype="text/plain">
+    <div class="form-row">
+      <label class="form-label" for="form-name">Your name</label>
+      <input class="form-input" type="text" id="form-name" name="name" placeholder="Name" required>
+    </div>
+    <div class="form-row">
+      <label class="form-label" for="form-email">Email</label>
+      <input class="form-input" type="email" id="form-email" name="email" placeholder="your@email.com" required>
+    </div>
+    <div class="form-row">
+      <label class="form-label" for="form-message">Book title / enquiry</label>
+      <textarea class="form-textarea" id="form-message" name="body"
+                placeholder="Title, author, and any notes…"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Send →</button>
+    <p class="form-note">
+      We'll respond within 48 hours. Special orders take 4–6 weeks from the UK.
+    </p>
+  </form>
+</div>
+
+<footer class="footer">
+  <a href="index.html" class="footer-logo">Hilo.</a>
+  <ul class="footer-links">
+    <li><a href="threads.html">Threads</a></li>
+    <li><a href="catalogue.html">Catalogue</a></li>
+    <li><a href="objects.html">Objects</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="https://instagram.com/hilobookshop" target="_blank" rel="noopener">Instagram</a></li>
+    <li><a href="about.html#contact">Contact</a></li>
+  </ul>
+  <div class="footer-address">Buenos Aires, Argentina<br>hilobookshop.com</div>
+</footer>
+
+</body>
+</html>

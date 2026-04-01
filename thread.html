@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thread — Hilo Bookshop</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .thread-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      min-height: calc(100vh - 86px);
+    }
+
+    /* ── Essay column ── */
+    .thread-essay {
+      padding: 56px 64px 80px 48px;
+      border-right: 1px solid var(--border);
+      max-width: 720px;
+    }
+
+    .thread-number-large {
+      font-family: var(--serif);
+      font-size: 96px;
+      font-weight: 300;
+      color: var(--border);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .thread-title-large {
+      font-family: var(--serif);
+      font-size: 40px;
+      font-weight: 300;
+      line-height: 1.15;
+      margin-bottom: 32px;
+      color: var(--ink);
+    }
+
+    .thread-title-large em { font-style: italic; color: var(--accent); }
+
+    .thread-body {
+      font-size: 15px;
+      line-height: 1.95;
+      color: var(--muted);
+      white-space: pre-line;
+    }
+
+    .thread-body p { margin-bottom: 20px; }
+
+    .thread-back {
+      margin-bottom: 32px;
+    }
+
+    /* ── Book list sidebar ── */
+    .thread-books-col {
+      padding: 56px 40px;
+      position: sticky;
+      top: 86px;
+      height: calc(100vh - 86px);
+      overflow-y: auto;
+    }
+
+    .thread-books-heading {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .thread-books-heading::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .thread-book-item {
+      display: flex;
+      gap: 16px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: opacity 0.15s;
+    }
+
+    .thread-book-item:hover { opacity: 0.7; }
+    .thread-book-item:first-of-type { padding-top: 0; }
+
+    .thread-book-thumb {
+      width: 44px;
+      height: 64px;
+      border-radius: 2px;
+      flex-shrink: 0;
+      overflow: hidden;
+      background: var(--border);
+      box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .thread-book-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .thread-book-info { flex: 1; }
+
+    .thread-book-title {
+      font-family: var(--serif);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.3;
+      color: var(--ink);
+      margin-bottom: 3px;
+    }
+
+    .thread-book-author {
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .thread-book-stock {
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .thread-book-stock.available { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-main">Hilo</span>
+    <span class="nav-logo-sub">An independent bookshop · Buenos Aires</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="threads.html" class="active">Threads</a></li>
+    <li><a href="catalogue.html">Catalogue</a></li>
+    <li><a href="objects.html">Objects</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+</nav>
+
+<div class="thread-layout">
+
+  <div class="thread-essay" id="thread-essay">
+    <div class="loading-state">Loading thread…</div>
+  </div>
+
+  <div class="thread-books-col" id="thread-books-col">
+    <div class="thread-books-heading">Books in this thread</div>
+    <div id="thread-books-list">
+      <div class="loading-state">Loading…</div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="footer">
+  <a href="index.html" class="footer-logo">Hilo.</a>
+  <ul class="footer-links">
+    <li><a href="threads.html">Threads</a></li>
+    <li><a href="catalogue.html">Catalogue</a></li>
+    <li><a href="objects.html">Objects</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="https://instagram.com/hilobookshop" target="_blank" rel="noopener">Instagram</a></li>
+    <li><a href="about.html#contact">Contact</a></li>
+  </ul>
+  <div class="footer-address">Buenos Aires, Argentina<br>hilobookshop.com</div>
+</footer>
+
+<script type="module">
+  import { getThread, getBook, formatPrice } from './js/airtable.js';
+
+  async function init() {
+    const params = new URLSearchParams(window.location.search);
+    const slug = params.get('slug');
+
+    if (!slug) {
+      window.location.href = 'threads.html';
+      return;
+    }
+
+    try {
+      const thread = await getThread(slug);
+
+      // Update page title
+      document.title = `${thread.Title} — Hilo Bookshop`;
+
+      // Render essay
+      const essay = document.getElementById('thread-essay');
+      essay.innerHTML = `
+        <div class="thread-back">
+          <a href="threads.html" class="link-accent" style="font-size:10px;">← All threads</a>
+        </div>
+        <div class="thread-number-large">${String(thread.Number || '').padStart(2,'0')}</div>
+        <h1 class="thread-title-large">${thread.Title || ''}</h1>
+        <div class="thread-body">${(thread.Intro || '').split('\n').map(p => p ? `<p>${p}</p>` : '').join('')}</div>`;
+
+      // Render books
+      const bookIds = thread.Books || [];
+      const booksList = document.getElementById('thread-books-list');
+
+      if (!bookIds.length) {
+        booksList.innerHTML = '<div class="empty-state">No books linked yet.</div>';
+        return;
+      }
+
+      const books = await Promise.all(bookIds.map(id => getBook(id).catch(() => null)));
+      const validBooks = books.filter(Boolean);
+
+      booksList.innerHTML = validBooks.map(b => `
+        <a href="catalogue.html?book=${b.id}" class="thread-book-item">
+          <div class="thread-book-thumb">
+            ${b['Cover URL']
+              ? `<img src="${b['Cover URL']}" alt="${b.Title}" loading="lazy">`
+              : ''}
+          </div>
+          <div class="thread-book-info">
+            <div class="thread-book-title">${b.Title || ''}</div>
+            <div class="thread-book-author">${b.Author || ''}</div>
+            <div class="thread-book-stock ${b['In Stock'] ? 'available' : ''}">
+              ${b['In Stock'] ? 'In stock' : 'Order in'}
+              ${b.Price ? ` · ${formatPrice(b.Price)}` : ''}
+            </div>
+          </div>
+        </a>`).join('');
+
+    } catch(e) {
+      document.getElementById('thread-essay').innerHTML =
+        '<div class="empty-state">Thread not found. <a href="threads.html" class="link-accent">View all threads →</a></div>';
+    }
+  }
+
+  init();
+</script>
+
+</body>
+</html>

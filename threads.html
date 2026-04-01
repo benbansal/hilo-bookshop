@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Threads — Hilo Bookshop</title>
+  <meta name="description" content="Hilo threads — curated reading sequences in political economy, urbanism, architecture, and current affairs.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .threads-intro {
+      padding: 40px 48px;
+      border-bottom: 1px solid var(--border);
+      max-width: 560px;
+    }
+
+    .threads-intro p {
+      font-size: 13px;
+      line-height: 1.9;
+      color: var(--muted);
+    }
+
+    .threads-list { border-bottom: 1px solid var(--border); }
+
+    .thread-row {
+      display: grid;
+      grid-template-columns: 64px 1fr auto;
+      gap: 40px;
+      padding: 40px 48px;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: background 0.15s;
+      align-items: center;
+    }
+
+    .thread-row:hover { background: rgba(0,0,0,0.02); }
+    .thread-row:last-child { border-bottom: none; }
+
+    .thread-row-number {
+      font-family: var(--serif);
+      font-size: 40px;
+      font-weight: 300;
+      color: var(--border);
+      line-height: 1;
+    }
+
+    .thread-row-body {}
+
+    .thread-row-title {
+      font-family: var(--serif);
+      font-size: 24px;
+      font-weight: 300;
+      line-height: 1.2;
+      margin-bottom: 8px;
+      color: var(--ink);
+    }
+
+    .thread-row-title em { font-style: italic; color: var(--accent); }
+
+    .thread-row-intro {
+      font-size: 13px;
+      line-height: 1.8;
+      color: var(--muted);
+      max-width: 560px;
+      margin-bottom: 12px;
+    }
+
+    .thread-row-count {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .thread-row-arrow {
+      font-size: 18px;
+      color: var(--border);
+      transition: color 0.2s, transform 0.2s;
+    }
+
+    .thread-row:hover .thread-row-arrow {
+      color: var(--accent);
+      transform: translateX(4px);
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-main">Hilo</span>
+    <span class="nav-logo-sub">An independent bookshop · Buenos Aires</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="threads.html" class="active">Threads</a></li>
+    <li><a href="catalogue.html">Catalogue</a></li>
+    <li><a href="objects.html">Objects</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-eyebrow">Curated reading sequences</div>
+  <h1 class="page-header-title">Threads</h1>
+</div>
+
+<div class="threads-intro">
+  <p>
+    A thread is a curated sequence of 5–10 books organised around a single question,
+    argument, or field of inquiry. Each thread is introduced by a short essay from
+    the editor. Books belong to multiple threads — the catalogue is a web, not a shelf.
+  </p>
+</div>
+
+<div class="threads-list" id="threads-list">
+  <div class="loading-state">Loading threads…</div>
+</div>
+
+<footer class="footer">
+  <a href="index.html" class="footer-logo">Hilo.</a>
+  <ul class="footer-links">
+    <li><a href="threads.html">Threads</a></li>
+    <li><a href="catalogue.html">Catalogue</a></li>
+    <li><a href="objects.html">Objects</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="https://instagram.com/hilobookshop" target="_blank" rel="noopener">Instagram</a></li>
+    <li><a href="about.html#contact">Contact</a></li>
+  </ul>
+  <div class="footer-address">Buenos Aires, Argentina<br>hilobookshop.com</div>
+</footer>
+
+<script type="module">
+  import { getThreads } from './js/airtable.js';
+
+  async function init() {
+    const el = document.getElementById('threads-list');
+    try {
+      const threads = await getThreads();
+      if (!threads.length) {
+        el.innerHTML = '<div class="empty-state">No threads published yet. Coming soon.</div>';
+        return;
+      }
+
+      el.innerHTML = threads.map(t => `
+        <a href="thread.html?slug=${t.Slug}" class="thread-row">
+          <div class="thread-row-number">${String(t.Number || '').padStart(2,'0')}</div>
+          <div class="thread-row-body">
+            <h2 class="thread-row-title">${t.Title || ''}</h2>
+            <p class="thread-row-intro">${(t.Intro || '').substring(0, 200)}${t.Intro && t.Intro.length > 200 ? '…' : ''}</p>
+            <span class="thread-row-count">${(t.Books || []).length} books</span>
+          </div>
+          <div class="thread-row-arrow">→</div>
+        </a>`).join('');
+    } catch(e) {
+      el.innerHTML = '<div class="empty-state">Unable to load threads.</div>';
+    }
+  }
+
+  init();
+</script>
+
+</body>
+</html>

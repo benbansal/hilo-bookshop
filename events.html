@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events — Hilo Bookshop</title>
+  <meta name="description" content="Ticketed seminars and talks at Hilo Bookshop Buenos Aires. Small gatherings around books, ideas and current affairs.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .events-layout {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 56px 48px;
+    }
+
+    .event-card {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 40px;
+      padding: 40px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: start;
+    }
+
+    .event-card:first-child { padding-top: 0; }
+
+    .event-date-block {
+      text-align: center;
+      padding-top: 4px;
+    }
+
+    .event-day {
+      font-family: var(--serif);
+      font-size: 52px;
+      font-weight: 300;
+      color: var(--border);
+      line-height: 1;
+      display: block;
+    }
+
+    .event-month-year {
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-top: 2px;
+    }
+
+    .event-content {}
+
+    .event-tags {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .event-tag {
+      font-size: 9px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 2px;
+    }
+
+    .event-tag.free {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .event-title {
+      font-family: var(--serif);
+      font-size: 24px;
+      font-weight: 300;
+      line-height: 1.3;
+      margin-bottom: 12px;
+      color: var(--ink);
+    }
+
+    .event-description {
+      font-size: 13px;
+      line-height: 1.85;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .event-meta {
+      display: flex;
+      gap: 24px;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .event-meta span::before {
+      content: '·';
+      margin-right: 6px;
+      color: var(--border);
+    }
+
+    .event-meta span:first-child::before { display: none; }
+
+    /* Past events */
+    .past-section { padding: 0 0 56px; }
+
+    .past-toggle {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--sans);
+      padding: 24px 0 0;
+      display: block;
+    }
+
+    .past-toggle:hover { color: var(--ink); }
+
+    .past-list { display: none; }
+    .past-list.open { display: block; }
+
+    .past-event {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 24px;
+    }
+
+    .past-event-title {
+      font-family: var(--serif);
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--muted);
+    }
+
+    .past-event-date {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+
+    .no-events {
+      padding: 80px 0;
+      text-align: center;
+    }
+
+    .no-events-title {
+      font-family: var(--serif);
+      font-size: 24px;
+      font-weight: 300;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .no-events-sub {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-main">Hilo</span>
+    <span class="nav-logo-sub">An independent bookshop · Buenos Aires</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="threads.html">Threads</a></li>
+    <li><a href="catalogue.html">Catalogue</a></li>
+    <li><a href="objects.html">Objects</a></li>
+    <li><a href="events.html" class="active">Events</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-eyebrow">Ticketed seminars · Buenos Aires</div>
+  <h1 class="page-header-title">Events</h1>
+</div>
+
+<div class="events-layout">
+  <div id="events-list">
+    <div class="loading-state">Loading events…</div>
+  </div>
+
+  <div class="past-section" id="past-section" style="display:none;">
+    <button class="past-toggle" id="past-toggle">
+      Past events ↓
+    </button>
+    <div class="past-list" id="past-list"></div>
+  </div>
+</div>
+
+<div class="newsletter-section">
+  <div>
+    <div class="newsletter-heading">Don't miss an event.</div>
+    <p class="newsletter-sub">
+      Subscribe for the monthly letter — new events, new threads, new arrivals.
+    </p>
+  </div>
+  <form class="newsletter-form"
+        action="https://hilobookshop.substack.com/api/v1/free?nojs=true"
+        method="post" target="_blank">
+    <input class="newsletter-input" type="email" name="email"
+           placeholder="your@email.com" required>
+    <button class="newsletter-btn" type="submit">Subscribe</button>
+  </form>
+</div>
+
+<footer class="footer">
+  <a href="index.html" class="footer-logo">Hilo.</a>
+  <ul class="footer-links">
+    <li><a href="threads.html">Threads</a></li>
+    <li><a href="catalogue.html">Catalogue</a></li>
+    <li><a href="objects.html">Objects</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="https://instagram.com/hilobookshop" target="_blank" rel="noopener">Instagram</a></li>
+    <li><a href="about.html#contact">Contact</a></li>
+  </ul>
+  <div class="footer-address">Buenos Aires, Argentina<br>hilobookshop.com</div>
+</footer>
+
+<script type="module">
+  import { getEvents, formatDate, formatDateShort } from './js/airtable.js';
+
+  async function init() {
+    const [upcoming, past] = await Promise.all([
+      getEvents({ past: false }),
+      getEvents({ past: true })
+    ]);
+
+    renderUpcoming(upcoming);
+    renderPast(past);
+  }
+
+  function renderUpcoming(events) {
+    const el = document.getElementById('events-list');
+
+    if (!events.length) {
+      el.innerHTML = `
+        <div class="no-events">
+          <div class="no-events-title">No upcoming events right now.</div>
+          <p class="no-events-sub">
+            Subscribe below to be the first to know when new events are announced.
+          </p>
+        </div>`;
+      return;
+    }
+
+    el.innerHTML = events.map(ev => {
+      const { day, month, year } = formatDateShort(ev.Date);
+      return `
+        <div class="event-card">
+          <div class="event-date-block">
+            <span class="event-day">${day}</span>
+            <div class="event-month-year">${month}<br>${year}</div>
+          </div>
+          <div class="event-content">
+            <div class="event-tags">
+              ${ev.Language ? `<span class="event-tag">${ev.Language}</span>` : ''}
+              ${ev.Free ? `<span class="event-tag free">Free</span>` : `<span class="event-tag">Ticketed</span>`}
+            </div>
+            <h2 class="event-title">${ev.Title || ''}</h2>
+            <p class="event-description">${ev.Description || ''}</p>
+            <div class="event-meta">
+              ${ev.Time ? `<span>${ev.Time}</span>` : ''}
+              ${ev.Venue ? `<span>${ev.Venue}</span>` : ''}
+              ${ev.Capacity ? `<span>${ev.Capacity} places</span>` : ''}
+            </div>
+            ${ev['Ticket URL']
+              ? `<a href="${ev['Ticket URL']}" class="btn" target="_blank" rel="noopener">Reserve a place →</a>`
+              : `<a href="about.html#contact" class="btn">Enquire →</a>`}
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function renderPast(events) {
+    if (!events.length) return;
+    const section = document.getElementById('past-section');
+    const list = document.getElementById('past-list');
+    const toggle = document.getElementById('past-toggle');
+
+    section.style.display = 'block';
+    list.innerHTML = events.map(ev => `
+      <div class="past-event">
+        <div class="past-event-title">${ev.Title || ''}</div>
+        <div class="past-event-date">${formatDate(ev.Date)}</div>
+      </div>`).join('');
+
+    toggle.addEventListener('click', () => {
+      const open = list.classList.toggle('open');
+      toggle.textContent = open ? 'Past events ↑' : 'Past events ↓';
+    });
+  }
+
+  init().catch(console.error);
+</script>
+
+</body>
+</html>

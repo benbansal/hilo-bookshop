@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Objects — Hilo Bookshop</title>
+  <meta name="description" content="Japanese studio ceramics at Hilo Bookshop — Mino, Bizen, Shigaraki. Sourced directly from kilns in Japan.">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .objects-intro {
+      padding: 40px 48px;
+      border-bottom: 1px solid var(--border);
+      max-width: 640px;
+    }
+
+    .objects-intro p {
+      font-family: var(--serif);
+      font-size: 17px;
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.75;
+      color: var(--muted);
+    }
+
+    .objects-main { padding: 52px 48px; }
+
+    /* Masonry-style grid */
+    .objects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .object-card {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      cursor: pointer;
+    }
+
+    .object-photo {
+      width: 100%;
+      aspect-ratio: 1;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Every third card is taller for visual rhythm */
+    .object-card:nth-child(3n) .object-photo {
+      aspect-ratio: 3/4;
+    }
+
+    .object-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .object-card:hover .object-photo img { transform: scale(1.04); }
+
+    .object-photo-placeholder {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #c8bfb0, #b0a898);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .object-sold-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(0,0,0,0.6);
+      color: rgba(255,255,255,0.7);
+      font-size: 9px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      border-radius: 2px;
+    }
+
+    .object-info {}
+
+    .object-name {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .object-origin {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      margin-bottom: 8px;
+    }
+
+    .object-description {
+      font-size: 12px;
+      line-height: 1.7;
+      color: var(--muted);
+      font-style: italic;
+      font-family: var(--serif);
+      margin-bottom: 10px;
+    }
+
+    .object-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .object-price {
+      font-family: var(--serif);
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--ink);
+    }
+
+    .object-status {
+      font-size: 10px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .object-status.available { color: var(--accent); }
+
+    /* Enquire link */
+    .objects-enquire {
+      margin-top: 64px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .objects-enquire-text {
+      font-family: var(--serif);
+      font-size: 20px;
+      font-weight: 300;
+      line-height: 1.4;
+      color: var(--muted);
+      max-width: 480px;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-main">Hilo</span>
+    <span class="nav-logo-sub">An independent bookshop · Buenos Aires</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="threads.html">Threads</a></li>
+    <li><a href="catalogue.html">Catalogue</a></li>
+    <li><a href="objects.html" class="active">Objects</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+</nav>
+
+<div class="page-header">
+  <div class="page-header-eyebrow">Japanese studio ceramics</div>
+  <h1 class="page-header-title">Objects</h1>
+</div>
+
+<div class="objects-intro">
+  <p>
+    Alongside the books, Hilo carries a rotating selection of Japanese studio ceramics —
+    sourced with direct kiln relationships in Mino, Bizen, and Shigaraki. Objects that
+    reward the same kind of slow attention the books ask of their readers.
+  </p>
+</div>
+
+<div class="objects-main">
+  <div class="objects-grid" id="objects-grid">
+    <div class="loading-state" style="grid-column:1/-1">Loading objects…</div>
+  </div>
+
+  <div class="objects-enquire">
+    <p class="objects-enquire-text">
+      All pieces are available for in-store viewing.<br>
+      Enquire about availability, shipping, or commissions.
+    </p>
+    <a href="about.html#contact" class="btn">Get in touch →</a>
+  </div>
+</div>
+
+<footer class="footer">
+  <a href="index.html" class="footer-logo">Hilo.</a>
+  <ul class="footer-links">
+    <li><a href="threads.html">Threads</a></li>
+    <li><a href="catalogue.html">Catalogue</a></li>
+    <li><a href="objects.html">Objects</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="https://instagram.com/hilobookshop" target="_blank" rel="noopener">Instagram</a></li>
+    <li><a href="about.html#contact">Contact</a></li>
+  </ul>
+  <div class="footer-address">Buenos Aires, Argentina<br>hilobookshop.com</div>
+</footer>
+
+<script type="module">
+  import { getObjects, formatPrice } from './js/airtable.js';
+
+  async function init() {
+    const el = document.getElementById('objects-grid');
+    try {
+      const objects = await getObjects({ available: false }); // show all, including sold
+      if (!objects.length) {
+        el.innerHTML = '<div class="empty-state" style="grid-column:1/-1">No objects in stock right now. Check back soon.</div>';
+        return;
+      }
+
+      el.innerHTML = objects.map(o => `
+        <div class="object-card">
+          <div class="object-photo">
+            ${o['Photo URL']
+              ? `<img src="${o['Photo URL']}" alt="${o.Name || ''}" loading="lazy">`
+              : `<div class="object-photo-placeholder"></div>`}
+            ${!o.Available ? `<div class="object-sold-badge">Sold</div>` : ''}
+          </div>
+          <div class="object-info">
+            <div class="object-name">${o.Name || ''}</div>
+            ${o.Origin ? `<div class="object-origin">${o.Origin}</div>` : ''}
+            ${o.Description ? `<div class="object-description">${o.Description}</div>` : ''}
+            <div class="object-footer">
+              <div class="object-price">${o.Price ? formatPrice(o.Price) : ''}</div>
+              <div class="object-status ${o.Available ? 'available' : ''}">
+                ${o.Available ? 'Available' : 'Sold'}
+              </div>
+            </div>
+          </div>
+        </div>`).join('');
+    } catch(e) {
+      el.innerHTML = '<div class="empty-state" style="grid-column:1/-1">Unable to load objects.</div>';
+    }
+  }
+
+  init();
+</script>
+
+</body>
+</html>
