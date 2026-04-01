@@ -7,8 +7,8 @@
      AIRTABLE_TOKEN and AIRTABLE_BASE_ID
    ============================================================ */
 
-const AIRTABLE_TOKEN   = 'pat2W1FakhwgdOIt0';   // 
-const AIRTABLE_BASE_ID = 'appzfvlbPljtAF9FC';           // 
+const AIRTABLE_TOKEN   = 'pat2W1FakhwgdOIt0';
+const AIRTABLE_BASE_ID = 'appzfvlbPljtAF9FC';          
 const AIRTABLE_API     = 'https://api.airtable.com/v0';
 
 /* ============================================================
