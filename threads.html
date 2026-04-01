@@ -6,81 +6,402 @@
   <title>Threads — Hilo Bookshop</title>
   <meta name="description" content="Hilo threads — curated reading sequences in political economy, urbanism, architecture, and current affairs.">
   <link rel="stylesheet" href="css/style.css">
+
   <style>
-    .threads-intro {
-      padding: 40px 48px;
-      border-bottom: 1px solid var(--border);
-      max-width: 560px;
+    :root {
+      --threads-paper: #f3ede4;
+      --threads-paper-warm: #efe5d8;
+      --threads-line: rgba(60, 45, 32, 0.14);
+      --threads-line-strong: rgba(60, 45, 32, 0.22);
+      --threads-shadow-soft: 0 8px 18px rgba(28, 20, 14, 0.06);
+      --threads-brown: #6f5640;
     }
 
-    .threads-intro p {
-      font-size: 13px;
-      line-height: 1.9;
-      color: var(--muted);
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.42), transparent 30%),
+        var(--threads-paper);
     }
 
-    .threads-list { border-bottom: 1px solid var(--border); }
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+      padding: 18px 40px 16px;
+      border-bottom: 1px solid var(--threads-line);
+      background: rgba(243, 237, 228, 0.92);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
 
-    .thread-row {
-      display: grid;
-      grid-template-columns: 64px 1fr auto;
-      gap: 40px;
-      padding: 40px 48px;
-      border-bottom: 1px solid var(--border);
+    .nav-logo {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
       text-decoration: none;
       color: inherit;
-      transition: background 0.15s;
-      align-items: center;
+      min-width: 0;
     }
 
-    .thread-row:hover { background: rgba(0,0,0,0.02); }
-    .thread-row:last-child { border-bottom: none; }
-
-    .thread-row-number {
+    .nav-logo-main {
       font-family: var(--serif);
-      font-size: 40px;
-      font-weight: 300;
-      color: var(--border);
-      line-height: 1;
-    }
-
-    .thread-row-body {}
-
-    .thread-row-title {
-      font-family: var(--serif);
-      font-size: 24px;
-      font-weight: 300;
-      line-height: 1.2;
-      margin-bottom: 8px;
+      font-size: 34px;
+      line-height: 0.95;
+      font-weight: 400;
+      letter-spacing: -0.03em;
       color: var(--ink);
     }
 
-    .thread-row-title em { font-style: italic; color: var(--accent); }
-
-    .thread-row-intro {
-      font-size: 13px;
-      line-height: 1.8;
-      color: var(--muted);
-      max-width: 560px;
-      margin-bottom: 12px;
-    }
-
-    .thread-row-count {
+    .nav-logo-sub {
       font-size: 10px;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--muted);
     }
 
-    .thread-row-arrow {
-      font-size: 18px;
-      color: var(--border);
-      transition: color 0.2s, transform 0.2s;
+    .nav-links {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin: 0;
+      padding: 0;
     }
 
-    .thread-row:hover .thread-row-arrow {
+    .nav-links a {
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
       color: var(--accent);
-      transform: translateX(4px);
+    }
+
+    .threads-page-header {
+      border-bottom: 1px solid var(--threads-line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0)),
+        rgba(255,255,255,0.10);
+    }
+
+    .threads-page-header-inner {
+      max-width: 980px;
+      padding: 34px 40px 38px;
+    }
+
+    .threads-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .threads-title {
+      font-family: var(--serif);
+      font-size: clamp(34px, 5vw, 56px);
+      font-weight: 300;
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+      margin: 0 0 16px;
+      color: var(--ink);
+      max-width: 14ch;
+      text-wrap: balance;
+    }
+
+    .threads-intro {
+      font-size: 15px;
+      line-height: 1.85;
+      color: var(--muted);
+      max-width: 70ch;
+    }
+
+    .threads-intro p {
+      margin: 0 0 16px;
+    }
+
+    .threads-main {
+      border-bottom: 1px solid var(--threads-line);
+    }
+
+    .threads-list {
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
+    .thread-row {
+      display: grid;
+      grid-template-columns: 70px minmax(0, 1fr) 160px;
+      gap: 24px;
+      align-items: start;
+      padding: 30px 40px;
+      border-bottom: 1px solid var(--threads-line);
+      color: inherit;
+      text-decoration: none;
+      transition: background 0.18s ease;
+    }
+
+    .thread-row:hover {
+      background: rgba(255,255,255,0.16);
+    }
+
+    .thread-row:last-child {
+      border-bottom: none;
+    }
+
+    .thread-number {
+      font-family: var(--serif);
+      font-size: 58px;
+      font-weight: 300;
+      color: #d4c6b7;
+      line-height: 0.9;
+      margin-top: 2px;
+    }
+
+    .thread-text {
+      min-width: 0;
+      padding-top: 4px;
+    }
+
+    .thread-title-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 10px 14px;
+      margin-bottom: 10px;
+    }
+
+    .thread-title-row h2 {
+      font-family: var(--serif);
+      font-size: clamp(26px, 3.1vw, 38px);
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      font-weight: 300;
+      margin: 0;
+      color: var(--ink);
+    }
+
+    .thread-title-row h2 em {
+      font-style: italic;
+      color: var(--threads-brown);
+    }
+
+    .thread-meta {
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .thread-blurb {
+      font-size: 14px;
+      line-height: 1.8;
+      color: var(--muted);
+      max-width: 68ch;
+      margin: 0 0 14px;
+    }
+
+    .thread-anchor-note {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+      align-items: baseline;
+      font-size: 11px;
+      line-height: 1.5;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .thread-anchor-label {
+      color: var(--threads-brown);
+    }
+
+    .thread-anchor-title {
+      color: var(--ink);
+      text-transform: none;
+      letter-spacing: 0;
+      font-size: 13px;
+    }
+
+    .thread-anchor-author {
+      text-transform: none;
+      letter-spacing: 0;
+      font-size: 13px;
+    }
+
+    .thread-cover-wrap {
+      justify-self: end;
+      width: 132px;
+      min-width: 132px;
+    }
+
+    .thread-cover {
+      width: 132px;
+      aspect-ratio: 0.72;
+      border-radius: 2px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #d8cbbb 0%, #efe5da 100%);
+      box-shadow: var(--threads-shadow-soft);
+      border: 1px solid rgba(70, 50, 35, 0.06);
+      margin-bottom: 10px;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .thread-row:hover .thread-cover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 22px rgba(28, 20, 14, 0.10);
+    }
+
+    .thread-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .thread-cover-caption {
+      font-size: 11px;
+      line-height: 1.45;
+      color: var(--muted);
+    }
+
+    .thread-cover-caption strong {
+      display: block;
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .loading-state,
+    .empty-state {
+      font-size: 12px;
+      color: var(--muted);
+      padding: 30px 40px;
+    }
+
+    .footer {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 24px;
+      align-items: start;
+      padding: 26px 40px 30px;
+      background: #eee4d7;
+      border-top: 1px solid var(--threads-line);
+    }
+
+    .footer-logo {
+      font-family: var(--serif);
+      font-size: 30px;
+      line-height: 1;
+      text-decoration: none;
+      color: var(--ink);
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin: 4px 0 0;
+      padding: 0;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .footer-links a:hover {
+      color: var(--ink);
+    }
+
+    .footer-address {
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    @media (max-width: 900px) {
+      .thread-row {
+        grid-template-columns: 56px minmax(0, 1fr) 110px;
+        gap: 18px;
+      }
+
+      .thread-number {
+        font-size: 42px;
+      }
+
+      .thread-cover-wrap,
+      .thread-cover {
+        width: 100px;
+        min-width: 100px;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px 22px 14px;
+      }
+
+      .nav-links {
+        gap: 10px 14px;
+      }
+
+      .threads-page-header-inner {
+        padding: 24px 22px 28px;
+      }
+
+      .thread-row {
+        grid-template-columns: 1fr;
+        gap: 14px;
+        padding: 22px;
+      }
+
+      .thread-number {
+        font-size: 34px;
+        margin: 0;
+      }
+
+      .thread-text {
+        padding-top: 0;
+      }
+
+      .thread-cover-wrap {
+        justify-self: start;
+        width: 92px;
+        min-width: 92px;
+      }
+
+      .thread-cover {
+        width: 92px;
+        min-width: 92px;
+        margin-bottom: 8px;
+      }
+
+      .footer {
+        grid-template-columns: 1fr;
+        padding: 22px;
+      }
+
+      .footer-address {
+        text-align: left;
+      }
     }
   </style>
 </head>
@@ -100,22 +421,29 @@
   </ul>
 </nav>
 
-<div class="page-header">
-  <div class="page-header-eyebrow">Curated reading sequences</div>
-  <h1 class="page-header-title">Threads</h1>
-</div>
+<header class="threads-page-header">
+  <div class="threads-page-header-inner">
+    <div class="threads-eyebrow">Curated reading sequences</div>
+    <h1 class="threads-title">Threads</h1>
+    <div class="threads-intro">
+      <p>
+        A thread is a curated sequence of books organised around a single question,
+        argument, or field of inquiry. Each one begins with an editorial proposition
+        and unfolds through a small constellation of titles.
+      </p>
+      <p>
+        Here, each thread is paired with one anchor book: the title that holds the
+        sequence together.
+      </p>
+    </div>
+  </div>
+</header>
 
-<div class="threads-intro">
-  <p>
-    A thread is a curated sequence of 5–10 books organised around a single question,
-    argument, or field of inquiry. Each thread is introduced by a short essay from
-    the editor. Books belong to multiple threads — the catalogue is a web, not a shelf.
-  </p>
-</div>
-
-<div class="threads-list" id="threads-list">
-  <div class="loading-state">Loading threads…</div>
-</div>
+<main class="threads-main">
+  <div class="threads-list" id="threads-list">
+    <div class="loading-state">Loading threads…</div>
+  </div>
+</main>
 
 <footer class="footer">
   <a href="index.html" class="footer-logo">Hilo.</a>
@@ -131,28 +459,351 @@
 </footer>
 
 <script type="module">
-  import { getThreads } from './js/airtable.js';
+  import { getThreads, getBooks } from './js/airtable.js';
+
+  function escapeHtml(str = '') {
+    return String(str)
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#39;');
+  }
+
+  function normalize(value = '') {
+    return String(value)
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/&/g, ' and ')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
+  }
+
+  function arrayify(value) {
+    if (Array.isArray(value)) return value.filter(Boolean);
+    if (value == null || value === '') return [];
+    return [value];
+  }
+
+  function truncate(text = '', max = 240) {
+    const clean = String(text).trim();
+    if (!clean) return '';
+    if (clean.length <= max) return clean;
+    return clean.slice(0, max).replace(/\s+\S*$/, '') + '…';
+  }
+
+  function getBookCover(book) {
+    return (
+      book['Cover URL'] ||
+      book['Cover'] ||
+      book['Image URL'] ||
+      book['Photo URL'] ||
+      book.cover ||
+      ''
+    );
+  }
+
+  function getBookLink(book) {
+    if (book.Slug) return `book.html?slug=${encodeURIComponent(book.Slug)}`;
+    return `catalogue.html?book=${encodeURIComponent(book.id)}`;
+  }
+
+  function getThreadLink(thread) {
+    if (thread.Slug) return `thread.html?slug=${encodeURIComponent(thread.Slug)}`;
+    return 'threads.html';
+  }
+
+  function getThreadTitleCandidates(thread) {
+    const candidates = new Set();
+
+    [
+      thread.Title,
+      thread.Slug,
+      thread.Name,
+      thread['Thread'],
+      thread['Thread Title'],
+      thread['Short Title'],
+      thread['Display Title'],
+      thread['Category'],
+      thread['Theme']
+    ].forEach(value => {
+      if (value) candidates.add(normalize(value));
+    });
+
+    return [...candidates].filter(Boolean);
+  }
+
+  function getPossibleThreadBookRefs(thread) {
+    const possibleFields = [
+      'Books',
+      'Book',
+      'Related Books',
+      'Book Objects',
+      'Books Data',
+      'Titles',
+      'Linked Books',
+      'Featured Books',
+      'Books Linked',
+      'Books in Thread',
+      'Thread Books',
+      'Selected Books'
+    ];
+
+    const refs = [];
+
+    for (const field of possibleFields) {
+      const value = thread[field];
+      if (Array.isArray(value)) refs.push(...value);
+    }
+
+    return refs;
+  }
+
+  function resolveThreadLinkedBooks(thread, books) {
+    const refs = getPossibleThreadBookRefs(thread);
+    if (!refs.length) return [];
+
+    const byId = new Map(books.map(book => [String(book.id), book]));
+    const byTitle = new Map(
+      books
+        .map(book => [normalize(book.Title || ''), book])
+        .filter(([key]) => key)
+    );
+
+    const resolved = [];
+
+    for (const ref of refs) {
+      if (!ref) continue;
+
+      if (typeof ref === 'object' && !Array.isArray(ref)) {
+        const resolvedBook = {
+          id: ref.id || `embedded-${Math.random().toString(36).slice(2)}`,
+          Title: ref.Title || ref.title || '',
+          Author: ref.Author || ref.author || '',
+          Slug: ref.Slug || ref.slug || '',
+          Publisher: ref.Publisher || '',
+          Year: ref.Year || '',
+          Price: ref.Price || '',
+          ISBN: ref.ISBN || '',
+          Blurb: ref.Blurb || '',
+          Anchor: ref.Anchor || false,
+          'In Stock': ref['In Stock'],
+          'Cover URL': ref['Cover URL'] || ref.cover || ref.image || ref['Photo URL'] || ''
+        };
+        resolved.push(resolvedBook);
+        continue;
+      }
+
+      const refString = String(ref).trim();
+
+      if (byId.has(refString)) {
+        resolved.push(byId.get(refString));
+        continue;
+      }
+
+      const normalizedRef = normalize(refString);
+      if (byTitle.has(normalizedRef)) {
+        resolved.push(byTitle.get(normalizedRef));
+        continue;
+      }
+    }
+
+    const deduped = [];
+    const seen = new Set();
+
+    for (const book of resolved) {
+      const key = String(book.id || normalize(book.Title || ''));
+      if (!seen.has(key)) {
+        seen.add(key);
+        deduped.push(book);
+      }
+    }
+
+    return deduped;
+  }
+
+  function bookContainsThreadReference(book, threadCandidates, threadId) {
+    const possibleLinkFields = [
+      'Thread',
+      'Threads',
+      'Thread Title',
+      'Thread Titles',
+      'Related Thread',
+      'Related Threads',
+      'Shelf',
+      'Shelves',
+      'Topic',
+      'Topics',
+      'Category',
+      'Categories',
+      'Theme',
+      'Themes',
+      'Section',
+      'Sections',
+      'Collection',
+      'Collections',
+      'Cluster',
+      'Clusters',
+      'Tag',
+      'Tags',
+      'Keywords',
+      'Homepage Thread',
+      'Homepage Threads'
+    ];
+
+    for (const field of possibleLinkFields) {
+      const values = arrayify(book[field]);
+
+      for (const value of values) {
+        const normalizedValue = normalize(value);
+        if (!normalizedValue) continue;
+
+        for (const candidate of threadCandidates) {
+          if (
+            normalizedValue === candidate ||
+            normalizedValue.includes(candidate) ||
+            candidate.includes(normalizedValue)
+          ) {
+            return true;
+          }
+        }
+      }
+    }
+
+    const possibleIdFields = [
+      'Thread ID',
+      'Thread IDs',
+      'Thread Record ID',
+      'Thread Record IDs',
+      'Related Thread ID',
+      'Related Thread IDs',
+      'Thread Link',
+      'Thread Links',
+      'Thread Ref',
+      'Thread Refs'
+    ];
+
+    for (const field of possibleIdFields) {
+      const values = arrayify(book[field]).map(String);
+      if (values.includes(String(threadId))) return true;
+    }
+
+    return false;
+  }
+
+  function deriveThreadBooks(thread, books) {
+    const threadCandidates = getThreadTitleCandidates(thread);
+    const linkedBooks = resolveThreadLinkedBooks(thread, books);
+
+    const matchedBooks = books.filter(book =>
+      bookContainsThreadReference(book, threadCandidates, thread.id)
+    );
+
+    const merged = [];
+    const seen = new Set();
+
+    [...linkedBooks, ...matchedBooks].forEach(book => {
+      const key = String(book.id || normalize(book.Title || ''));
+      if (!seen.has(key) && (book.Title || getBookCover(book))) {
+        seen.add(key);
+        merged.push(book);
+      }
+    });
+
+    return merged;
+  }
+
+  function getAnchorBook(thread, books) {
+    const threadBooks = deriveThreadBooks(thread, books);
+
+    const explicitAnchor = threadBooks.find(book =>
+      book.Anchor === true ||
+      book.Anchor === 1 ||
+      book.Anchor === '1' ||
+      book.Anchor === 'true' ||
+      book.Anchor === 'TRUE' ||
+      book.Anchor === 'Yes' ||
+      book.Anchor === 'yes'
+    );
+
+    if (explicitAnchor) return explicitAnchor;
+
+    return threadBooks[0] || null;
+  }
 
   async function init() {
     const el = document.getElementById('threads-list');
+
     try {
-      const threads = await getThreads();
+      const [threads, books] = await Promise.all([
+        getThreads({ maxRecords: 50 }),
+        getBooks({ maxRecords: 500 })
+      ]);
+
       if (!threads.length) {
         el.innerHTML = '<div class="empty-state">No threads published yet. Coming soon.</div>';
         return;
       }
 
-      el.innerHTML = threads.map(t => `
-        <a href="thread.html?slug=${t.Slug}" class="thread-row">
-          <div class="thread-row-number">${String(t.Number || '').padStart(2,'0')}</div>
-          <div class="thread-row-body">
-            <h2 class="thread-row-title">${t.Title || ''}</h2>
-            <p class="thread-row-intro">${(t.Intro || '').substring(0, 200)}${t.Intro && t.Intro.length > 200 ? '…' : ''}</p>
-            <span class="thread-row-count">${(t.Books || []).length} books</span>
-          </div>
-          <div class="thread-row-arrow">→</div>
-        </a>`).join('');
-    } catch(e) {
+      el.innerHTML = threads.map((thread, index) => {
+        const anchor = getAnchorBook(thread, books);
+        const cover = anchor ? getBookCover(anchor) : '';
+        const blurb = thread.Blurb || thread.Intro || thread.Description || '';
+        const threadBooks = deriveThreadBooks(thread, books);
+
+        return `
+          <a href="${getThreadLink(thread)}" class="thread-row">
+            <div class="thread-number">${String(thread.Number || index + 1).padStart(2, '0')}</div>
+
+            <div class="thread-text">
+              <div class="thread-title-row">
+                <h2>${escapeHtml(thread.Title || '')}</h2>
+                <div class="thread-meta">
+                  ${threadBooks.length ? `${threadBooks.length} book${threadBooks.length === 1 ? '' : 's'}` : 'Thread'}
+                </div>
+              </div>
+
+              <p class="thread-blurb">${escapeHtml(truncate(blurb, 300))}</p>
+
+              ${
+                anchor
+                  ? `
+                    <div class="thread-anchor-note">
+                      <span class="thread-anchor-label">Anchor book</span>
+                      <span class="thread-anchor-title">${escapeHtml(anchor.Title || '')}</span>
+                      ${anchor.Author ? `<span class="thread-anchor-author">by ${escapeHtml(anchor.Author)}</span>` : ''}
+                    </div>
+                  `
+                  : ''
+              }
+            </div>
+
+            <div class="thread-cover-wrap">
+              <div class="thread-cover">
+                ${
+                  cover
+                    ? `<img src="${cover}" alt="${escapeHtml(anchor?.Title || thread.Title || '')}" loading="lazy">`
+                    : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#d8cbbb 0%,#efe5da 100%);"></div>`
+                }
+              </div>
+
+              ${
+                anchor
+                  ? `
+                    <div class="thread-cover-caption">
+                      <strong>${escapeHtml(anchor.Title || '')}</strong>
+                      ${anchor.Author ? `${escapeHtml(anchor.Author)}` : ''}
+                    </div>
+                  `
+                  : ''
+              }
+            </div>
+          </a>
+        `;
+      }).join('');
+    } catch (e) {
+      console.error('Threads page error:', e);
       el.innerHTML = '<div class="empty-state">Unable to load threads.</div>';
     }
   }
