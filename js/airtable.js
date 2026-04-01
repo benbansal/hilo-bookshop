@@ -3,7 +3,7 @@
    Calls /api/airtable (Netlify function) — no credentials here.
    ============================================================ */
 
-const API = '/api/airtable';
+const API = '/.netlify/functions/airtable';
 
 /* ── Core fetch with pagination ── */
 async function airtableFetch(table, params = {}) {
