@@ -4,135 +4,415 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Thread — Hilo Bookshop</title>
+  <meta name="description" content="Browse a Hilo thread: an editorial selection of books organised around connected thinking.">
   <link rel="stylesheet" href="css/style.css">
+
   <style>
-    .thread-layout {
-      display: grid;
-      grid-template-columns: 1fr 340px;
+    :root {
+      --thread-paper: #f3ede4;
+      --thread-paper-warm: #efe5d8;
+      --thread-line: rgba(60, 45, 32, 0.14);
+      --thread-line-strong: rgba(60, 45, 32, 0.22);
+      --thread-shadow-soft: 0 8px 18px rgba(28, 20, 14, 0.06);
+      --thread-brown: #6f5640;
+    }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.42), transparent 30%),
+        var(--thread-paper);
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 24px;
+      padding: 18px 40px 16px;
+      border-bottom: 1px solid var(--thread-line);
+      background: rgba(243, 237, 228, 0.92);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 20;
+    }
+
+    .nav-logo {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      text-decoration: none;
+      color: inherit;
+      min-width: 0;
+    }
+
+    .nav-logo-main {
+      font-family: var(--serif);
+      font-size: 34px;
+      line-height: 0.95;
+      font-weight: 400;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+    }
+
+    .nav-logo-sub {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: opacity 0.2s ease, color 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--accent);
+    }
+
+    .thread-page {
       min-height: calc(100vh - 86px);
     }
 
-    /* ── Essay column ── */
-    .thread-essay {
-      padding: 56px 64px 80px 48px;
-      border-right: 1px solid var(--border);
-      max-width: 720px;
+    .thread-hero {
+      border-bottom: 1px solid var(--thread-line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.14), rgba(255,255,255,0)),
+        rgba(255,255,255,0.10);
+    }
+
+    .thread-hero-inner {
+      max-width: 980px;
+      padding: 34px 40px 38px;
+    }
+
+    .thread-back {
+      margin-bottom: 24px;
+    }
+
+    .thread-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .thread-header-grid {
+      display: grid;
+      grid-template-columns: 70px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
     }
 
     .thread-number-large {
       font-family: var(--serif);
-      font-size: 96px;
+      font-size: 62px;
       font-weight: 300;
-      color: var(--border);
-      line-height: 1;
-      margin-bottom: 8px;
+      color: #d4c6b7;
+      line-height: 0.9;
+      margin-top: 2px;
     }
 
     .thread-title-large {
       font-family: var(--serif);
-      font-size: 40px;
+      font-size: clamp(34px, 5vw, 56px);
       font-weight: 300;
-      line-height: 1.15;
-      margin-bottom: 32px;
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+      margin: 0 0 16px;
+      max-width: 16ch;
       color: var(--ink);
+      text-wrap: balance;
     }
 
-    .thread-title-large em { font-style: italic; color: var(--accent); }
+    .thread-title-large em {
+      font-style: italic;
+      color: var(--thread-brown);
+    }
 
-    .thread-body {
+    .thread-blurb {
       font-size: 15px;
-      line-height: 1.95;
+      line-height: 1.85;
       color: var(--muted);
+      max-width: 72ch;
       white-space: pre-line;
     }
 
-    .thread-body p { margin-bottom: 20px; }
-
-    .thread-back {
-      margin-bottom: 32px;
+    .thread-blurb p {
+      margin: 0 0 18px;
     }
 
-    /* ── Book list sidebar ── */
-    .thread-books-col {
-      padding: 56px 40px;
-      position: sticky;
-      top: 86px;
-      height: calc(100vh - 86px);
-      overflow-y: auto;
+    .thread-books-section {
+      padding: 34px 40px 46px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04)),
+        var(--thread-paper);
     }
 
-    .thread-books-heading {
-      font-size: 10px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 28px;
+    .thread-books-head {
       display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .thread-books-heading::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
-
-    .thread-book-item {
-      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
       gap: 16px;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border);
-      text-decoration: none;
-      color: inherit;
-      transition: opacity 0.15s;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--thread-line);
     }
 
-    .thread-book-item:hover { opacity: 0.7; }
-    .thread-book-item:first-of-type { padding-top: 0; }
-
-    .thread-book-thumb {
-      width: 44px;
-      height: 64px;
-      border-radius: 2px;
-      flex-shrink: 0;
-      overflow: hidden;
-      background: var(--border);
-      box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
-    }
-
-    .thread-book-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .thread-book-info { flex: 1; }
-
-    .thread-book-title {
-      font-family: var(--serif);
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 1.3;
-      color: var(--ink);
-      margin-bottom: 3px;
-    }
-
-    .thread-book-author {
+    .thread-books-label {
       font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 4px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--thread-brown);
     }
 
-    .thread-book-stock {
-      font-size: 9px;
+    .thread-books-count {
+      font-size: 11px;
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: var(--muted);
     }
 
-    .thread-book-stock.available { color: var(--accent); }
+    .thread-books-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0;
+      max-width: 1080px;
+    }
+
+    .thread-book-item {
+      display: grid;
+      grid-template-columns: 88px minmax(0, 1fr);
+      gap: 18px;
+      padding: 22px 0;
+      border-bottom: 1px solid rgba(60, 45, 32, 0.10);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .thread-book-cover {
+      width: 88px;
+      aspect-ratio: 0.72;
+      border-radius: 2px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #d8cbbb 0%, #efe5da 100%);
+      box-shadow: var(--thread-shadow-soft);
+      border: 1px solid rgba(70, 50, 35, 0.06);
+      flex-shrink: 0;
+    }
+
+    .thread-book-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.25s ease;
+    }
+
+    .thread-book-item:hover .thread-book-cover img {
+      transform: scale(1.02);
+    }
+
+    .thread-book-main {
+      min-width: 0;
+    }
+
+    .thread-book-title {
+      font-family: var(--serif);
+      font-size: 28px;
+      line-height: 1.02;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+      margin: 0 0 4px;
+    }
+
+    .thread-book-author {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+
+    .thread-book-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 16px;
+      margin-bottom: 12px;
+      font-size: 11px;
+      line-height: 1.5;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .thread-book-meta span {
+      white-space: nowrap;
+    }
+
+    .thread-book-stock.in-stock {
+      color: var(--accent);
+    }
+
+    .thread-book-stock.out-stock {
+      color: var(--muted);
+    }
+
+    .thread-book-isbn {
+      font-size: 11px;
+      line-height: 1.5;
+      color: var(--muted);
+      margin-bottom: 12px;
+      letter-spacing: 0.02em;
+    }
+
+    .thread-book-blurb {
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--muted);
+      max-width: 74ch;
+      white-space: pre-line;
+    }
+
+    .thread-book-blurb p {
+      margin: 0 0 12px;
+    }
+
+    .thread-book-blurb p:last-child {
+      margin-bottom: 0;
+    }
+
+    .empty-state,
+    .loading-state {
+      font-size: 12px;
+      color: var(--muted);
+      padding: 8px 0;
+    }
+
+    .footer {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 24px;
+      align-items: start;
+      padding: 26px 40px 30px;
+      background: #eee4d7;
+      border-top: 1px solid var(--thread-line);
+    }
+
+    .footer-logo {
+      font-family: var(--serif);
+      font-size: 30px;
+      line-height: 1;
+      text-decoration: none;
+      color: var(--ink);
+    }
+
+    .footer-links {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      margin: 4px 0 0;
+      padding: 0;
+    }
+
+    .footer-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .footer-links a:hover {
+      color: var(--ink);
+    }
+
+    .footer-address {
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    @media (max-width: 760px) {
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px 22px 14px;
+      }
+
+      .nav-links {
+        gap: 10px 14px;
+      }
+
+      .thread-hero-inner,
+      .thread-books-section {
+        padding: 24px 22px 28px;
+      }
+
+      .thread-header-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .thread-number-large {
+        font-size: 40px;
+      }
+
+      .thread-title-large {
+        max-width: none;
+        font-size: 34px;
+      }
+
+      .thread-book-item {
+        grid-template-columns: 64px minmax(0, 1fr);
+        gap: 14px;
+        padding: 18px 0;
+      }
+
+      .thread-book-cover {
+        width: 64px;
+      }
+
+      .thread-book-title {
+        font-size: 22px;
+      }
+
+      .footer {
+        grid-template-columns: 1fr;
+        padding: 22px;
+      }
+
+      .footer-address {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .thread-title-large {
+        font-size: 29px;
+      }
+
+      .thread-book-title {
+        font-size: 20px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -151,20 +431,23 @@
   </ul>
 </nav>
 
-<div class="thread-layout">
-
-  <div class="thread-essay" id="thread-essay">
-    <div class="loading-state">Loading thread…</div>
-  </div>
-
-  <div class="thread-books-col" id="thread-books-col">
-    <div class="thread-books-heading">Books in this thread</div>
-    <div id="thread-books-list">
-      <div class="loading-state">Loading…</div>
+<main class="thread-page">
+  <section class="thread-hero">
+    <div class="thread-hero-inner" id="thread-hero">
+      <div class="loading-state">Loading thread…</div>
     </div>
-  </div>
+  </section>
 
-</div>
+  <section class="thread-books-section">
+    <div class="thread-books-head">
+      <div class="thread-books-label">Books in this thread</div>
+      <div class="thread-books-count" id="thread-books-count"></div>
+    </div>
+    <div class="thread-books-list" id="thread-books-list">
+      <div class="loading-state">Loading books…</div>
+    </div>
+  </section>
+</main>
 
 <footer class="footer">
   <a href="index.html" class="footer-logo">Hilo.</a>
@@ -182,6 +465,48 @@
 <script type="module">
   import { getThread, getBook, formatPrice } from './js/airtable.js';
 
+  function escapeHtml(str = '') {
+    return String(str)
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#39;');
+  }
+
+  function renderParagraphs(text = '') {
+    return String(text)
+      .split('\n')
+      .map(p => p.trim())
+      .filter(Boolean)
+      .map(p => `<p>${escapeHtml(p)}</p>`)
+      .join('');
+  }
+
+  function getBookCover(book) {
+    return (
+      book['Cover URL'] ||
+      book['Cover'] ||
+      book['Image URL'] ||
+      book['Photo URL'] ||
+      book.cover ||
+      ''
+    );
+  }
+
+  function bookLink(book) {
+    if (book.Slug) return `book.html?slug=${encodeURIComponent(book.Slug)}`;
+    return `catalogue.html?book=${encodeURIComponent(book.id)}`;
+  }
+
+  function stockLabel(book) {
+    return book['In Stock'] ? 'In stock' : 'Order in';
+  }
+
+  function stockClass(book) {
+    return book['In Stock'] ? 'in-stock' : 'out-stock';
+  }
+
   async function init() {
     const params = new URLSearchParams(window.location.search);
     const slug = params.get('slug');
@@ -191,54 +516,97 @@
       return;
     }
 
+    const heroEl = document.getElementById('thread-hero');
+    const booksListEl = document.getElementById('thread-books-list');
+    const booksCountEl = document.getElementById('thread-books-count');
+
     try {
       const thread = await getThread(slug);
 
-      // Update page title
-      document.title = `${thread.Title} — Hilo Bookshop`;
+      document.title = `${thread.Title || 'Thread'} — Hilo Bookshop`;
 
-      // Render essay
-      const essay = document.getElementById('thread-essay');
-      essay.innerHTML = `
+      heroEl.innerHTML = `
         <div class="thread-back">
           <a href="threads.html" class="link-accent" style="font-size:10px;">← All threads</a>
         </div>
-        <div class="thread-number-large">${String(thread.Number || '').padStart(2,'0')}</div>
-        <h1 class="thread-title-large">${thread.Title || ''}</h1>
-        <div class="thread-body">${(thread.Intro || '').split('\n').map(p => p ? `<p>${p}</p>` : '').join('')}</div>`;
+        <div class="thread-eyebrow">Thread ${String(thread.Number || '').padStart(2, '0')}</div>
+        <div class="thread-header-grid">
+          <div class="thread-number-large">${String(thread.Number || '').padStart(2, '0')}</div>
+          <div>
+            <h1 class="thread-title-large">${escapeHtml(thread.Title || '')}</h1>
+            <div class="thread-blurb">
+              ${renderParagraphs(thread.Blurb || thread.Intro || '') || '<p>No thread text yet.</p>'}
+            </div>
+          </div>
+        </div>
+      `;
 
-      // Render books
-      const bookIds = thread.Books || [];
-      const booksList = document.getElementById('thread-books-list');
+      const bookIds = Array.isArray(thread.Books) ? thread.Books : [];
 
       if (!bookIds.length) {
-        booksList.innerHTML = '<div class="empty-state">No books linked yet.</div>';
+        booksCountEl.textContent = '0 books';
+        booksListEl.innerHTML = '<div class="empty-state">No books linked yet.</div>';
         return;
       }
 
-      const books = await Promise.all(bookIds.map(id => getBook(id).catch(() => null)));
+      const books = await Promise.all(
+        bookIds.map(id => getBook(id).catch(() => null))
+      );
+
       const validBooks = books.filter(Boolean);
 
-      booksList.innerHTML = validBooks.map(b => `
-        <a href="catalogue.html?book=${b.id}" class="thread-book-item">
-          <div class="thread-book-thumb">
-            ${b['Cover URL']
-              ? `<img src="${b['Cover URL']}" alt="${b.Title}" loading="lazy">`
-              : ''}
-          </div>
-          <div class="thread-book-info">
-            <div class="thread-book-title">${b.Title || ''}</div>
-            <div class="thread-book-author">${b.Author || ''}</div>
-            <div class="thread-book-stock ${b['In Stock'] ? 'available' : ''}">
-              ${b['In Stock'] ? 'In stock' : 'Order in'}
-              ${b.Price ? ` · ${formatPrice(b.Price)}` : ''}
-            </div>
-          </div>
-        </a>`).join('');
+      booksCountEl.textContent = `${validBooks.length} ${validBooks.length === 1 ? 'book' : 'books'}`;
 
-    } catch(e) {
-      document.getElementById('thread-essay').innerHTML =
-        '<div class="empty-state">Thread not found. <a href="threads.html" class="link-accent">View all threads →</a></div>';
+      if (!validBooks.length) {
+        booksListEl.innerHTML = '<div class="empty-state">No books linked yet.</div>';
+        return;
+      }
+
+      booksListEl.innerHTML = validBooks.map(book => {
+        const cover = getBookCover(book);
+        const publisher = book.Publisher || '';
+        const year = book.Year || '';
+        const price = book.Price ? formatPrice(book.Price) : '';
+        const isbn = book.ISBN || '';
+        const blurb = renderParagraphs(book.Blurb || '');
+        const author = book.Author || '';
+
+        return `
+          <a href="${bookLink(book)}" class="thread-book-item">
+            <div class="thread-book-cover">
+              ${cover
+                ? `<img src="${cover}" alt="${escapeHtml(book.Title || '')}" loading="lazy">`
+                : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#d8cbbb 0%,#efe5da 100%);"></div>`}
+            </div>
+
+            <div class="thread-book-main">
+              <h2 class="thread-book-title">${escapeHtml(book.Title || '')}</h2>
+              <div class="thread-book-author">${escapeHtml(author)}</div>
+
+              <div class="thread-book-meta">
+                ${publisher ? `<span>${escapeHtml(publisher)}</span>` : ''}
+                ${year ? `<span>${escapeHtml(year)}</span>` : ''}
+                ${price ? `<span>${escapeHtml(price)}</span>` : ''}
+                <span class="thread-book-stock ${stockClass(book)}">${stockLabel(book)}</span>
+              </div>
+
+              ${isbn ? `<div class="thread-book-isbn">ISBN ${escapeHtml(isbn)}</div>` : ''}
+
+              ${blurb ? `<div class="thread-book-blurb">${blurb}</div>` : ''}
+            </div>
+          </a>
+        `;
+      }).join('');
+
+    } catch (e) {
+      heroEl.innerHTML = `
+        <div class="empty-state">
+          Thread not found.
+          <a href="threads.html" class="link-accent">View all threads →</a>
+        </div>
+      `;
+      booksCountEl.textContent = '';
+      booksListEl.innerHTML = '';
     }
   }
 
