@@ -1120,7 +1120,7 @@
     });
 
     if (merged.length) {
-      return merged.filter(book => getBookCover(book)).slice(0, 12);
+return merged.slice(0, 12);
     }
 
     if (Array.isArray(explicitThumbs) && explicitThumbs.length) {
@@ -1135,35 +1135,34 @@
   }
 
   function renderThreadBooks(books) {
-    if (!books.length) {
-      return `<div class="empty-state">No books linked to this thread yet.</div>`;
-    }
-
-    return `
-      <div class="thread-books-wrap">
-        <div class="thread-books-label">Books in this thread</div>
-        <div class="thread-books">
-          ${books.map(book => {
-            const cover = getBookCover(book);
-            const title = escapeHtml(book.Title || '');
-            const href = book.id ? getBookLink(book) : 'catalogue.html';
-
-            return `
-              <a href="${href}" class="thread-book-thumb" title="${title}">
-                <div class="thread-book-thumb-image">
-                  ${cover
-                    ? `<img src="${cover}" alt="${title}" loading="lazy">`
-                    : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#d8cbbb 0%,#efe5da 100%);"></div>`}
-                </div>
-                ${title ? `<div class="thread-book-thumb-title">${title}</div>` : ''}
-              </a>
-            `;
-          }).join('')}
-        </div>
-      </div>
-    `;
+  if (!books.length) {
+    return `<div class="empty-state">No books linked to this thread yet.</div>`;
   }
 
+  return `
+    <div class="thread-books-wrap">
+      <div class="thread-books-label">Books in this thread</div>
+      <div class="thread-books">
+        ${books.map(book => {
+          const cover = getBookCover(book);
+          const title = escapeHtml(book.Title || '');
+          const href = book.id ? getBookLink(book) : 'catalogue.html';
+
+          return `
+            <a href="${href}" class="thread-book-thumb" title="${title}">
+              <div class="thread-book-thumb-image">
+                ${cover
+                  ? `<img src="${cover}" alt="${title}" loading="lazy">`
+                  : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#d8cbbb 0%,#efe5da 100%);"></div>`}
+              </div>
+              ${title ? `<div class="thread-book-thumb-title">${title}</div>` : ''}
+            </a>
+          `;
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
   function renderThread(index) {
     const el = document.getElementById('thread-feature');
 
