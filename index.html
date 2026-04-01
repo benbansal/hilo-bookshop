@@ -386,18 +386,6 @@
       overflow: hidden;
     }
 
-    .thread-book-chip {
-      display: inline-flex;
-      align-items: center;
-      min-height: 24px;
-      padding: 3px 8px;
-      border: 1px solid var(--home-line);
-      border-radius: 999px;
-      font-size: 11px;
-      color: var(--muted);
-      background: rgba(255,255,255,0.42);
-    }
-
     .thread-footer {
       display: flex;
       flex-wrap: wrap;
@@ -456,10 +444,6 @@
       width: 100%;
       height: 100%;
       background: linear-gradient(135deg, #d8cbbb 0%, #efe5da 100%);
-    }
-
-    .book-cover-text {
-      display: none;
     }
 
     .book-meta-title {
@@ -783,7 +767,7 @@
       }
 
       .thread-books {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(3, 1fr);
       }
 
       .objects-grid {
@@ -958,196 +942,229 @@
   }
 
   function getThreadTitleCandidates(thread) {
-  const candidates = new Set();
+    const candidates = new Set();
 
-  [
-    thread.Title,
-    thread.Slug,
-    thread.Name,
-    thread['Thread'],
-    thread['Thread Title'],
-    thread['Short Title'],
-    thread['Display Title']
-  ].forEach(value => {
-    if (value) candidates.add(normalize(value));
-  });
+    [
+      thread.Title,
+      thread.Slug,
+      thread.Name,
+      thread['Thread'],
+      thread['Thread Title'],
+      thread['Short Title'],
+      thread['Display Title']
+    ].forEach(value => {
+      if (value) candidates.add(normalize(value));
+    });
 
-  return [...candidates].filter(Boolean);
-}
-
-function getPossibleThreadBookRefs(thread) {
-  const possibleFields = [
-    'Books',
-    'Book',
-    'Related Books',
-    'Book Objects',
-    'Books Data',
-    'Titles',
-    'Linked Books',
-    'Featured Books'
-  ];
-
-  const refs = [];
-
-  for (const field of possibleFields) {
-    const value = thread[field];
-    if (Array.isArray(value)) refs.push(...value);
+    return [...candidates].filter(Boolean);
   }
 
-  return refs;
-}
+  function getPossibleThreadBookRefs(thread) {
+    const possibleFields = [
+      'Books',
+      'Book',
+      'Related Books',
+      'Book Objects',
+      'Books Data',
+      'Titles',
+      'Linked Books',
+      'Featured Books'
+    ];
 
-function resolveThreadLinkedBooks(thread, books) {
-  const refs = getPossibleThreadBookRefs(thread);
-  if (!refs.length) return [];
+    const refs = [];
 
-  const byId = new Map(books.map(book => [String(book.id), book]));
-  const byTitle = new Map(
-    books.map(book => [normalize(book.Title || ''), book]).filter(([key]) => key)
-  );
+    for (const field of possibleFields) {
+      const value = thread[field];
+      if (Array.isArray(value)) refs.push(...value);
+    }
 
-  const resolved = [];
+    return refs;
+  }
 
-  for (const ref of refs) {
-    if (!ref) continue;
+  function resolveThreadLinkedBooks(thread, books) {
+    const refs = getPossibleThreadBookRefs(thread);
+    if (!refs.length) return [];
 
-    if (typeof ref === 'object' && !Array.isArray(ref)) {
-      const resolvedBook = {
-        id: ref.id || `embedded-${Math.random().toString(36).slice(2)}`,
-        Title: ref.Title || ref.title || '',
-        Author: ref.Author || ref.author || '',
-        Slug: ref.Slug || ref.slug || '',
-        'Cover URL': ref['Cover URL'] || ref.cover || ref.image || ref['Photo URL'] || ''
-      };
-      if (getBookCover(resolvedBook) || resolvedBook.Title) {
-        resolved.push(resolvedBook);
+    const byId = new Map(books.map(book => [String(book.id), book]));
+    const byTitle = new Map(
+      books
+        .map(book => [normalize(book.Title || ''), book])
+        .filter(([key]) => key)
+    );
+
+    const resolved = [];
+
+    for (const ref of refs) {
+      if (!ref) continue;
+
+      if (typeof ref === 'object' && !Array.isArray(ref)) {
+        const resolvedBook = {
+          id: ref.id || `embedded-${Math.random().toString(36).slice(2)}`,
+          Title: ref.Title || ref.title || '',
+          Author: ref.Author || ref.author || '',
+          Slug: ref.Slug || ref.slug || '',
+          'Cover URL': ref['Cover URL'] || ref.cover || ref.image || ref['Photo URL'] || ''
+        };
+
+        if (getBookCover(resolvedBook) || resolvedBook.Title) {
+          resolved.push(resolvedBook);
+        }
+        continue;
       }
-      continue;
+
+      const refString = String(ref).trim();
+
+      if (byId.has(refString)) {
+        resolved.push(byId.get(refString));
+        continue;
+      }
+
+      const normalizedRef = normalize(refString);
+      if (byTitle.has(normalizedRef)) {
+        resolved.push(byTitle.get(normalizedRef));
+        continue;
+      }
     }
 
-    const refString = String(ref).trim();
+    const deduped = [];
+    const seen = new Set();
 
-    if (byId.has(refString)) {
-      resolved.push(byId.get(refString));
-      continue;
+    for (const book of resolved) {
+      const key = String(book.id || normalize(book.Title || ''));
+      if (!seen.has(key)) {
+        seen.add(key);
+        deduped.push(book);
+      }
     }
 
-    const normalizedRef = normalize(refString);
-    if (byTitle.has(normalizedRef)) {
-      resolved.push(byTitle.get(normalizedRef));
-      continue;
-    }
+    return deduped;
   }
 
-  const deduped = [];
-  const seen = new Set();
+  function bookContainsThreadReference(book, threadCandidates, threadId) {
+    const possibleLinkFields = [
+      'Thread',
+      'Threads',
+      'Thread Title',
+      'Thread Titles',
+      'Related Thread',
+      'Related Threads',
+      'Shelf',
+      'Shelves',
+      'Topic',
+      'Topics',
+      'Category',
+      'Categories'
+    ];
 
-  for (const book of resolved) {
-    const key = String(book.id || normalize(book.Title || ''));
-    if (!seen.has(key)) {
-      seen.add(key);
-      deduped.push(book);
-    }
-  }
+    for (const field of possibleLinkFields) {
+      const values = arrayify(book[field]);
 
-  return deduped;
-}
+      for (const value of values) {
+        const normalizedValue = normalize(value);
+        if (!normalizedValue) continue;
 
-function bookContainsThreadReference(book, threadCandidates, threadId) {
-  const possibleLinkFields = [
-    'Thread',
-    'Threads',
-    'Thread Title',
-    'Thread Titles',
-    'Related Thread',
-    'Related Threads',
-    'Shelf',
-    'Shelves',
-    'Topic',
-    'Topics',
-    'Category',
-    'Categories'
-  ];
-
-  for (const field of possibleLinkFields) {
-    const values = arrayify(book[field]);
-    for (const value of values) {
-      const normalizedValue = normalize(value);
-      if (!normalizedValue) continue;
-
-      for (const candidate of threadCandidates) {
-        if (
-          normalizedValue === candidate ||
-          normalizedValue.includes(candidate) ||
-          candidate.includes(normalizedValue)
-        ) {
-          return true;
+        for (const candidate of threadCandidates) {
+          if (
+            normalizedValue === candidate ||
+            normalizedValue.includes(candidate) ||
+            candidate.includes(normalizedValue)
+          ) {
+            return true;
+          }
         }
       }
     }
-  }
 
-  const possibleIdFields = [
-    'Thread ID',
-    'Thread IDs',
-    'Thread Record ID',
-    'Thread Record IDs',
-    'Related Thread ID',
-    'Related Thread IDs'
-  ];
+    const possibleIdFields = [
+      'Thread ID',
+      'Thread IDs',
+      'Thread Record ID',
+      'Thread Record IDs',
+      'Related Thread ID',
+      'Related Thread IDs'
+    ];
 
-  for (const field of possibleIdFields) {
-    const values = arrayify(book[field]).map(String);
-    if (values.includes(String(threadId))) return true;
-  }
-
-  return false;
-}
-
-function deriveThreadBooks(thread, books) {
-  const threadCandidates = getThreadTitleCandidates(thread);
-
-  const explicitThumbs =
-    thread['Book Covers'] ||
-    thread['Book Cover URLs'] ||
-    thread['Book Thumbnails'] ||
-    thread['Books Covers'] ||
-    [];
-
-  const linkedBooks = resolveThreadLinkedBooks(thread, books);
-
-  const matchedBooks = books.filter(book =>
-    bookContainsThreadReference(book, threadCandidates, thread.id)
-  );
-
-  const merged = [];
-  const seen = new Set();
-
-  [...linkedBooks, ...matchedBooks].forEach(book => {
-    const key = String(book.id || normalize(book.Title || ''));
-    if (!seen.has(key) && (getBookCover(book) || book.Title)) {
-      seen.add(key);
-      merged.push(book);
+    for (const field of possibleIdFields) {
+      const values = arrayify(book[field]).map(String);
+      if (values.includes(String(threadId))) return true;
     }
-  });
 
-  if (merged.length) {
-    return merged.filter(book => getBookCover(book)).slice(0, 12);
+    return false;
   }
 
-  if (Array.isArray(explicitThumbs) && explicitThumbs.length) {
-    return explicitThumbs.slice(0, 12).map((src, index) => ({
-      id: `${thread.id}-thumb-${index}`,
-      Title: '',
-      'Cover URL': src
-    }));
+  function deriveThreadBooks(thread, books) {
+    const threadCandidates = getThreadTitleCandidates(thread);
+
+    const explicitThumbs =
+      thread['Book Covers'] ||
+      thread['Book Cover URLs'] ||
+      thread['Book Thumbnails'] ||
+      thread['Books Covers'] ||
+      [];
+
+    const linkedBooks = resolveThreadLinkedBooks(thread, books);
+
+    const matchedBooks = books.filter(book =>
+      bookContainsThreadReference(book, threadCandidates, thread.id)
+    );
+
+    const merged = [];
+    const seen = new Set();
+
+    [...linkedBooks, ...matchedBooks].forEach(book => {
+      const key = String(book.id || normalize(book.Title || ''));
+      if (!seen.has(key) && (getBookCover(book) || book.Title)) {
+        seen.add(key);
+        merged.push(book);
+      }
+    });
+
+    if (merged.length) {
+      return merged.filter(book => getBookCover(book)).slice(0, 12);
+    }
+
+    if (Array.isArray(explicitThumbs) && explicitThumbs.length) {
+      return explicitThumbs.slice(0, 12).map((src, index) => ({
+        id: `${thread.id}-thumb-${index}`,
+        Title: '',
+        'Cover URL': src
+      }));
+    }
+
+    return [];
   }
 
-  return [];
-}
+  function renderThreadBooks(books) {
+    if (!books.length) {
+      return `<div class="empty-state">No books linked to this thread yet.</div>`;
+    }
+
+    return `
+      <div class="thread-books-wrap">
+        <div class="thread-books-label">Books in this thread</div>
+        <div class="thread-books">
+          ${books.map(book => {
+            const cover = getBookCover(book);
+            const title = escapeHtml(book.Title || '');
+            const href = book.id ? getBookLink(book) : 'catalogue.html';
+
+            return `
+              <a href="${href}" class="thread-book-thumb" title="${title}">
+                <div class="thread-book-thumb-image">
+                  ${cover
+                    ? `<img src="${cover}" alt="${title}" loading="lazy">`
+                    : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#d8cbbb 0%,#efe5da 100%);"></div>`}
+                </div>
+                ${title ? `<div class="thread-book-thumb-title">${title}</div>` : ''}
+              </a>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }
 
   function renderThread(index) {
-const threadBooks = deriveThreadBooks(thread, allBooks);
     const el = document.getElementById('thread-feature');
 
     if (!allThreads.length) {
