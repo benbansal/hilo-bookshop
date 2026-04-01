@@ -6,369 +6,510 @@
   <title>Hilo — An Independent Bookshop · Buenos Aires</title>
   <meta name="description" content="A curated bookshop in Buenos Aires organised around threads of connected thinking. Political economy, urbanism, architecture, current affairs.">
   <link rel="stylesheet" href="css/style.css">
- <style>
-  /* ── Homepage-specific styles: warmer / tighter / more tactile ── */
 
-  .hero {
-    display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
-    min-height: 320px;
-    border-bottom: 1px solid var(--border);
-    background: #f7f2eb;
-  }
+  <style>
+    /* ── Homepage-specific styles: tighter / warmer / more editorial ── */
 
-  .hero-text {
-    padding: 44px 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    border-right: 1px solid var(--border);
-  }
-
-  .hero-eyebrow {
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 16px;
-  }
-
-  .hero-statement {
-    font-family: var(--serif);
-    font-size: 32px;
-    font-weight: 300;
-    line-height: 1.16;
-    color: var(--ink);
-    margin-bottom: 18px;
-    max-width: 10ch;
-  }
-
-  .hero-statement em {
-    font-style: italic;
-    color: var(--accent);
-  }
-
-  .hero-body {
-    font-size: 13px;
-    line-height: 1.72;
-    color: var(--muted);
-    max-width: 410px;
-  }
-
-  .hero-image {
-    background: #1c1712;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    align-items: flex-end;
-    padding: 22px;
-    min-height: 320px;
-  }
-
-  .hero-image img {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    opacity: 0.72;
-  }
-
-  .hero-image-caption {
-    position: relative;
-    z-index: 1;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.48);
-  }
-
-  /* ── Sections ── */
-
-  .threads-section,
-  .acquisitions-section,
-  .event-panel,
-  .objects-panel {
-    padding: 40px 40px;
-  }
-
-  .threads-section,
-  .acquisitions-section {
-    border-bottom: 1px solid var(--border);
-  }
-
-  .split-section {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    border-bottom: 1px solid var(--border);
-    background: #f7f2eb;
-  }
-
-  .event-panel {
-    border-right: 1px solid var(--border);
-  }
-
-  .section-label {
-    margin-bottom: 18px;
-  }
-
-  /* ── Latest Thread ── */
-
-  .thread-feature {
-    display: grid;
-    grid-template-columns: 64px 1fr;
-    gap: 28px;
-    align-items: start;
-  }
-
-  .thread-number {
-    font-family: var(--serif);
-    font-size: 62px;
-    font-weight: 300;
-    color: #ddd3c7;
-    line-height: 0.95;
-  }
-
-  .thread-title {
-    font-family: var(--serif);
-    font-size: 28px;
-    font-weight: 300;
-    line-height: 1.14;
-    margin-bottom: 12px;
-    max-width: 18ch;
-  }
-
-  .thread-title em {
-    font-style: italic;
-    color: var(--accent);
-  }
-
-  .thread-excerpt {
-    font-size: 13px;
-    line-height: 1.72;
-    color: var(--muted);
-    margin-bottom: 18px;
-    max-width: 58ch;
-  }
-
-  .thread-books {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-bottom: 18px;
-  }
-
-  /* ── Recent Acquisitions ── */
-
-  .books-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 18px;
-  }
-
-  .book-card {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .book-cover {
-    position: relative;
-    aspect-ratio: 0.72;
-    overflow: hidden;
-    border-radius: 2px;
-    background: #e7ddd1;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-    margin-bottom: 10px;
-  }
-
-  .book-cover img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: transform 0.35s ease;
-  }
-
-  .book-card:hover .book-cover img {
-    transform: scale(1.025);
-  }
-
-  .book-cover-fallback {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #d8cbbb 0%, #efe5da 100%);
-  }
-
-  .book-cover-text {
-    display: none;
-  }
-
-  .book-meta-title {
-    font-family: var(--serif);
-    font-size: 20px;
-    line-height: 1.15;
-    margin-bottom: 3px;
-  }
-
-  .book-meta-author {
-    font-size: 12px;
-    color: var(--muted);
-    margin-bottom: 8px;
-  }
-
-  .book-note {
-    font-size: 12px;
-    line-height: 1.62;
-    color: var(--muted);
-  }
-
-  /* ── Event ── */
-
-  .event-date {
-    font-family: var(--serif);
-    font-size: 44px;
-    font-weight: 300;
-    color: #ddd3c7;
-    line-height: 0.95;
-    margin-bottom: 3px;
-  }
-
-  .event-month {
-    font-size: 10px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 16px;
-  }
-
-  .event-title {
-    font-family: var(--serif);
-    font-size: 22px;
-    font-weight: 300;
-    line-height: 1.2;
-    margin-bottom: 10px;
-    max-width: 20ch;
-  }
-
-  .event-details {
-    font-size: 12px;
-    color: var(--muted);
-    line-height: 1.68;
-    margin-bottom: 18px;
-    max-width: 46ch;
-  }
-
-  /* ── Objects ── */
-
-  .objects-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-
-  .object-item {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .object-item img,
-  .object-item > div {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-    border-radius: 2px;
-    overflow: hidden;
-    background: #ddd3c7;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
-    transition: transform 0.35s ease;
-  }
-
-  .object-item:hover img,
-  .object-item:hover > div {
-    transform: scale(1.03);
-  }
-
-  .object-caption {
-    margin-top: 6px;
-    font-size: 10px;
-    color: var(--muted);
-    letter-spacing: 0.04em;
-  }
-
-  /* ── Loading / empty states ── */
-
-  .loading-state,
-  .empty-state {
-    font-size: 12px;
-    color: var(--muted);
-    padding: 8px 0;
-  }
-
-  /* ── Responsive ── */
-
-  @media (max-width: 980px) {
-    .books-row {
-      grid-template-columns: repeat(2, 1fr);
+    :root {
+      --home-paper: #f3ede4;
+      --home-paper-deep: #e8ddcf;
+      --home-paper-warm: #efe5d8;
+      --home-line: rgba(60, 45, 32, 0.14);
+      --home-line-strong: rgba(60, 45, 32, 0.24);
+      --home-shadow: 0 10px 24px rgba(28, 20, 14, 0.06);
+      --home-shadow-soft: 0 6px 16px rgba(28, 20, 14, 0.05);
+      --home-brown: #6f5640;
+      --home-brown-deep: #4f3d2e;
     }
 
-    .objects-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  @media (max-width: 760px) {
-    .hero,
-    .split-section {
-      grid-template-columns: 1fr;
+    body {
+      background:
+        radial-gradient(circle at top left, rgba(255,255,255,0.45), transparent 30%),
+        var(--home-paper);
     }
 
-    .hero-text,
-    .event-panel {
-      border-right: none;
-      border-bottom: 1px solid var(--border);
+    /* ── Navigation subtle lift ── */
+
+    .nav {
+      background: rgba(243, 237, 228, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--home-line);
     }
 
-    .hero-text,
+    /* ── Hero ── */
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      min-height: 250px;
+      border-bottom: 1px solid var(--home-line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.2), rgba(255,255,255,0)),
+        var(--home-paper);
+    }
+
+    .hero-text {
+      padding: 30px 40px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 1px solid var(--home-line);
+    }
+
+    .hero-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 10px;
+    }
+
+    .hero-statement {
+      font-family: var(--serif);
+      font-size: clamp(30px, 4.2vw, 46px);
+      font-weight: 300;
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      margin-bottom: 12px;
+      max-width: 19ch;
+      text-wrap: balance;
+    }
+
+    .hero-statement em {
+      font-style: italic;
+      color: var(--home-brown);
+    }
+
+    .hero-body {
+      font-size: 13px;
+      line-height: 1.62;
+      color: var(--muted);
+      max-width: 58ch;
+      margin: 0;
+    }
+
+    .hero-image {
+      background: #1c1712;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      padding: 18px 20px;
+      min-height: 250px;
+    }
+
+    .hero-image img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.76;
+    }
+
+    .hero-image::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(20,15,12,0.10), rgba(20,15,12,0.48));
+    }
+
+    .hero-image-caption {
+      position: relative;
+      z-index: 1;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.62);
+    }
+
+    /* ── Sections ── */
+
     .threads-section,
     .acquisitions-section,
     .event-panel,
     .objects-panel {
-      padding: 28px 22px;
+      padding: 34px 40px;
     }
 
-    .hero-statement {
-      font-size: 28px;
-      max-width: none;
+    .threads-section,
+    .acquisitions-section {
+      border-bottom: 1px solid var(--home-line);
+      background: rgba(255,255,255,0.10);
     }
+
+    .split-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 1px solid var(--home-line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0)),
+        var(--home-paper);
+    }
+
+    .event-panel {
+      border-right: 1px solid var(--home-line);
+    }
+
+    .section-label {
+      margin-bottom: 16px;
+      color: var(--home-brown);
+      letter-spacing: 0.12em;
+    }
+
+    /* ── Latest Thread ── */
 
     .thread-feature {
-      grid-template-columns: 1fr;
-      gap: 12px;
+      display: grid;
+      grid-template-columns: 56px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
     }
 
     .thread-number {
-      font-size: 42px;
+      font-family: var(--serif);
+      font-size: 54px;
+      font-weight: 300;
+      color: #d4c6b7;
+      line-height: 0.9;
+      margin-top: -2px;
     }
+
+    .thread-title {
+      font-family: var(--serif);
+      font-size: 28px;
+      font-weight: 300;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin-bottom: 10px;
+      max-width: 24ch;
+    }
+
+    .thread-title em {
+      font-style: italic;
+      color: var(--home-brown);
+    }
+
+    .thread-excerpt {
+      font-size: 13px;
+      line-height: 1.65;
+      color: var(--muted);
+      margin-bottom: 14px;
+      max-width: 64ch;
+    }
+
+    .thread-books {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      margin-bottom: 16px;
+      min-height: 0;
+    }
+
+    .thread-book-thumb {
+      width: 44px;
+      flex: 0 0 44px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .thread-book-thumb-image {
+      width: 44px;
+      aspect-ratio: 0.72;
+      border-radius: 2px;
+      overflow: hidden;
+      background: linear-gradient(135deg, #d9ccbd 0%, #eadfd3 100%);
+      box-shadow: var(--home-shadow-soft);
+      border: 1px solid rgba(70, 50, 35, 0.06);
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .thread-book-thumb:hover .thread-book-thumb-image {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 18px rgba(28, 20, 14, 0.08);
+    }
+
+    .thread-book-thumb-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .thread-book-chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 24px;
+      padding: 3px 8px;
+      border: 1px solid var(--home-line);
+      border-radius: 999px;
+      font-size: 11px;
+      color: var(--muted);
+      background: rgba(255,255,255,0.42);
+    }
+
+    /* ── Recent Acquisitions ── */
 
     .books-row {
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px 28px;
     }
 
+    .book-card {
+      display: grid;
+      grid-template-columns: 46px minmax(0, 1fr);
+      gap: 12px;
+      align-items: start;
+      text-decoration: none;
+      color: inherit;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(60, 45, 32, 0.08);
+    }
+
+    .book-cover {
+      position: relative;
+      width: 46px;
+      aspect-ratio: 0.72;
+      overflow: hidden;
+      border-radius: 2px;
+      background: #e4d7c8;
+      box-shadow: var(--home-shadow-soft);
+      margin-bottom: 0;
+    }
+
+    .book-cover img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.25s ease;
+    }
+
+    .book-card:hover .book-cover img {
+      transform: scale(1.03);
+    }
+
+    .book-cover-fallback {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #d8cbbb 0%, #efe5da 100%);
+    }
+
+    .book-cover-text {
+      display: none;
+    }
+
+    .book-meta-title {
+      font-family: var(--serif);
+      font-size: 18px;
+      line-height: 1.04;
+      letter-spacing: -0.01em;
+      margin-bottom: 2px;
+    }
+
+    .book-meta-author {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .book-note {
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--muted);
+      max-width: 44ch;
+    }
+
+    /* ── Event ── */
+
+    .event-date {
+      font-family: var(--serif);
+      font-size: 42px;
+      font-weight: 300;
+      color: #d4c6b7;
+      line-height: 0.9;
+      margin-bottom: 2px;
+    }
+
+    .event-month {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+
+    .event-title {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 300;
+      line-height: 1.12;
+      letter-spacing: -0.01em;
+      margin-bottom: 10px;
+      max-width: 23ch;
+    }
+
+    .event-details {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.62;
+      margin-bottom: 16px;
+      max-width: 48ch;
+    }
+
+    /* ── Objects ── */
+
     .objects-grid {
+      display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
+      gap: 10px;
+      margin-bottom: 14px;
     }
-  }
 
-  @media (max-width: 560px) {
-    .books-row,
-    .objects-grid {
-      grid-template-columns: 1fr;
+    .object-item {
+      display: block;
+      text-decoration: none;
+      color: inherit;
     }
-  }
-</style>
+
+    .object-item img,
+    .object-item > div {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      border-radius: 2px;
+      overflow: hidden;
+      background: #ddd3c7;
+      box-shadow: var(--home-shadow-soft);
+      transition: transform 0.25s ease;
+    }
+
+    .object-item:hover img,
+    .object-item:hover > div {
+      transform: scale(1.03);
+    }
+
+    .object-caption {
+      margin-top: 6px;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── Newsletter subtle warm-up ── */
+
+    .newsletter-section {
+      background:
+        linear-gradient(180deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06)),
+        var(--home-paper-warm);
+      border-top: 1px solid rgba(255,255,255,0.25);
+      border-bottom: 1px solid var(--home-line);
+    }
+
+    .newsletter-btn {
+      background: var(--home-brown-deep);
+      border-color: var(--home-brown-deep);
+    }
+
+    .newsletter-btn:hover {
+      background: var(--home-brown);
+      border-color: var(--home-brown);
+    }
+
+    /* ── Loading / empty states ── */
+
+    .loading-state,
+    .empty-state {
+      font-size: 12px;
+      color: var(--muted);
+      padding: 8px 0;
+    }
+
+    /* ── Responsive ── */
+
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr 0.8fr;
+      }
+
+      .books-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .hero,
+      .split-section {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-text,
+      .event-panel {
+        border-right: none;
+        border-bottom: 1px solid var(--home-line);
+      }
+
+      .hero-text,
+      .threads-section,
+      .acquisitions-section,
+      .event-panel,
+      .objects-panel {
+        padding: 24px 22px;
+      }
+
+      .hero {
+        min-height: 0;
+      }
+
+      .hero-image {
+        min-height: 180px;
+      }
+
+      .hero-statement {
+        max-width: none;
+        font-size: 30px;
+      }
+
+      .thread-feature {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .thread-number {
+        font-size: 38px;
+      }
+
+      .books-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .objects-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .hero-statement {
+        font-size: 27px;
+      }
+
+      .thread-book-thumb {
+        width: 40px;
+        flex-basis: 40px;
+      }
+
+      .thread-book-thumb-image {
+        width: 40px;
+      }
+
+      .objects-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -391,11 +532,7 @@
 <div class="hero">
   <div class="hero-text">
     <div class="hero-eyebrow">Buenos Aires — Est. 2026</div>
-    <h1 class="hero-statement">
-      A curated bookshop<br>
-      organised around <em>threads</em><br>
-      of connected thinking.
-    </h1>
+    <h1 class="hero-statement">A curated bookshop organised around <em>threads</em> of connected thinking.</h1>
     <p class="hero-body">
       300–500 titles in political economy, urbanism, architecture,
       and current affairs. Every book chosen personally. Every blurb
@@ -452,7 +589,6 @@
       what's on next. No noise.
     </p>
   </div>
-  <!-- Replace href with your Substack embed URL -->
   <form class="newsletter-form"
         action="https://hilobookshop.substack.com/api/v1/free?nojs=true"
         method="post" target="_blank">
@@ -480,22 +616,85 @@
 <script type="module">
   import { getThreads, getBooks, getEvents, getObjects, formatDateShort, formatPrice } from './js/airtable.js';
 
+  function escapeHtml(str = '') {
+    return String(str)
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#39;');
+  }
+
+  function getThreadBookThumbs(thread) {
+    const explicitThumbs =
+      thread['Book Covers'] ||
+      thread['Book Cover URLs'] ||
+      thread['Book Thumbnails'] ||
+      thread['Books Covers'] ||
+      [];
+
+    if (Array.isArray(explicitThumbs) && explicitThumbs.length) {
+      return explicitThumbs.slice(0, 6).map((src, i) => `
+        <span class="thread-book-thumb" aria-hidden="true">
+          <span class="thread-book-thumb-image">
+            <img src="${src}" alt="" loading="lazy">
+          </span>
+        </span>
+      `).join('');
+    }
+
+    const richBooks =
+      thread['Books Data'] ||
+      thread['Related Books'] ||
+      thread['Book Objects'] ||
+      [];
+
+    if (Array.isArray(richBooks) && richBooks.length) {
+      return richBooks.slice(0, 6).map(book => {
+        const src = book['Cover URL'] || book.cover || book.image || '';
+        const title = book.Title || book.title || '';
+        if (!src) {
+          return `<span class="thread-book-chip">${escapeHtml(title || 'Book')}</span>`;
+        }
+        return `
+          <span class="thread-book-thumb" title="${escapeHtml(title)}">
+            <span class="thread-book-thumb-image">
+              <img src="${src}" alt="${escapeHtml(title)}" loading="lazy">
+            </span>
+          </span>
+        `;
+      }).join('');
+    }
+
+    if (Array.isArray(thread.Books) && thread.Books.length) {
+      return thread.Books.slice(0, 6).map(book =>
+        `<span class="thread-book-chip">${escapeHtml(typeof book === 'string' ? book : 'Book')}</span>`
+      ).join('');
+    }
+
+    return '';
+  }
+
   /* ── Latest thread ── */
   async function loadThread() {
     const el = document.getElementById('thread-feature');
     try {
       const threads = await getThreads({ maxRecords: 1 });
-      if (!threads.length) { el.innerHTML = '<div class="empty-state">No threads yet.</div>'; return; }
+      if (!threads.length) {
+        el.innerHTML = '<div class="empty-state">No threads yet.</div>';
+        return;
+      }
+
       const t = threads[0];
+      const thumbs = getThreadBookThumbs(t);
+
       el.innerHTML = `
         <div class="thread-feature">
           <div class="thread-number">${String(t.Number || 1).padStart(2,'0')}</div>
           <div>
             <h2 class="thread-title">${t.Title || ''}</h2>
             <p class="thread-excerpt">${t.Intro || ''}</p>
-            <div class="thread-books">
-              ${(t.Books || []).slice(0,6).map(() => '').join('')}
-            </div>
+            ${thumbs ? `<div class="thread-books">${thumbs}</div>` : ''}
             <a href="thread.html?slug=${t.Slug}" class="link-accent">Read the thread →</a>
           </div>
         </div>`;
@@ -509,21 +708,27 @@
     const el = document.getElementById('books-row');
     try {
       const books = await getBooks({ featured: true, maxRecords: 4 });
-      if (!books.length) { el.innerHTML = '<div class="empty-state">No featured books yet.</div>'; return; }
+      if (!books.length) {
+        el.innerHTML = '<div class="empty-state">No featured books yet.</div>';
+        return;
+      }
+
       el.innerHTML = books.map(b => `
         <a href="catalogue.html?book=${b.id}" class="book-card">
           <div class="book-cover">
             ${b['Cover URL']
-              ? `<img src="${b['Cover URL']}" alt="${b.Title}" loading="lazy">`
+              ? `<img src="${b['Cover URL']}" alt="${escapeHtml(b.Title || '')}" loading="lazy">`
               : `<div class="book-cover-fallback"></div>`}
             <div class="book-cover-text">
               <div class="book-cover-title">${b.Title || ''}</div>
               <div class="book-cover-author">${b.Author || ''}</div>
             </div>
           </div>
-          <div class="book-meta-title">${b.Title || ''}</div>
-          <div class="book-meta-author">${b.Author || ''}</div>
-          ${b.Blurb ? `<div class="book-note">${b.Blurb.substring(0,120)}…</div>` : ''}
+          <div>
+            <div class="book-meta-title">${b.Title || ''}</div>
+            <div class="book-meta-author">${b.Author || ''}</div>
+            ${b.Blurb ? `<div class="book-note">${b.Blurb.substring(0,110)}…</div>` : ''}
+          </div>
         </a>`).join('');
     } catch(e) {
       el.innerHTML = '<div class="empty-state">Unable to load books.</div>';
@@ -539,8 +744,10 @@
         el.innerHTML = '<div class="empty-state">No upcoming events. Check back soon.</div>';
         return;
       }
+
       const ev = events[0];
       const { day, month, year } = formatDateShort(ev.Date);
+
       el.innerHTML = `
         <div class="event-date">${day}</div>
         <div class="event-month">${month} ${year}</div>
@@ -567,15 +774,16 @@
     try {
       const objects = await getObjects({ featured: true, maxRecords: 3 });
       if (!objects.length) return;
+
       el.innerHTML = objects.map(o => `
         <a href="objects.html" class="object-item">
           ${o['Photo URL']
-            ? `<img src="${o['Photo URL']}" alt="${o.Name}" loading="lazy">`
+            ? `<img src="${o['Photo URL']}" alt="${escapeHtml(o.Name || '')}" loading="lazy">`
             : `<div style="width:100%;height:100%;background:var(--border);"></div>`}
           <div class="object-caption">${o.Origin || o.Name || ''}</div>
         </a>`).join('');
     } catch(e) {
-      // Objects section fails silently — not critical
+      /* fail silently */
     }
   }
 
