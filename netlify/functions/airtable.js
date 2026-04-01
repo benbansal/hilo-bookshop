@@ -51,16 +51,16 @@ exports.handler = async function(event) {
             headers: { Authorization: `Bearer ${token}` }
         });
 
-        const data = await res.json();
+        const text = await res.text();
 
-        return {
-            statusCode: res.status,
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
-            body: JSON.stringify(data)
-        };
+return {
+    statusCode: res.status,
+    headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*'
+    },
+    body: text
+};
     } catch (err) {
         return {
             statusCode: 500,
