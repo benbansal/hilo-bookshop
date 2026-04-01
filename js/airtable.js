@@ -38,9 +38,9 @@ export async function getBooks(options = {}) {
   };
 
   if (options.featured) {
-    params.filterByFormula = `AND({Featured}=1, {In Stock}=1)`;
+    params.filterByFormula = `AND({Featured}=TRUE(), {In Stock}=TRUE())`;
   } else if (options.inStock) {
-    params.filterByFormula = `{In Stock}=1`;
+    params.filterByFormula = `{In Stock}=TRUE()`;
   } else if (options.thread) {
     params.filterByFormula = `FIND("${options.thread}", ARRAYJOIN({Thread}))`;
   } else if (options.category) {
@@ -67,8 +67,8 @@ export async function getEvents(options = {}) {
   const params = {
     sort: JSON.stringify([{ field: 'Date', direction: 'asc' }]),
     filterByFormula: options.past
-      ? `AND({Active}=1, IS_BEFORE({Date}, TODAY()))`
-      : `AND({Active}=1, NOT(IS_BEFORE({Date}, TODAY())))`,
+      ? `AND({Active}=TRUE(), {Date}, {Date} < TODAY())`
+      : `AND({Active}=TRUE(), {Date}, {Date} >= TODAY())`,
   };
 
   if (options.maxRecords) params.maxRecords = options.maxRecords;
@@ -84,9 +84,9 @@ export async function getObjects(options = {}) {
   };
 
   if (options.featured) {
-    params.filterByFormula = `AND({Featured}=1, {Available}=1)`;
+    params.filterByFormula = `AND({Featured}=TRUE(), {Available}=TRUE())`;
   } else if (options.available) {
-    params.filterByFormula = `{Available}=1`;
+    params.filterByFormula = `{Available}=TRUE()`;
   }
 
   if (options.maxRecords) params.maxRecords = options.maxRecords;
@@ -99,7 +99,7 @@ export async function getObjects(options = {}) {
 export async function getThreads(options = {}) {
   const params = {
     sort: JSON.stringify([{ field: 'Number', direction: 'asc' }]),
-    filterByFormula: `{Published}=1`,
+    filterByFormula: `{Published}=TRUE()`,
   };
 
   if (options.maxRecords) params.maxRecords = options.maxRecords;
