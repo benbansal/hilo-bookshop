@@ -957,13 +957,31 @@
     return 'threads.html';
   }
 
-  function matchBookToThread(book, thread) {
-    const threadTitle = normalize(thread.Title || '');
-    const threadSlug = normalize(thread.Slug || '');
-    const threadId = String(thread.id || '');
-    const candidates = [];
+  function getThreadTitleCandidates(thread) {
+    const threadTitle = thread.Title || '';
+    const threadSlug = thread.Slug || '';
+    const candidates = new Set();
 
-    const fieldsToCheck = [
+    if (threadTitle) candidates.add(normalize(threadTitle));
+    if (threadSlug) candidates.add(normalize(threadSlug));
+
+    const alternateFields = [
+      'Name',
+      'Thread',
+      'Thread Title',
+      'Short Title',
+      'Display Title'
+    ];
+
+    alternateFields.forEach(field => {
+      if (thread[field]) candidates.add(normalize(thread[field]));
+    });
+
+    return [...candidates].filter(Boolean);
+  }
+
+  function bookContainsThreadReference(book, threadCandidates, threadId) {
+    const possibleLinkFields = [
       'Thread',
       'Threads',
       'Thread Title',
@@ -973,69 +991,48 @@
       'Shelf',
       'Shelves',
       'Topic',
-      'Topics'
+      'Topics',
+      'Category',
+      'Categories'
     ];
 
-    for (const field of fieldsToCheck) {
-      candidates.push(...arrayify(book[field]));
-    }
+    for (const field of possibleLinkFields) {
+      const values = arrayify(book[field]);
+      for (const value of values) {
+        const normalizedValue = normalize(value);
+        if (!normalizedValue) continue;
 
-    for (const candidate of candidates) {
-      const text = normalize(candidate);
-      if (!text) continue;
-      if (text === threadTitle || text.includes(threadTitle) || (threadSlug && text.includes(threadSlug))) {
-        return true;
+        for (const candidate of threadCandidates) {
+          if (
+            normalizedValue === candidate ||
+            normalizedValue.includes(candidate) ||
+            candidate.includes(normalizedValue)
+          ) {
+            return true;
+          }
+        }
       }
     }
 
-    const linkedFields = [
+    const possibleIdFields = [
+      'Thread ID',
       'Thread IDs',
-      'Threads IDs',
+      'Thread Record ID',
       'Thread Record IDs',
-      'Related Thread IDs',
-      'Thread Record ID'
+      'Related Thread ID',
+      'Related Thread IDs'
     ];
 
-    for (const field of linkedFields) {
+    for (const field of possibleIdFields) {
       const values = arrayify(book[field]).map(String);
-      if (values.includes(threadId)) return true;
+      if (values.includes(String(threadId))) return true;
     }
 
     return false;
   }
 
-  function getThreadBooksFromThreadRecord(thread) {
-    const richBooks =
-      thread['Books Data'] ||
-      thread['Related Books'] ||
-      thread['Book Objects'] ||
-      [];
-
-    if (Array.isArray(richBooks) && richBooks.length) {
-      return richBooks.map((book, index) => ({
-        id: book.id || `${thread.id}-embedded-${index}`,
-        Title: book.Title || book.title || '',
-        Author: book.Author || book.author || '',
-        Slug: book.Slug || book.slug || '',
-        'Cover URL': book['Cover URL'] || book.cover || book.image || '',
-        _embedded: true
-      }));
-    }
-
-    return [];
-  }
-
   function deriveThreadBooks(thread, books) {
-    const explicitEmbedded = getThreadBooksFromThreadRecord(thread);
-    const matched = books.filter(book => matchBookToThread(book, thread));
-    const merged = [...explicitEmbedded];
-
-    for (const book of matched) {
-      if (!merged.some(item => String(item.id) === String(book.id))) {
-        merged.push(book);
-      }
-    }
-
+    const threadCandidates = getThreadTitleCandidates(thread);
     const explicitThumbs =
       thread['Book Covers'] ||
       thread['Book Cover URLs'] ||
@@ -1043,20 +1040,55 @@
       thread['Books Covers'] ||
       [];
 
-    if (!merged.length && Array.isArray(explicitThumbs) && explicitThumbs.length) {
-      return explicitThumbs.map((src, i) => ({
-        id: `${thread.id}-thumb-${i}`,
+    const embeddedBooks =
+      thread['Books Data'] ||
+      thread['Related Books'] ||
+      thread['Book Objects'] ||
+      [];
+
+    const matchedBooks = books.filter(book =>
+      bookContainsThreadReference(book, threadCandidates, thread.id)
+    );
+
+    const merged = [];
+
+    if (Array.isArray(embeddedBooks)) {
+      embeddedBooks.forEach((book, index) => {
+        merged.push({
+          id: book.id || `${thread.id}-embedded-${index}`,
+          Title: book.Title || book.title || '',
+          Author: book.Author || book.author || '',
+          Slug: book.Slug || book.slug || '',
+          'Cover URL': book['Cover URL'] || book.cover || book.image || ''
+        });
+      });
+    }
+
+    matchedBooks.forEach(book => {
+      if (!merged.some(item => String(item.id) === String(book.id))) {
+        merged.push(book);
+      }
+    });
+
+    if (merged.length) {
+      return merged.filter(book => getBookCover(book)).slice(0, 12);
+    }
+
+    if (Array.isArray(explicitThumbs) && explicitThumbs.length) {
+      return explicitThumbs.slice(0, 12).map((src, index) => ({
+        id: `${thread.id}-thumb-${index}`,
         Title: '',
-        Author: '',
         'Cover URL': src
       }));
     }
 
-    return merged.filter(book => getBookCover(book) || book.Title);
+    return [];
   }
 
   function renderThreadBooks(books) {
-    if (!books.length) return '';
+    if (!books.length) {
+      return `<div class="empty-state">No books linked to this thread yet.</div>`;
+    }
 
     return `
       <div class="thread-books-wrap">
@@ -1070,9 +1102,7 @@
             return `
               <a href="${href}" class="thread-book-thumb" title="${title}">
                 <div class="thread-book-thumb-image">
-                  ${cover
-                    ? `<img src="${cover}" alt="${title}" loading="lazy">`
-                    : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#d8cbbb 0%,#efe5da 100%);"></div>`}
+                  <img src="${cover}" alt="${title}" loading="lazy">
                 </div>
                 ${title ? `<div class="thread-book-thumb-title">${title}</div>` : ''}
               </a>
@@ -1092,7 +1122,7 @@
     }
 
     const thread = allThreads[index];
-    const books = deriveThreadBooks(thread, allBooks);
+    const threadBooks = deriveThreadBooks(thread, allBooks);
 
     el.innerHTML = `
       <div class="thread-shell">
@@ -1103,7 +1133,7 @@
               <div class="thread-title-wrap">
                 <h2 class="thread-title">${escapeHtml(thread.Title || '')}</h2>
                 <div class="thread-meta">
-                  ${books.length ? `${books.length} book${books.length === 1 ? '' : 's'}` : 'Thread'}
+                  ${threadBooks.length ? `${threadBooks.length} book${threadBooks.length === 1 ? '' : 's'}` : 'Thread'}
                 </div>
               </div>
               <div class="thread-nav" aria-label="Thread navigation">
@@ -1114,7 +1144,7 @@
 
             <p class="thread-excerpt">${escapeHtml(thread.Intro || thread.Description || '')}</p>
 
-            ${renderThreadBooks(books)}
+            ${renderThreadBooks(threadBooks)}
 
             <div class="thread-footer">
               <a href="${getThreadLink(thread)}" class="link-accent">Read the thread →</a>
@@ -1153,7 +1183,7 @@
     try {
       const [threads, books] = await Promise.all([
         getThreads({ maxRecords: 20 }),
-        getBooks({ maxRecords: 120 })
+        getBooks({ maxRecords: 200 })
       ]);
 
       allThreads = Array.isArray(threads) ? threads : [];
@@ -1167,6 +1197,7 @@
       currentThreadIndex = 0;
       renderThread(currentThreadIndex);
     } catch (e) {
+      console.error('Thread/books load error:', e);
       threadEl.innerHTML = '<div class="empty-state">Unable to load thread.</div>';
     }
   }
@@ -1197,6 +1228,7 @@
         </a>
       `).join('');
     } catch (e) {
+      console.error('Books load error:', e);
       el.innerHTML = '<div class="empty-state">Unable to load books.</div>';
     }
   }
@@ -1232,6 +1264,7 @@
             : `<a href="events.html" class="btn">See all events →</a>`}
       `;
     } catch (e) {
+      console.error('Event load error:', e);
       el.innerHTML = '<div class="empty-state">Unable to load events.</div>';
     }
   }
@@ -1256,6 +1289,7 @@
         </a>
       `).join('');
     } catch (e) {
+      console.error('Objects load error:', e);
       el.innerHTML = '<div class="empty-state">Unable to load objects.</div>';
     }
   }
