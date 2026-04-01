@@ -1,50 +1,37 @@
 /* ============================================================
-   HILO BOOKSHOP — Airtable API Wrapper
-   ============================================================
-   Replace the two config values below with your own.
-   Never commit real credentials to a public GitHub repo.
-   Use Netlify environment variables for production:
-     AIRTABLE_TOKEN and AIRTABLE_BASE_ID
+   HILO BOOKSHOP — Airtable client
+   Calls /api/airtable (Netlify function) — no credentials here.
    ============================================================ */
 
-const AIRTABLE_TOKEN   = 'YOUR_AIRTABLE_TOKEN';
-const AIRTABLE_BASE_ID = 'YOUR_BASE_ID';       
-const AIRTABLE_API     = 'https://api.airtable.com/v0';
+const API = '/api/airtable';
 
-/* ============================================================
-   Core fetch — handles pagination automatically
-   ============================================================ */
-
+/* ── Core fetch with pagination ── */
 async function airtableFetch(table, params = {}) {
   const records = [];
   let offset = null;
 
   do {
-    const url = new URL(`${AIRTABLE_API}/${AIRTABLE_BASE_ID}/${encodeURIComponent(table)}`);
+    const url = new URL(API, window.location.origin);
+    url.searchParams.set('table', table);
     Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
     if (offset) url.searchParams.set('offset', offset);
 
-    const res = await fetch(url.toString(), {
-      headers: { Authorization: `Bearer ${AIRTABLE_TOKEN}` }
-    });
+    const res = await fetch(url.toString());
 
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
-      throw new Error(`Airtable error ${res.status}: ${err.error?.message || res.statusText}`);
+      throw new Error(`API error ${res.status}: ${err.error || res.statusText}`);
     }
 
     const data = await res.json();
-    records.push(...data.records);
+    records.push(...(data.records || []));
     offset = data.offset || null;
   } while (offset);
 
   return records;
 }
 
-/* ============================================================
-   Books
-   ============================================================ */
-
+/* ── Books ── */
 export async function getBooks(options = {}) {
   const params = {
     sort: JSON.stringify([{ field: 'Title', direction: 'asc' }]),
@@ -67,21 +54,16 @@ export async function getBooks(options = {}) {
 }
 
 export async function getBook(id) {
-  const res = await fetch(
-    `${AIRTABLE_API}/${AIRTABLE_BASE_ID}/Books/${id}`,
-    { headers: { Authorization: `Bearer ${AIRTABLE_TOKEN}` } }
-  );
+  const url = new URL(API, window.location.origin);
+  url.searchParams.set('table', `Books/${id}`);
+  const res  = await fetch(url.toString());
   if (!res.ok) throw new Error(`Book not found: ${id}`);
   const data = await res.json();
   return { id: data.id, ...data.fields };
 }
 
-/* ============================================================
-   Events
-   ============================================================ */
-
+/* ── Events ── */
 export async function getEvents(options = {}) {
-  const today = new Date().toISOString().split('T')[0];
   const params = {
     sort: JSON.stringify([{ field: 'Date', direction: 'asc' }]),
     filterByFormula: options.past
@@ -95,19 +77,16 @@ export async function getEvents(options = {}) {
   return records.map(r => ({ id: r.id, ...r.fields }));
 }
 
-/* ============================================================
-   Objects
-   ============================================================ */
-
+/* ── Objects ── */
 export async function getObjects(options = {}) {
   const params = {
     sort: JSON.stringify([{ field: 'Name', direction: 'asc' }]),
   };
 
-  if (options.available) {
-    params.filterByFormula = `{Available}=1`;
-  } else if (options.featured) {
+  if (options.featured) {
     params.filterByFormula = `AND({Featured}=1, {Available}=1)`;
+  } else if (options.available) {
+    params.filterByFormula = `{Available}=1`;
   }
 
   if (options.maxRecords) params.maxRecords = options.maxRecords;
@@ -116,10 +95,7 @@ export async function getObjects(options = {}) {
   return records.map(r => ({ id: r.id, ...r.fields }));
 }
 
-/* ============================================================
-   Threads
-   ============================================================ */
-
+/* ── Threads ── */
 export async function getThreads(options = {}) {
   const params = {
     sort: JSON.stringify([{ field: 'Number', direction: 'asc' }]),
@@ -142,10 +118,7 @@ export async function getThread(slug) {
   return { id: records[0].id, ...records[0].fields };
 }
 
-/* ============================================================
-   Helpers
-   ============================================================ */
-
+/* ── Helpers ── */
 export function formatPrice(price) {
   if (!price && price !== 0) return '';
   return `$${Number(price).toLocaleString('en-US', { minimumFractionDigits: 0 })}`;
@@ -158,7 +131,7 @@ export function formatDate(dateStr) {
 }
 
 export function formatDateShort(dateStr) {
-  if (!dateStr) return '';
+  if (!dateStr) return {};
   const d = new Date(dateStr + 'T12:00:00');
   return {
     day:   d.toLocaleDateString('en-GB', { day: 'numeric' }),
