@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +10,6 @@
   >
   <link rel="stylesheet" href="/css/style.css">
 </head>
-
 <body>
 
   <nav class="nav">
@@ -19,7 +20,7 @@
 
     <ul class="nav-links">
       <li><a href="/threads.html">Threads</a></li>
-      <li><a href="/books.html">Books</a></li>
+      <li><a href="/catalogue.html">Catalogue</a></li>
       <li><a href="/objects.html">Objects</a></li>
       <li><a href="/events.html">Events</a></li>
       <li><a href="/about.html">About</a></li>
@@ -35,28 +36,42 @@
         <div class="hero-copy">
           <p class="eyebrow">Buenos Aires — Est. 2026</p>
 
-          <h1>
-            A curated bookshop<br>
-            organised around<br>
-            threads of connected thinking.
-          </h1>
+          <h1>Threads of connected thinking.</h1>
 
           <p>
-            300–500 titles in political economy, urbanism, architecture,
-            and current affairs. Every book chosen personally. Every blurb
-            written by the editor. A space for slow reading in a fast city.
+            A curated bookshop in Buenos Aires. 300–500 titles in political economy,
+            urbanism, architecture, and current affairs. Every book chosen personally.
+            Every blurb written by the editor. A space for slow reading in a fast city.
           </p>
 
           <div class="hero-actions">
-            <a class="btn" href="/books.html">Browse books</a>
+            <a class="btn" href="/catalogue.html">Browse books</a>
             <a class="btn-secondary" href="/threads.html">Read threads</a>
           </div>
         </div>
 
-        <article class="hero-card" id="hero-feature">
-          <div class="loading-state">Loading feature…</div>
-        </article>
+        <figure class="hero-card hero-image">
+          <img src="/images/hero.jpg" alt="Hilo bookshop, Buenos Aires" loading="eager">
+          <div class="hero-card-body">
+            <p class="card-kicker">Buenos Aires</p>
+            <p>Palermo</p>
+          </div>
+        </figure>
 
+      </div>
+    </section>
+
+    <!-- LATEST THREAD -->
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Latest thread</h2>
+          <a href="/threads.html">View all</a>
+        </div>
+
+        <article class="thread-panel" id="thread-box">
+          <div class="loading-state">Loading thread…</div>
+        </article>
       </div>
     </section>
 
@@ -64,25 +79,28 @@
     <section class="section section-tight">
       <div class="container">
         <div class="feature-strip">
-
           <article class="feature-box" id="event-box">
             <div class="loading-state">Loading event…</div>
           </article>
 
-          <article class="feature-box" id="thread-box">
-            <div class="loading-state">Loading thread…</div>
+          <article class="feature-box">
+            <h3>From shelf to thread</h3>
+            <p>
+              Books, objects, and editorial paths arranged to feel less like inventory
+              and more like browsing a real shelf.
+            </p>
+            <a class="btn-secondary" href="/about.html">About Hilo</a>
           </article>
-
         </div>
       </div>
     </section>
 
-    <!-- FEATURED BOOKS -->
+    <!-- RECENT ACQUISITIONS -->
     <section class="section">
       <div class="container">
         <div class="section-head">
           <h2>Recent acquisitions</h2>
-          <a href="/books.html">View all</a>
+          <a href="/catalogue.html">View all</a>
         </div>
 
         <div class="rail" id="books-rail">
@@ -113,22 +131,22 @@
         </div>
 
         <div class="category-grid">
-          <a class="category-link" href="/books.html?category=Political%20Economy">
+          <a class="category-link" href="/catalogue.html?category=Political%20Economy">
             <strong>Political economy</strong>
             <span>States, markets, money, crisis</span>
           </a>
 
-          <a class="category-link" href="/books.html?category=Urbanism">
+          <a class="category-link" href="/catalogue.html?category=Urbanism">
             <strong>Urbanism</strong>
             <span>City life, housing, infrastructure</span>
           </a>
 
-          <a class="category-link" href="/books.html?category=Architecture">
+          <a class="category-link" href="/catalogue.html?category=Architecture">
             <strong>Architecture</strong>
             <span>Buildings, form, modernity, space</span>
           </a>
 
-          <a class="category-link" href="/books.html?category=Current%20Affairs">
+          <a class="category-link" href="/catalogue.html?category=Current%20Affairs">
             <strong>Current affairs</strong>
             <span>Power, conflict, institutions, change</span>
           </a>
@@ -163,9 +181,10 @@
       </form>
     </section>
 
+    <!-- MOBILE STICKY BAR -->
     <div class="mobile-sticky-bar">
       <a class="btn-secondary" href="/threads.html">Threads</a>
-      <a class="btn" href="/books.html">Browse books</a>
+      <a class="btn" href="/catalogue.html">Browse books</a>
     </div>
 
   </main>
@@ -175,7 +194,7 @@
 
     <ul class="footer-links">
       <li><a href="/threads.html">Threads</a></li>
-      <li><a href="/books.html">Books</a></li>
+      <li><a href="/catalogue.html">Catalogue</a></li>
       <li><a href="/objects.html">Objects</a></li>
       <li><a href="/events.html">Events</a></li>
       <li><a href="/about.html">About</a></li>
@@ -210,79 +229,52 @@
       return clean.slice(0, max).trimEnd() + '…';
     }
 
-    async function loadHeroFeature() {
-      const el = document.getElementById('hero-feature');
+    async function loadThreadBox() {
+      const el = document.getElementById('thread-box');
 
       try {
         const threads = await getThreads({ maxRecords: 1 });
+
         if (!threads.length) {
           el.innerHTML = `
-            <div class="hero-card-body">
-              <p class="card-kicker">Featured thread</p>
-              <h3>Threads coming soon</h3>
-              <p>Editorial essays, reading pathways, and connected books.</p>
+            <div class="thread-panel-inner">
+              <div class="thread-number">01</div>
+              <div class="thread-main">
+                <h3>Current thread</h3>
+                <p>No thread is live yet. Check back soon.</p>
+                <a class="btn-secondary" href="/threads.html">Browse threads</a>
+              </div>
             </div>
           `;
           return;
         }
 
         const t = threads[0];
-        const image = t['Hero Image'] || t['Image URL'] || t['Cover URL'] || '';
         const title = escapeHtml(t.Title || 'Latest thread');
-        const intro = escapeHtml(truncate(t.Intro || t.Description || '', 140));
+        const intro = escapeHtml(t.Intro || t.Description || '');
         const slug = encodeURIComponent(t.Slug || '');
+        const number = String(t.Number || 1).padStart(2, '0');
 
         el.innerHTML = `
-          ${image ? `<img src="${image}" alt="${title}" loading="eager">` : ''}
-          <div class="hero-card-body">
-            <p class="card-kicker">Latest thread</p>
-            <h3>${title}</h3>
-            <p>${intro}</p>
-            <div class="card-actions" style="margin-top:16px;">
+          <div class="thread-panel-inner">
+            <div class="thread-number">${number}</div>
+            <div class="thread-main">
+              <h3>${title}</h3>
+              <p>${intro}</p>
               <a class="btn-secondary" href="/thread.html?slug=${slug}">Read now</a>
             </div>
           </div>
         `;
       } catch (err) {
         el.innerHTML = `
-          <div class="hero-card-body">
-            <p class="card-kicker">Featured thread</p>
-            <h3>Unable to load feature</h3>
-            <p>Please try again shortly.</p>
+          <div class="thread-panel-inner">
+            <div class="thread-number">01</div>
+            <div class="thread-main">
+              <h3>Current thread</h3>
+              <p>Unable to load the latest editorial feature.</p>
+              <a class="btn-secondary" href="/threads.html">View threads</a>
+            </div>
           </div>
-        `;
-      }
-    }
-
-    async function loadThreadBox() {
-      const el = document.getElementById('thread-box');
-
-      try {
-        const threads = await getThreads({ maxRecords: 1 });
-        if (!threads.length) {
-          el.innerHTML = `
-            <h3>Current thread</h3>
-            <p>No thread is live yet. Check back soon.</p>
-            <a class="btn-secondary" href="/threads.html">Browse threads</a>
-          `;
-          return;
-        }
-
-        const t = threads[0];
-        const title = escapeHtml(t.Title || 'Latest thread');
-        const intro = escapeHtml(truncate(t.Intro || t.Description || '', 120));
-        const slug = encodeURIComponent(t.Slug || '');
-
-        el.innerHTML = `
-          <h3>${title}</h3>
-          <p>${intro}</p>
-          <a class="btn-secondary" href="/thread.html?slug=${slug}">Read now</a>
-        `;
-      } catch (err) {
-        el.innerHTML = `
-          <h3>Current thread</h3>
-          <p>Unable to load the latest editorial feature.</p>
-          <a class="btn-secondary" href="/threads.html">View threads</a>
         `;
       }
     }
@@ -292,6 +284,7 @@
 
       try {
         const events = await getEvents({ maxRecords: 1 });
+
         if (!events.length) {
           el.innerHTML = `
             <h3>Next event</h3>
@@ -310,7 +303,10 @@
 
         el.innerHTML = `
           <h3>${title}</h3>
-          <p>${date}${venue ? ` · ${venue}` : ''}<br>${desc}</p>
+          <p>
+            ${date}${venue ? ` · ${venue}` : ''}<br>
+            ${desc}
+          </p>
           <a class="btn-secondary" href="${ticketUrl}">View event</a>
         `;
       } catch (err) {
@@ -338,7 +334,7 @@
           const author = escapeHtml(b.Author || '');
           const category = escapeHtml(b.Category || b.Section || 'Book');
           const image = b['Cover URL'] || '';
-          const url = `/book.html?id=${encodeURIComponent(b.id)}`;
+          const url = `/catalogue.html?book=${encodeURIComponent(b.id)}`;
           const price = b.Price ? `$${escapeHtml(String(b.Price))}` : '';
           const stock = b['In Stock'] ? 'In stock' : '';
           const meta = [price, stock].filter(Boolean).join(' • ');
@@ -412,10 +408,11 @@
       }
     }
 
-    loadHeroFeature();
     loadThreadBox();
     loadEventBox();
     loadBooks();
     loadObjects();
   </script>
+
 </body>
+</html>
