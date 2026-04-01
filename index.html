@@ -1,437 +1,320 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Hilo — An Independent Bookshop · Buenos Aires</title>
   <meta
     name="description"
-    content="A curated bookshop in Buenos Aires organised around threads of connected thinking. Political economy, urbanism, architecture, current affairs."
-  >
-  <link rel="stylesheet" href="/css/style.css">
+    content="An independent bookshop in Buenos Aires with books, objects, threads, and events."
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
+  <div class="site-shell">
+    <header class="site-header">
+      <div class="container header-row">
+        <a class="brand" href="/" aria-label="Hilo home">
+          <span class="brand-mark">Hilo</span>
+          <span class="brand-sub">Buenos Aires</span>
+        </a>
 
-  <nav class="nav">
-    <a href="/index.html" class="nav-logo">
-      <span class="nav-logo-main">Hilo</span>
-      <span class="nav-logo-sub">An independent bookshop · Buenos Aires</span>
-    </a>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="/threads.html">Threads</a>
+          <a href="/books.html">Catalogue</a>
+          <a href="/objects.html">Objects</a>
+          <a href="/events.html">Events</a>
+          <a href="/about.html">About</a>
+        </nav>
 
-    <ul class="nav-links">
-      <li><a href="/threads.html">Threads</a></li>
-      <li><a href="/catalogue.html">Catalogue</a></li>
-      <li><a href="/objects.html">Objects</a></li>
-      <li><a href="/events.html">Events</a></li>
-      <li><a href="/about.html">About</a></li>
-    </ul>
-  </nav>
-
-  <main>
-
-    <!-- HERO -->
-    <section class="hero">
-      <div class="container hero-grid">
-
-        <div class="hero-copy">
-          <p class="eyebrow">Buenos Aires — Est. 2026</p>
-
-          <h1>Threads of connected thinking.</h1>
-
-          <p>
-            A curated bookshop in Buenos Aires. 300–500 titles in political economy,
-            urbanism, architecture, and current affairs. Every book chosen personally.
-            Every blurb written by the editor. A space for slow reading in a fast city.
-          </p>
-
-          <div class="hero-actions">
-            <a class="btn" href="/catalogue.html">Browse books</a>
-            <a class="btn-secondary" href="/threads.html">Read threads</a>
-          </div>
-        </div>
-
-        <figure class="hero-card hero-image">
-          <img src="/images/hero.jpg" alt="Hilo bookshop, Buenos Aires" loading="eager">
-          <div class="hero-card-body">
-            <p class="card-kicker">Buenos Aires</p>
-            <p>Palermo</p>
-          </div>
-        </figure>
-
+        <a class="header-link" href="/books.html">Browse books</a>
       </div>
-    </section>
+    </header>
 
-    <!-- LATEST THREAD -->
-    <section class="section">
-      <div class="container">
-        <div class="section-head">
-          <h2>Latest thread</h2>
-          <a href="/threads.html">View all</a>
-        </div>
+    <main>
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="kicker">Buenos Aires — Est. 2026</p>
+            <h1>Books for slow browsing, close reading, and connected thinking.</h1>
+            <p class="hero-text">
+              A curated independent bookshop with titles in political economy,
+              urbanism, architecture, and current affairs. Every book chosen
+              personally. Every blurb written with care.
+            </p>
 
-        <article class="thread-panel" id="thread-box">
-          <div class="loading-state">Loading thread…</div>
-        </article>
-      </div>
-    </section>
-
-    <!-- EVENTS + OBJECTS -->
-    <section class="section section-tight">
-      <div class="container">
-        <div class="feature-strip feature-strip-importance">
-
-          <article class="feature-box feature-box-large" id="event-box">
-            <div class="loading-state">Loading event…</div>
-          </article>
-
-          <article class="feature-box feature-box-large">
-            <div class="section-head section-head-inline">
-              <h2>Objects</h2>
-              <a href="/objects.html">View all</a>
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="/books.html">Browse books</a>
+              <a class="btn btn-secondary" href="/threads.html">Read threads</a>
             </div>
+          </div>
 
-            <div class="objects-mini-rail" id="objects-rail">
-              <div class="loading-state">Loading objects…</div>
-            </div>
-          </article>
+          <aside class="hero-panel" aria-label="About the shop">
+            <figure class="hero-image-wrap">
+              <img
+                src="/images/hero-bookshop.jpg"
+                alt="Hilo bookshop, Buenos Aires"
+              />
+            </figure>
 
-        </div>
-      </div>
-    </section>
-
-    <!-- RECENT ACQUISITIONS -->
-    <section class="section">
-      <div class="container">
-        <div class="section-head">
-          <h2>Recent acquisitions</h2>
-          <a href="/catalogue.html">View all</a>
-        </div>
-
-        <div class="rail" id="books-rail">
-          <div class="loading-state">Loading books…</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CATEGORY NAV -->
-    <section class="section">
-      <div class="container">
-        <div class="section-head">
-          <h2>Browse by shelf</h2>
-        </div>
-
-        <div class="category-grid">
-          <a class="category-link" href="/catalogue.html?category=Political%20Economy">
-            <strong>Political economy</strong>
-            <span>States, markets, money, crisis</span>
-          </a>
-
-          <a class="category-link" href="/catalogue.html?category=Urbanism">
-            <strong>Urbanism</strong>
-            <span>City life, housing, infrastructure</span>
-          </a>
-
-          <a class="category-link" href="/catalogue.html?category=Architecture">
-            <strong>Architecture</strong>
-            <span>Buildings, form, modernity, space</span>
-          </a>
-
-          <a class="category-link" href="/catalogue.html?category=Current%20Affairs">
-            <strong>Current affairs</strong>
-            <span>Power, conflict, institutions, change</span>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- NEWSLETTER -->
-    <section class="newsletter-section">
-      <div>
-        <h3 class="newsletter-heading">New threads, new arrivals.</h3>
-        <p class="newsletter-sub">
-          A monthly letter from the editor. What arrived, what we’re reading,
-          what’s on next. No noise.
-        </p>
-      </div>
-
-      <form
-        class="newsletter-form"
-        action="https://hilobookshop.substack.com/api/v1/free?nojs=true"
-        method="post"
-        target="_blank"
-      >
-        <input
-          type="email"
-          name="email"
-          placeholder="Your email"
-          class="newsletter-input"
-          required
-        >
-        <button class="newsletter-btn" type="submit">Subscribe</button>
-      </form>
-    </section>
-
-    <div class="mobile-sticky-bar">
-      <a class="btn-secondary" href="/threads.html">Threads</a>
-      <a class="btn" href="/catalogue.html">Browse books</a>
-    </div>
-
-  </main>
-
-  <footer class="footer">
-    <a href="/index.html" class="footer-logo">Hilo</a>
-
-    <ul class="footer-links">
-      <li><a href="/threads.html">Threads</a></li>
-      <li><a href="/catalogue.html">Catalogue</a></li>
-      <li><a href="/objects.html">Objects</a></li>
-      <li><a href="/events.html">Events</a></li>
-      <li><a href="/about.html">About</a></li>
-    </ul>
-
-    <div class="footer-address">
-      Buenos Aires, Argentina<br>
-      hilobookshop.com
-    </div>
-  </footer>
-
-  <script type="module">
-    import {
-      getThreads,
-      getBooks,
-      getEvents,
-      getObjects
-    } from '/js/airtable.js';
-
-    function escapeHtml(str = '') {
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
-
-    function truncate(text = '', max = 140) {
-      const clean = String(text).trim();
-      if (clean.length <= max) return clean;
-      return clean.slice(0, max).trimEnd() + '…';
-    }
-
-    async function loadThreadBox() {
-      const el = document.getElementById('thread-box');
-
-      try {
-        const threads = await getThreads({ maxRecords: 1 });
-
-        if (!threads.length) {
-          el.innerHTML = `
-            <div class="thread-panel-inner">
-              <div class="thread-number">01</div>
-              <div class="thread-main">
-                <h3>Current thread</h3>
-                <p>No thread is live yet. Check back soon.</p>
-                <a class="btn-secondary" href="/threads.html">Browse threads</a>
+            <div class="hero-notes">
+              <div class="hero-note">
+                <span class="note-label">Neighbourhood</span>
+                <span class="note-value">Palermo</span>
+              </div>
+              <div class="hero-note">
+                <span class="note-label">Focus</span>
+                <span class="note-value">Books, objects, editorial threads</span>
+              </div>
+              <div class="hero-note">
+                <span class="note-label">Mood</span>
+                <span class="note-value">Calm, curious, tactile</span>
               </div>
             </div>
-          `;
-          return;
-        }
+          </aside>
+        </div>
+      </section>
 
-        const t = threads[0];
-        const title = escapeHtml(t.Title || 'Latest thread');
-        const intro = escapeHtml(t.Intro || t.Description || '');
-        const slug = encodeURIComponent(t.Slug || '');
-        const number = String(t.Number || 1).padStart(2, '0');
-
-        let linkedBooks = [];
-        try {
-          const allBooks = await getBooks({ maxRecords: 100 });
-          const threadBooks = Array.isArray(t.Books) ? t.Books : [];
-          linkedBooks = allBooks.filter((b) => threadBooks.includes(b.id)).slice(0, 8);
-        } catch (e) {
-          linkedBooks = [];
-        }
-
-        const booksMarkup = linkedBooks.length
-          ? `
-            <div class="thread-books-strip">
-              ${linkedBooks.map((b) => {
-                const bookTitle = escapeHtml(b.Title || 'Untitled');
-                const bookAuthor = escapeHtml(b.Author || '');
-                const image = b['Cover URL'] || '';
-                const url = `/catalogue.html?book=${encodeURIComponent(b.id)}`;
-
-                return `
-                  <a class="thread-book-thumb" href="${url}" aria-label="${bookTitle}">
-                    <div class="thread-book-cover">
-                      ${image
-                        ? `<img src="${image}" alt="${bookTitle}" loading="lazy">`
-                        : `<div class="thread-book-cover-fallback"></div>`}
-                    </div>
-                    <div class="thread-book-meta">
-                      <div class="thread-book-title">${bookTitle}</div>
-                      <div class="thread-book-author">${bookAuthor}</div>
-                    </div>
-                  </a>
-                `;
-              }).join('')}
-            </div>
-          `
-          : '';
-
-        el.innerHTML = `
-          <div class="thread-panel-inner">
-            <div class="thread-number">${number}</div>
-            <div class="thread-main">
-              <h3>${title}</h3>
-              <p>${intro}</p>
-              ${booksMarkup}
-              <a class="btn-secondary" href="/thread.html?slug=${slug}">Read now</a>
-            </div>
-          </div>
-        `;
-      } catch (err) {
-        el.innerHTML = `
-          <div class="thread-panel-inner">
-            <div class="thread-number">01</div>
-            <div class="thread-main">
-              <h3>Current thread</h3>
-              <p>Unable to load the latest editorial feature.</p>
-              <a class="btn-secondary" href="/threads.html">View threads</a>
-            </div>
-          </div>
-        `;
-      }
-    }
-
-    async function loadEventBox() {
-      const el = document.getElementById('event-box');
-
-      try {
-        const events = await getEvents({ maxRecords: 1 });
-
-        if (!events.length) {
-          el.innerHTML = `
-            <h3>Next event</h3>
-            <p>No upcoming events right now. Check back soon.</p>
-            <a class="btn-secondary" href="/events.html">View events</a>
-          `;
-          return;
-        }
-
-        const ev = events[0];
-        const title = escapeHtml(ev.Title || 'Upcoming event');
-        const venue = ev.Venue ? escapeHtml(ev.Venue) : '';
-        const date = ev.Date ? escapeHtml(ev.Date) : '';
-        const desc = escapeHtml(truncate(ev.Description || '', 140));
-        const ticketUrl = ev['Ticket URL'] || '/events.html';
-
-        el.innerHTML = `
-          <h3>${title}</h3>
+      <section class="section intro-strip">
+        <div class="container intro-strip-grid">
           <p>
-            ${date}${venue ? ` · ${venue}` : ''}<br>
-            ${desc}
+            A bookshop for people who like to browse by subject, follow
+            footnotes, and leave with something unexpected.
           </p>
-          <a class="btn-secondary" href="${ticketUrl}">View event</a>
-        `;
-      } catch (err) {
-        el.innerHTML = `
-          <h3>Next event</h3>
-          <p>Unable to load event details.</p>
-          <a class="btn-secondary" href="/events.html">View events</a>
-        `;
-      }
-    }
+          <p>
+            Part reading room, part editorial project, part neighbourhood shelf.
+          </p>
+        </div>
+      </section>
 
-    async function loadBooks() {
-      const el = document.getElementById('books-rail');
+      <section class="section feature-section">
+        <div class="container">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Journal</p>
+              <h2>Latest thread</h2>
+            </div>
+            <a class="section-link" href="/threads.html">View all</a>
+          </div>
 
-      try {
-        const books = await getBooks({ featured: true, maxRecords: 4 });
+          <article class="feature-card">
+            <div class="feature-card-body">
+              <p class="meta">Thread · Essay</p>
+              <h3>
+                <a href="/threads/sample-thread.html">
+                  Notes on cities, shelves, and the pace of attention
+                </a>
+              </h3>
+              <p>
+                A short editorial reflection on browsing, urban life, and why
+                bookshops still matter as places to think in public.
+              </p>
+              <a class="text-link" href="/threads/sample-thread.html">Read thread</a>
+            </div>
 
-        if (!books.length) {
-          el.innerHTML = `<div class="empty-state">No featured books yet.</div>`;
-          return;
-        }
+            <div class="feature-card-image">
+              <img
+                src="/images/thread-placeholder.jpg"
+                alt="Latest editorial thread"
+              />
+            </div>
+          </article>
 
-        el.innerHTML = books.map((b) => {
-          const title = escapeHtml(b.Title || 'Untitled');
-          const author = escapeHtml(b.Author || '');
-          const category = escapeHtml(b.Category || b.Section || 'Book');
-          const image = b['Cover URL'] || '';
-          const url = `/catalogue.html?book=${encodeURIComponent(b.id)}`;
-          const price = b.Price ? `$${escapeHtml(String(b.Price))}` : '';
-          const stock = b['In Stock'] ? 'In stock' : '';
-          const meta = [price, stock].filter(Boolean).join(' • ');
+          <!--
+            Replace the article above with your dynamic thread card if your JS injects it.
+            Example:
+            <div id="latest-thread"></div>
+          -->
+        </div>
+      </section>
 
-          return `
-            <article class="card">
-              <div class="card-media">
-                ${image
-                  ? `<img src="${image}" alt="${title}" loading="lazy">`
-                  : `<div style="width:100%;height:100%;background:#e8e1d7;"></div>`}
+      <section class="section two-column-section">
+        <div class="container two-column-grid">
+          <div>
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Objects</p>
+                <h2>Small things with presence</h2>
               </div>
+              <a class="section-link" href="/objects.html">View all</a>
+            </div>
 
-              <div class="card-body">
-                <div class="card-kicker">${category}</div>
-                <h3 class="card-title">${title}</h3>
-                <div class="card-meta">${meta}</div>
-
-                <div class="card-actions">
-                  <a class="btn-secondary" href="${url}">Details</a>
-                  <a class="btn" href="${url}">View book</a>
+            <div class="mini-grid">
+              <article class="mini-card">
+                <img src="/images/object-1.jpg" alt="Object one" />
+                <div class="mini-card-body">
+                  <h3><a href="/objects/sample-object.html">Notebook, linen spine</a></h3>
+                  <p>Quiet materials for desks, shelves, and reading corners.</p>
                 </div>
+              </article>
+
+              <article class="mini-card">
+                <img src="/images/object-2.jpg" alt="Object two" />
+                <div class="mini-card-body">
+                  <h3><a href="/objects/sample-object-2.html">Brass bookmark</a></h3>
+                  <p>Small tools that make reading feel ceremonial again.</p>
+                </div>
+              </article>
+            </div>
+
+            <!-- Optional dynamic mount point:
+            <div id="homepage-objects"></div>
+            -->
+          </div>
+
+          <div>
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">Catalogue</p>
+                <h2>Recent acquisitions</h2>
               </div>
-            </article>
-          `;
-        }).join('');
-      } catch (err) {
-        el.innerHTML = `<div class="empty-state">Unable to load books.</div>`;
-      }
-    }
+              <a class="section-link" href="/books.html">View all</a>
+            </div>
 
-    async function loadObjects() {
-      const el = document.getElementById('objects-rail');
+            <div class="book-list">
+              <article class="book-row">
+                <img src="/images/book-1.jpg" alt="Book cover" />
+                <div>
+                  <p class="meta">Political economy</p>
+                  <h3><a href="/books/sample-book.html">The Price of the State</a></h3>
+                  <p>Money, crisis, and institutions in late modern capitalism.</p>
+                </div>
+              </article>
 
-      try {
-        const objects = await getObjects({ featured: true, maxRecords: 3 });
+              <article class="book-row">
+                <img src="/images/book-2.jpg" alt="Book cover" />
+                <div>
+                  <p class="meta">Urbanism</p>
+                  <h3><a href="/books/sample-book-2.html">Streets of Assembly</a></h3>
+                  <p>Infrastructure, conflict, and the life of public space.</p>
+                </div>
+              </article>
 
-        if (!objects.length) {
-          el.innerHTML = `<div class="empty-state">No featured objects yet.</div>`;
-          return;
-        }
+              <article class="book-row">
+                <img src="/images/book-3.jpg" alt="Book cover" />
+                <div>
+                  <p class="meta">Architecture</p>
+                  <h3><a href="/books/sample-book-3.html">Forms of Nearness</a></h3>
+                  <p>Buildings, domesticity, and the politics of material culture.</p>
+                </div>
+              </article>
+            </div>
 
-        el.innerHTML = objects.map((o) => {
-          const name = escapeHtml(o.Name || 'Object');
-          const type = escapeHtml(o.Type || 'Object');
-          const image = o['Photo URL'] || '';
-          const url = `/objects.html`;
+            <!-- Optional dynamic mount point:
+            <div id="recent-books"></div>
+            -->
+          </div>
+        </div>
+      </section>
 
-          return `
-            <a class="object-mini-card" href="${url}">
-              <div class="object-mini-media">
-                ${image
-                  ? `<img src="${image}" alt="${name}" loading="lazy">`
-                  : `<div style="width:100%;height:100%;background:#e8e1d7;"></div>`}
-              </div>
-              <div class="object-mini-text">
-                <div class="card-kicker">${type}</div>
-                <h3>${name}</h3>
-              </div>
+      <section class="section shelves-section">
+        <div class="container">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Browse</p>
+              <h2>Browse by shelf</h2>
+            </div>
+          </div>
+
+          <div class="shelf-grid">
+            <a class="shelf-card" href="/books.html?shelf=political-economy">
+              <span class="shelf-title">Political economy</span>
+              <span class="shelf-text">States, markets, money, crisis</span>
             </a>
-          `;
-        }).join('');
-      } catch (err) {
-        el.innerHTML = `<div class="empty-state">Unable to load objects.</div>`;
-      }
-    }
 
-    loadThreadBox();
-    loadEventBox();
-    loadBooks();
-    loadObjects();
-  </script>
+            <a class="shelf-card" href="/books.html?shelf=urbanism">
+              <span class="shelf-title">Urbanism</span>
+              <span class="shelf-text">City life, housing, infrastructure</span>
+            </a>
 
+            <a class="shelf-card" href="/books.html?shelf=architecture">
+              <span class="shelf-title">Architecture</span>
+              <span class="shelf-text">Buildings, form, modernity, space</span>
+            </a>
+
+            <a class="shelf-card" href="/books.html?shelf=current-affairs">
+              <span class="shelf-title">Current affairs</span>
+              <span class="shelf-text">Power, conflict, institutions, change</span>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section events-newsletter">
+        <div class="container events-newsletter-grid">
+          <div class="events-block">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">In the shop</p>
+                <h2>Events</h2>
+              </div>
+              <a class="section-link" href="/events.html">View all</a>
+            </div>
+
+            <article class="event-card">
+              <p class="meta">Next gathering</p>
+              <h3><a href="/events/sample-event.html">Reading night: cities and memory</a></h3>
+              <p>Thursday evening in Palermo. A small-format conversation around urban writing.</p>
+            </article>
+
+            <!-- Optional dynamic mount point:
+            <div id="next-event"></div>
+            -->
+          </div>
+
+          <div class="newsletter-block">
+            <p class="eyebrow">Letter from the editor</p>
+            <h2>New threads, new arrivals.</h2>
+            <p>
+              Once a month: what arrived, what we are reading, and what is on next.
+              No noise, no hard sell.
+            </p>
+
+            <form class="newsletter-form" action="/subscribe" method="post">
+              <label class="sr-only" for="email">Email address</label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Your email"
+                required
+              />
+              <button type="submit" class="btn btn-primary">Subscribe</button>
+            </form>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <a class="brand footer-brand" href="/">Hilo</a>
+          <p class="footer-copy">
+            Independent bookshop and editorial project in Buenos Aires.
+          </p>
+        </div>
+
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="/threads.html">Threads</a>
+          <a href="/books.html">Catalogue</a>
+          <a href="/objects.html">Objects</a>
+          <a href="/events.html">Events</a>
+          <a href="/about.html">About</a>
+        </nav>
+
+        <div class="footer-meta">
+          <p>Buenos Aires, Argentina</p>
+          <p><a href="https://hilobookshop.com/">hilobookshop.com</a></p>
+        </div>
+      </div>
+    </footer>
+  </div>
 </body>
 </html>
