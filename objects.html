@@ -222,17 +222,6 @@
       margin-bottom: 8px;
     }
 
-    .object-description {
-      font-size: 13px;
-      line-height: 1.7;
-      color: var(--muted);
-      margin-bottom: 10px;
-      display: -webkit-box;
-      -webkit-line-clamp: 4;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-
     .object-meta {
       display: flex;
       flex-wrap: wrap;
@@ -477,13 +466,6 @@
       .replaceAll("'", '&#39;');
   }
 
-  function truncate(text = '', max = 140) {
-    const clean = String(text).trim();
-    if (!clean) return '';
-    if (clean.length <= max) return clean;
-    return clean.slice(0, max).replace(/\s+\S*$/, '') + '…';
-  }
-
   async function init() {
     const el = document.getElementById('objects-grid');
 
@@ -507,7 +489,6 @@
           <div class="object-info">
             <div class="object-name">${escapeHtml(o.Name || '')}</div>
             ${o.Origin ? `<div class="object-origin">${escapeHtml(o.Origin)}</div>` : ''}
-            ${o.Description ? `<div class="object-description">${escapeHtml(truncate(o.Description, 160))}</div>` : ''}
 
             <div class="object-meta">
               <div class="object-price">${o.Price ? escapeHtml(formatPrice(o.Price)) : ''}</div>
