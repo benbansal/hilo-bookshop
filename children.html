@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Children's books at Hilo — a small, carefully chosen shelf of picture books, stories, and early readers for curious young minds.">
+  <title>For Young Readers — Hilo Bookshop</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400;1,500&display=swap');
+
+    :root {
+      --c-bg:       #f3ede4;
+      --c-text:     #1d1a17;
+      --c-warm:     #c8622a;
+      --c-warm-lt:  #f5e6d8;
+      --c-muted:    rgba(29,26,23,0.45);
+      --c-border:   rgba(29,26,23,0.15);
+      --font-body:  'Inter', system-ui, -apple-system, sans-serif;
+      --font-story: 'Lora', Georgia, serif;
+    }
+
+    /* ── Hero ── */
+    .children-hero {
+      padding: 6rem 2rem 3rem;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .children-eyebrow {
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--c-warm);
+      margin-bottom: 1rem;
+    }
+
+    .children-title {
+      font-family: var(--font-story);
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 400;
+      line-height: 1.15;
+      color: var(--c-text);
+      margin: 0 0 1.5rem;
+    }
+
+    .children-title em {
+      font-style: italic;
+      color: var(--c-warm);
+    }
+
+    .children-intro {
+      font-family: var(--font-body);
+      font-size: 1rem;
+      line-height: 1.7;
+      color: var(--c-text);
+      max-width: 560px;
+      opacity: 0.85;
+      margin-bottom: 0.5rem;
+    }
+
+    .children-note {
+      font-family: var(--font-story);
+      font-style: italic;
+      font-size: 0.92rem;
+      color: var(--c-muted);
+      max-width: 480px;
+      margin-top: 0.75rem;
+    }
+
+    .children-rule {
+      width: 100%;
+      height: 1px;
+      background: var(--c-border);
+    }
+
+    /* ── Main ── */
+    .children-main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 3rem 2rem 5rem;
+    }
+
+    .children-meta {
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      color: var(--c-muted);
+      letter-spacing: 0.04em;
+      margin-bottom: 2rem;
+    }
+
+    /* ── Age filters ── */
+    .children-filters {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .age-btn {
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      padding: 0.35rem 0.85rem;
+      border-radius: 99px;
+      border: 1px solid var(--c-border);
+      background: transparent;
+      color: var(--c-text);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .age-btn:hover,
+    .age-btn.active {
+      background: var(--c-warm);
+      border-color: var(--c-warm);
+      color: #fff;
+    }
+
+    /* ── Grid ── */
+    .children-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 2rem;
+    }
+
+    /* ── Card ── */
+    .child-card {
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .child-card:hover { transform: translateY(-3px); }
+
+    .child-cover-wrap {
+      position: relative;
+      aspect-ratio: 3/4;
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--c-warm-lt);
+      margin-bottom: 0.85rem;
+    }
+
+    .child-cover-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .child-cover-fallback {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1.2rem;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    .child-cover-fallback-title {
+      font-family: var(--font-story);
+      font-size: 0.88rem;
+      font-weight: 500;
+      line-height: 1.3;
+      color: var(--c-text);
+      margin-bottom: 0.4rem;
+    }
+
+    .child-cover-fallback-author {
+      font-family: var(--font-body);
+      font-size: 0.72rem;
+      color: var(--c-muted);
+    }
+
+    .child-stock-badge {
+      position: absolute;
+      top: 0.6rem;
+      right: 0.6rem;
+      font-family: var(--font-body);
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.55rem;
+      border-radius: 99px;
+      background: rgba(200, 98, 42, 0.12);
+      color: var(--c-warm);
+    }
+
+    .child-stock-badge.in-stock {
+      background: rgba(60, 120, 60, 0.12);
+      color: #3a7a3a;
+    }
+
+    .child-title {
+      font-family: var(--font-story);
+      font-size: 0.92rem;
+      font-weight: 500;
+      line-height: 1.35;
+      color: var(--c-text);
+      margin: 0 0 0.2rem;
+    }
+
+    .child-author {
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      color: var(--c-muted);
+      margin: 0 0 0.4rem;
+    }
+
+    .child-byline {
+      font-family: var(--font-story);
+      font-style: italic;
+      font-size: 0.8rem;
+      line-height: 1.45;
+      color: var(--c-warm);
+      margin: 0;
+    }
+
+    /* ── Modal ── */
+    .child-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(29, 26, 23, 0.55);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .child-modal-overlay.open { display: flex; }
+
+    .child-modal {
+      background: var(--c-bg);
+      border-radius: 8px;
+      max-width: 540px;
+      width: 100%;
+      padding: 2.5rem;
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .child-modal-close {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.4rem;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: var(--c-muted);
+      line-height: 1;
+      padding: 0;
+    }
+
+    .child-modal-title {
+      font-family: var(--font-story);
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin: 0 0 0.3rem;
+      color: var(--c-text);
+      padding-right: 2rem;
+    }
+
+    .child-modal-author {
+      font-family: var(--font-body);
+      font-size: 0.85rem;
+      color: var(--c-muted);
+      margin: 0 0 0.2rem;
+    }
+
+    .child-modal-illustrator {
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      color: var(--c-muted);
+      margin: 0 0 0.6rem;
+    }
+
+    .child-modal-age {
+      display: inline-block;
+      font-family: var(--font-body);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--c-warm);
+      background: rgba(200, 98, 42, 0.1);
+      border-radius: 99px;
+      padding: 0.2rem 0.65rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .child-modal-byline {
+      font-family: var(--font-story);
+      font-style: italic;
+      font-size: 0.95rem;
+      line-height: 1.55;
+      color: var(--c-warm);
+      margin: 0 0 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--c-border);
+    }
+
+    .child-modal-blurb {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--c-text);
+      opacity: 0.85;
+      margin: 0;
+    }
+
+    /* ── States ── */
+    .children-loading {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 4rem 0;
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      color: var(--c-muted);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .children-hero { padding: 5rem 1.25rem 2.5rem; }
+      .children-main { padding: 2rem 1.25rem 4rem; }
+      .children-grid { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
+      .child-modal { padding: 1.75rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <a class="nav-logo" href="/">
+      <span class="nav-logo-main">Hilo</span>
+      <span class="nav-logo-sub">An independent bookshop · Buenos Aires</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/threads">Threads</a></li>
+      <li><a href="/catalogue">Catalogue</a></li>
+      <li><a href="/objects">Objects</a></li>
+      <li><a href="/events">Events</a></li>
+      <li><a href="/about">About</a></li>
+    </ul>
+  </nav>
+
+  <section class="children-hero">
+    <div class="children-eyebrow">For young readers</div>
+    <h1 class="children-title">Books for children<br><em>chosen by one.</em></h1>
+    <p class="children-intro">
+      A small, carefully considered shelf of picture books, early readers, and stories
+      for curious children. Every title chosen personally — not by algorithm, not by bestseller list.
+    </p>
+    <p class="children-note">Bylines written by Mila, age 7.</p>
+  </section>
+
+  <div class="children-rule"></div>
+
+  <main class="children-main">
+
+    <div class="children-filters" id="ageFilters">
+      <button class="age-btn active" data-age="all">All ages</button>
+    </div>
+
+    <div class="children-meta" id="childrenMeta"></div>
+
+    <div class="children-grid" id="childrenGrid">
+      <div class="children-loading">Loading books…</div>
+    </div>
+
+  </main>
+
+  <div class="child-modal-overlay" id="childModal">
+    <div class="child-modal">
+      <button class="child-modal-close" id="modalClose">×</button>
+      <h2 class="child-modal-title" id="modalTitle"></h2>
+      <div class="child-modal-author" id="modalAuthor"></div>
+      <div class="child-modal-illustrator" id="modalIllustrator"></div>
+      <div class="child-modal-age" id="modalAge"></div>
+      <p class="child-modal-byline" id="modalByline"></p>
+      <p class="child-modal-blurb" id="modalBlurb"></p>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <a class="footer-logo" href="/">Hilo.</a>
+    <ul class="footer-links">
+      <li><a href="/threads">Threads</a></li>
+      <li><a href="/catalogue">Catalogue</a></li>
+      <li><a href="/objects">Objects</a></li>
+      <li><a href="/events">Events</a></li>
+      <li><a href="https://instagram.com/hilobookshop" target="_blank" rel="noopener">Instagram</a></li>
+      <li><a href="/about#contact">Contact</a></li>
+    </ul>
+    <div class="footer-address">Buenos Aires, Argentina<br>hilobookshop.com</div>
+  </footer>
+
+  <script>
+    const grid        = document.getElementById('childrenGrid');
+    const metaEl      = document.getElementById('childrenMeta');
+    const modal       = document.getElementById('childModal');
+    const modalClose  = document.getElementById('modalClose');
+    const ageFilters  = document.getElementById('ageFilters');
+
+    let allBooks = [];
+
+    async function fetchAll(url) {
+      let records = [], offset = null;
+      do {
+        const paged = offset ? `${url}&offset=${encodeURIComponent(offset)}` : url;
+        const res = await fetch(paged);
+        const data = await res.json();
+        records = records.concat(data.records || []);
+        offset = data.offset || null;
+      } while (offset);
+      return records;
+    }
+
+    function buildFilters(books) {
+      const ages = [...new Set(books.map(b => b.fields['Age']).filter(Boolean))].sort();
+      ages.forEach(age => {
+        const btn = document.createElement('button');
+        btn.className = 'age-btn';
+        btn.dataset.age = age;
+        btn.textContent = age;
+        ageFilters.appendChild(btn);
+      });
+      ageFilters.addEventListener('click', e => {
+        if (!e.target.matches('.age-btn')) return;
+        [...ageFilters.querySelectorAll('.age-btn')].forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        renderBooks(e.target.dataset.age);
+      });
+    }
+
+    function renderBooks(ageFilter = 'all') {
+      const filtered = ageFilter === 'all'
+        ? allBooks
+        : allBooks.filter(b => b.fields['Age'] === ageFilter);
+
+      metaEl.textContent = `${filtered.length} title${filtered.length !== 1 ? 's' : ''}`;
+      grid.innerHTML = '';
+
+      if (!filtered.length) {
+        grid.innerHTML = '<div class="children-loading">No books found.</div>';
+        return;
+      }
+
+      filtered.forEach((record, i) => {
+        const f           = record.fields;
+        const title       = f['Title']       || '';
+        const author      = f['Author']      || '';
+        const illustrator = f['Illustrator'] || '';
+        const age         = f['Age']         || '';
+        const byline      = f['Byline']      || '';
+        const blurb       = f['Blurb']       || '';
+        const coverUrl    = f['Cover URL']   || '';
+        const stock       = f['Stock']       || 'Order in';
+        const inStock     = stock.toLowerCase().includes('stock');
+
+        const card = document.createElement('div');
+        card.className = 'child-card';
+        card.style.animationDelay = `${i * 0.04}s`;
+
+        // Cover
+        const coverWrap = document.createElement('div');
+        coverWrap.className = 'child-cover-wrap';
+
+        if (coverUrl) {
+          const img = document.createElement('img');
+          img.src = coverUrl;
+          img.alt = title;
+          img.loading = 'lazy';
+          coverWrap.appendChild(img);
+        } else {
+          coverWrap.innerHTML = `
+            <div class="child-cover-fallback">
+              <div class="child-cover-fallback-title">${title}</div>
+              <div class="child-cover-fallback-author">${author}</div>
+            </div>`;
+        }
+
+        const badge = document.createElement('span');
+        badge.className = `child-stock-badge${inStock ? ' in-stock' : ''}`;
+        badge.textContent = inStock ? 'In stock' : 'Order in';
+        coverWrap.appendChild(badge);
+        card.appendChild(coverWrap);
+
+        card.innerHTML += `
+          <div class="child-title">${title}</div>
+          <div class="child-author">${illustrator ? `${author} · illus. ${illustrator}` : author}</div>
+          ${byline ? `<p class="child-byline">"${byline}"</p>` : ''}
+        `;
+
+        card.addEventListener('click', () => openModal(f));
+        grid.appendChild(card);
+      });
+    }
+
+    function openModal(f) {
+      document.getElementById('modalTitle').textContent       = f['Title']       || '';
+      document.getElementById('modalAuthor').textContent      = f['Author']      ? `By ${f['Author']}` : '';
+      document.getElementById('modalIllustrator').textContent = f['Illustrator'] ? `Illustrated by ${f['Illustrator']}` : '';
+      document.getElementById('modalAge').textContent         = f['Age']         ? `Ages ${f['Age']}` : '';
+      document.getElementById('modalByline').textContent      = f['Byline']      ? `"${f['Byline']}"` : '';
+      document.getElementById('modalBlurb').textContent       = f['Blurb']       || '';
+
+      ['modalAuthor','modalIllustrator','modalAge','modalByline','modalBlurb'].forEach(id => {
+        const el = document.getElementById(id);
+        el.style.display = el.textContent ? '' : 'none';
+      });
+
+      modal.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    (async () => {
+      try {
+        const url = '/.netlify/functions/airtable?table=Children&sort=%5B%7B%22field%22%3A%22Title%22%2C%22direction%22%3A%22asc%22%7D%5D';
+        const records = await fetchAll(url);
+        allBooks = records.filter(r => {
+          const s = (r.fields['Stock'] || '').toLowerCase();
+          return s !== 'discontinued';
+        });
+        buildFilters(allBooks);
+        renderBooks();
+      } catch (err) {
+        console.error('Children fetch error:', err);
+        grid.innerHTML = '<div class="children-loading">Could not load books right now.</div>';
+      }
+    })();
+  </script>
+
+</body>
+</html>
