@@ -38,11 +38,29 @@ body {
     radial-gradient(circle at top left, rgba(255,255,255,0.35), transparent 32%),
     var(--paper);
   color: var(--ink);
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 16px;
+  font-family: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  font-size: 18px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* UI elements keep Inter */
+.nav-links a,
+.kicker,
+.eyebrow,
+.meta,
+.note-label,
+.btn,
+.newsletter-form input,
+.footer-links a,
+.footer-copy,
+.footer-meta,
+.footer-address,
+.section-link,
+.text-link,
+.shelf-text {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
 }
 
 body::before {
@@ -683,6 +701,12 @@ figure {
 }
 
 @media (max-width: 760px) {
+  /* Stronger contrast on small screens */
+  :root {
+    --ink-soft: #3d342b;
+    --ink-faint: #5f564d;
+  }
+
   .container {
     width: min(calc(100% - 1.4rem), var(--max));
   }
