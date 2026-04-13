@@ -45,21 +45,18 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* UI elements keep Inter */
+/* UI chrome stays Inter — nav, buttons, labels, inputs only */
 .nav-links a,
-.kicker,
-.eyebrow,
-.meta,
-.note-label,
 .btn,
 .newsletter-form input,
+.newsletter-btn,
+.section-label,
+.hero-eyebrow,
+.thread-meta,
+.thread-counter,
+.thread-number,
 .footer-links a,
-.footer-copy,
-.footer-meta,
-.footer-address,
-.section-link,
-.text-link,
-.shelf-text {
+.footer-address {
   font-family: "Inter", system-ui, -apple-system, sans-serif;
 }
 
@@ -210,7 +207,7 @@ figure {
   text-align: right;
 }
 
-/* ── Responsive ── */
+/* ── Responsive nav/footer ── */
 
 @media (max-width: 760px) {
   .nav {
@@ -701,12 +698,6 @@ figure {
 }
 
 @media (max-width: 760px) {
-  /* Stronger contrast on small screens */
-  :root {
-    --ink-soft: #3d342b;
-    --ink-faint: #5f564d;
-  }
-
   .container {
     width: min(calc(100% - 1.4rem), var(--max));
   }
@@ -767,5 +758,22 @@ figure {
   .newsletter-form .btn,
   .newsletter-form input {
     width: 100%;
+  }
+
+  /* Mobile contrast — direct color overrides on actual page classes */
+  .hero-eyebrow,
+  .section-label,
+  .thread-meta,
+  .thread-counter,
+  .thread-number,
+  .thread-excerpt,
+  .newsletter-sub,
+  .footer-address,
+  .footer-links a,
+  .object-caption,
+  .book-meta-author,
+  .section-link,
+  .text-link {
+    color: #3d342b;
   }
 }
