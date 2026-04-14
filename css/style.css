@@ -67,7 +67,87 @@ img {
   width: min(calc(100% - 3rem), var(--max-width));
   margin: 0 auto;
 }
+/* ===== INTRO BAND (NEW HERO) ===== */
 
+.intro-band {
+  background: #1d1a17;
+  color: #f4efe8;
+  padding: 70px 40px 60px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.intro-inner {
+  max-width: 780px;
+}
+
+.intro-eyebrow {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 16px;
+}
+
+.intro-title {
+  font-family: var(--serif);
+  font-size: clamp(32px, 4vw, 54px);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  margin: 0 0 18px;
+  max-width: 18ch;
+}
+
+.intro-title em {
+  font-style: italic;
+}
+
+.intro-body {
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 52ch;
+  margin-bottom: 22px;
+  opacity: 0.85;
+}
+
+.intro-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ===== FULL WIDTH IMAGE ===== */
+
+.shop-image-section img {
+  width: 100%;
+  height: 70vh;
+  object-fit: cover;
+  display: block;
+}
+
+/* ===== TYPOGRAPHY TIGHTENING ===== */
+
+/* Threads */
+.thread-title {
+  font-size: 26px;   /* was 30px */
+}
+
+.thread-excerpt {
+  font-size: 12.5px;
+}
+
+/* Books */
+.book-meta-title {
+  font-size: 17px;
+}
+
+.book-meta-author {
+  font-size: 11px;
+}
+
+/* Section labels */
+.section-label {
+  font-size: 10px;
+}
 .nav,
 .nav-links a,
 .nav-logo-sub,
