@@ -285,10 +285,9 @@ img {
 }
 
 .nav-logo-main {
-  font-family: var(--serif);
   font-size: 34px;
-  line-height: 0.95;
-  letter-spacing: -0.03em;
+  font-weight: 500;
+  color: #c3271f;
 }
 
 .nav-logo-sub {
