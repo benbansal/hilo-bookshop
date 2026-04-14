@@ -82,9 +82,9 @@ img {
 
 .intro-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
-  gap: 36px;
-  align-items: end;
+  grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
+  gap: 48px;
+  align-items: start;   /* ← THIS is key (was “end”) */
 }
 
 .intro-left {
@@ -92,11 +92,10 @@ img {
 }
 
 .intro-right {
-  font-size: 14px;
-  line-height: 1.65;
-  opacity: 0.8;
-  max-width: 32ch;
-}
+  font-size: 16px;   /* ← up from ~14px */
+  line-height: 1.7;
+  opacity: 0.85;
+  max-width: 34ch;
 }
 
 .intro-eyebrow {
@@ -108,12 +107,9 @@ img {
 }
 
 .intro-title {
-  font-family: var(--serif);
-  font-size: clamp(32px, 4vw, 54px);
+  font-size: clamp(40px, 4.6vw, 64px);  /* slightly bigger */
   line-height: 1.02;
-  letter-spacing: -0.03em;
-  margin: 0 0 18px;
-  max-width: 18ch;
+  max-width: 26ch;   /* ← was too tight (16–20ch) */
 }
 
 .intro-title em {
@@ -129,9 +125,7 @@ img {
 }
 
 .intro-actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
+  margin-top: 18px;
 }
 
 /* ===== FULL WIDTH IMAGE ===== */
