@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hilo — An Independent Bookshop · Buenos Aires</title>
+  <meta name="description" content="A curated bookshop in Buenos Aires organised around threads of connected thinking. Political economy, urbanism, architecture, current affairs.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="home-page">
+
+<nav class="nav">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-main">Hilo</span>
+    <span class="nav-logo-sub">An independent bookshop · Buenos Aires</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="threads.html">Threads</a></li>
+    <li><a href="catalogue.html">Catalogue</a></li>
+    <li><a href="objects.html">Objects</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="about.html">About</a></li>
+  </ul>
+</nav>
+
+<main class="home-shell">
+  <section class="home-hero">
+    <div class="home-container home-hero-grid">
+      <div class="home-hero-copy">
+        <div class="home-eyebrow">Buenos Aires — Est. 2026</div>
+        <h1 class="home-hero-title">A curated bookshop organised around <em>threads</em> of connected thinking.</h1>
+        <p class="home-hero-body">
+          300–500 titles in political economy, urbanism, architecture, and current affairs.
+          Every book chosen personally. Every blurb written by the editor. A space for slow
+          reading in a fast city.
+        </p>
+        <div class="home-hero-actions">
+          <a href="catalogue.html" class="btn btn-primary">Browse books</a>
+          <a href="threads.html" class="btn btn-secondary">Read threads</a>
+        </div>
+      </div>
+
+      <aside class="home-hero-panel" aria-label="Hilo overview">
+        <div class="home-hero-image-wrap">
+          <img
+            src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1400&q=80"
+            alt="Bookshelves in warm light"
+            loading="eager"
+          >
+        </div>
+        <div class="home-hero-notes">
+          <div class="home-note">
+            <span class="home-note-label">Focus</span>
+            <span class="home-note-value">Books, objects, and editorial threads</span>
+          </div>
+          <div class="home-note">
+            <span class="home-note-label">Shelves</span>
+            <span class="home-note-value">Political economy, urbanism, architecture</span>
+          </div>
+          <div class="home-note">
+            <span class="home-note-label">Approach</span>
+            <span class="home-note-value">Slow browsing, careful selection, live conversation</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="home-intro-strip">
+    <div class="home-container home-intro-strip-grid">
+      <p>Hilo is arranged less like a store by category than a set of conversations between books, questions, and readers.</p>
+      <p>Browse the latest thread, recent acquisitions, objects, and events — then follow what connects them.</p>
+    </div>
+  </section>
+
+  <section class="home-section home-featured-thread-section">
+    <div class="home-container">
+      <div class="home-section-top">
+        <div>
+          <div class="home-section-label">Latest thread</div>
+          <h2 class="home-section-title">An editorial path through the catalogue</h2>
+        </div>
+        <a href="threads.html" class="home-section-link">View all</a>
+      </div>
+      <div id="thread-feature" class="home-featured-thread-card">
+        <div class="loading-state">Loading thread…</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-section home-acquisitions-section">
+    <div class="home-container">
+      <div class="home-section-top">
+        <div>
+          <div class="home-section-label">Recent acquisitions</div>
+          <h2 class="home-section-title">Books newly on the table</h2>
+        </div>
+        <a href="catalogue.html" class="home-section-link">View all</a>
+      </div>
+      <div id="books-row" class="books-row home-books-row">
+        <div class="loading-state">Loading books…</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-section home-split-zone">
+    <div class="home-container home-split-grid">
+      <div class="home-panel home-event-panel">
+        <div class="home-section-top">
+          <div>
+            <div class="home-section-label">Next event</div>
+            <h2 class="home-section-title">What’s happening in the shop</h2>
+          </div>
+          <a href="events.html" class="home-section-link">View all</a>
+        </div>
+        <div id="event-feature">
+          <div class="loading-state">Loading event…</div>
+        </div>
+      </div>
+
+      <div class="home-panel home-objects-panel">
+        <div class="home-section-top">
+          <div>
+            <div class="home-section-label">Objects</div>
+            <h2 class="home-section-title">Things with a shelf life of their own</h2>
+          </div>
+          <a href="objects.html" class="home-section-link">View all</a>
+        </div>
+        <div id="objects-grid" class="objects-grid home-objects-grid">
+          <div class="loading-state">Loading objects…</div>
+        </div>
+        <a href="objects.html" class="link-accent home-panel-link">View all objects →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="newsletter-section home-newsletter-section">
+    <div class="home-container home-newsletter-grid">
+      <div>
+        <div class="newsletter-heading">New threads, new arrivals.</div>
+        <p class="newsletter-sub">
+          A monthly letter from the editor. What arrived, what we’re reading,
+          what’s on next. No noise.
+        </p>
+      </div>
+      <form class="newsletter-form"
+            action="https://hilobookshop.substack.com/api/v1/free?nojs=true"
+            method="post" target="_blank">
+        <input class="newsletter-input" type="email" name="email" placeholder="your@email.com" required>
+        <button class="newsletter-btn" type="submit">Subscribe</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <a href="index.html" class="footer-logo">Hilo.</a>
+  <ul class="footer-links">
+    <li><a href="threads.html">Threads</a></li>
+    <li><a href="catalogue.html">Catalogue</a></li>
+    <li><a href="objects.html">Objects</a></li>
+    <li><a href="events.html">Events</a></li>
+    <li><a href="https://instagram.com/hilobookshop" target="_blank" rel="noopener">Instagram</a></li>
+    <li><a href="about.html#contact">Contact</a></li>
+  </ul>
+  <div class="footer-address">Buenos Aires, Argentina<br>hilobookshop.com</div>
+</footer>
+
+<script type="module">
+  import { getThreads, getBooks, getEvents, getObjects, formatDateShort } from './js/airtable.js';
+
+  let allThreads = [];
+  let allBooks = [];
+  let currentThreadIndex = 0;
+
+  function escapeHtml(str = '') {
+    return String(str)
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;')
+      .replaceAll("'", '&#39;');
+  }
+
+  function normalize(value = '') {
+    return String(value)
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/&/g, ' and ')
+      .replace(/[^a-z0-9]+/g, ' ')
+      .trim();
+  }
+
+  function truncate(text = '', max = 180) {
+    const clean = String(text).trim();
+    if (!clean) return '';
+    if (clean.length <= max) return clean;
+    return clean.slice(0, max).replace(/\s+\S*$/, '') + '…';
+  }
+
+  function arrayify(value) {
+    if (Array.isArray(value)) return value.filter(Boolean);
+    if (value == null || value === '') return [];
+    return [value];
+  }
+
+  function getBookCover(book) {
+    return (
+      book['Cover URL'] ||
+      book['Cover'] ||
+      book['Image URL'] ||
+      book['Photo URL'] ||
+      book.cover ||
+      ''
+    );
+  }
+
+  function getBookLink(book) {
+    if (book.Slug) return `book.html?slug=${encodeURIComponent(book.Slug)}`;
+    return `catalogue.html?book=${encodeURIComponent(book.id)}`;
+  }
+
+  function getThreadLink(thread) {
+    if (thread.Slug) return `thread.html?slug=${encodeURIComponent(thread.Slug)}`;
+    return 'threads.html';
+  }
+
+  function getThreadTitleCandidates(thread) {
+    const candidates = new Set();
+
+    [
+      thread.Title,
+      thread.Slug,
+      thread.Name,
+      thread['Thread'],
+      thread['Thread Title'],
+      thread['Short Title'],
+      thread['Display Title']
+    ].forEach(value => {
+      if (value) candidates.add(normalize(value));
+    });
+
+    return [...candidates].filter(Boolean);
+  }
+
+  function getPossibleThreadBookRefs(thread) {
+    const possibleFields = [
+      'Books',
+      'Book',
+      'Related Books',
+      'Book Objects',
+      'Books Data',
+      'Titles',
+      'Linked Books',
+      'Featured Books'
+    ];
+
+    const refs = [];
+
+    for (const field of possibleFields) {
+      const value = thread[field];
+      if (Array.isArray(value)) refs.push(...value);
+    }
+
+    return refs;
+  }
+
+  function resolveThreadLinkedBooks(thread, books) {
+    const refs = getPossibleThreadBookRefs(thread);
+    if (!refs.length) return [];
+
+    const byId = new Map(books.map(book => [String(book.id), book]));
+    const byTitle = new Map(
+      books
+        .map(book => [normalize(book.Title || ''), book])
+        .filter(([key]) => key)
+    );
+
+    const resolved = [];
+
+    for (const ref of refs) {
+      if (!ref) continue;
+
+      if (typeof ref === 'object' && !Array.isArray(ref)) {
+        const resolvedBook = {
+          id: ref.id || `embedded-${Math.random().toString(36).slice(2)}`,
+          Title: ref.Title || ref.title || '',
+          Author: ref.Author || ref.author || '',
+          Slug: ref.Slug || ref.slug || '',
+          'Cover URL': ref['Cover URL'] || ref.cover || ref.image || ref['Photo URL'] || ''
+        };
+
+        if (getBookCover(resolvedBook) || resolvedBook.Title) {
+          resolved.push(resolvedBook);
+        }
+        continue;
+      }
+
+      const refString = String(ref).trim();
+
+      if (byId.has(refString)) {
+        resolved.push(byId.get(refString));
+        continue;
+      }
+
+      const normalizedRef = normalize(refString);
+      if (byTitle.has(normalizedRef)) {
+        resolved.push(byTitle.get(normalizedRef));
+        continue;
+      }
+    }
+
+    const deduped = [];
+    const seen = new Set();
+
+    for (const book of resolved) {
+      const key = String(book.id || normalize(book.Title || ''));
+      if (!seen.has(key)) {
+        seen.add(key);
+        deduped.push(book);
+      }
+    }
+
+    return deduped;
+  }
+
+  function bookContainsThreadReference(book, threadCandidates, threadId) {
+    const possibleLinkFields = [
+      'Thread',
+      'Threads',
+      'Thread Title',
+      'Thread Titles',
+      'Related Thread',
+      'Related Threads',
+      'Shelf',
+      'Shelves',
+      'Topic',
+      'Topics',
+      'Category',
+      'Categories'
+    ];
+
+    for (const field of possibleLinkFields) {
+      const values = arrayify(book[field]);
+
+      for (const value of values) {
+        const normalizedValue = normalize(value);
+        if (!normalizedValue) continue;
+
+        for (const candidate of threadCandidates) {
+          if (
+            normalizedValue === candidate ||
+            normalizedValue.includes(candidate) ||
+            candidate.includes(normalizedValue)
+          ) {
+            return true;
+          }
+        }
+      }
+    }
+
+    const possibleIdFields = [
+      'Thread ID',
+      'Thread IDs',
+      'Thread Record ID',
+      'Thread Record IDs',
+      'Related Thread ID',
+      'Related Thread IDs'
+    ];
+
+    for (const field of possibleIdFields) {
+      const values = arrayify(book[field]).map(String);
+      if (values.includes(String(threadId))) return true;
+    }
+
+    return false;
+  }
+
+  function deriveThreadBooks(thread, books) {
+    const threadCandidates = getThreadTitleCandidates(thread);
+
+    const explicitThumbs =
+      thread['Book Covers'] ||
+      thread['Book Cover URLs'] ||
+      thread['Book Thumbnails'] ||
+      thread['Books Covers'] ||
+      [];
+
+    const linkedBooks = resolveThreadLinkedBooks(thread, books);
+
+    const matchedBooks = books.filter(book =>
+      bookContainsThreadReference(book, threadCandidates, thread.id)
+    );
+
+    const merged = [];
+    const seen = new Set();
+
+    [...linkedBooks, ...matchedBooks].forEach(book => {
+      const key = String(book.id || normalize(book.Title || ''));
+      if (!seen.has(key) && (getBookCover(book) || book.Title)) {
+        seen.add(key);
+        merged.push(book);
+      }
+    });
+
+    if (merged.length) {
+      return merged.slice(0, 12);
+    }
+
+    if (Array.isArray(explicitThumbs) && explicitThumbs.length) {
+      return explicitThumbs.slice(0, 12).map((src, index) => ({
+        id: `${thread.id}-thumb-${index}`,
+        Title: '',
+        'Cover URL': src
+      }));
+    }
+
+    return [];
+  }
+
+  function renderThreadBooks(books) {
+    if (!books.length) {
+      return `<div class="empty-state">No books linked to this thread yet.</div>`;
+    }
+
+    return `
+      <div class="thread-books-wrap home-thread-books-wrap">
+        <div class="thread-books-label">Books in this thread</div>
+        <div class="thread-books home-thread-books">
+          ${books.map(book => {
+            const cover = getBookCover(book);
+            const title = escapeHtml(book.Title || '');
+            const href = book.id ? getBookLink(book) : 'catalogue.html';
+
+            return `
+              <a href="${href}" class="thread-book-thumb" title="${title}">
+                <div class="thread-book-thumb-image">
+                  ${cover
+                    ? `<img src="${cover}" alt="${title}" loading="lazy">`
+                    : `<div style="width:100%;height:100%;background:linear-gradient(135deg,#d8cbbb 0%,#efe5da 100%);"></div>`}
+                </div>
+                ${title ? `<div class="thread-book-thumb-title">${title}</div>` : ''}
+              </a>
+            `;
+          }).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  function renderThread(index) {
+    const el = document.getElementById('thread-feature');
+
+    if (!allThreads.length) {
+      el.innerHTML = '<div class="empty-state">No threads yet.</div>';
+      return;
+    }
+
+    const thread = allThreads[index];
+    const threadBooks = deriveThreadBooks(thread, allBooks);
+
+    el.innerHTML = `
+      <div class="thread-shell home-thread-shell">
+        <div class="thread-feature home-thread-feature">
+          <div class="thread-number">${String(thread.Number || index + 1).padStart(2, '0')}</div>
+          <div class="home-thread-main">
+            <div class="thread-head home-thread-head">
+              <div class="thread-title-wrap">
+                <h3 class="thread-title home-thread-title">${escapeHtml(thread.Title || '')}</h3>
+                <div class="thread-meta">
+                  ${threadBooks.length ? `${threadBooks.length} book${threadBooks.length === 1 ? '' : 's'}` : 'Thread'}
+                </div>
+              </div>
+              <div class="thread-nav" aria-label="Thread navigation">
+                <button type="button" id="thread-prev" ${index === 0 ? 'disabled' : ''} aria-label="Previous thread">←</button>
+                <button type="button" id="thread-next" ${index === allThreads.length - 1 ? 'disabled' : ''} aria-label="Next thread">→</button>
+              </div>
+            </div>
+
+            <p class="thread-excerpt home-thread-excerpt">${escapeHtml(thread.Intro || thread.Description || '')}</p>
+
+            ${renderThreadBooks(threadBooks)}
+
+            <div class="thread-footer home-thread-footer">
+              <a href="${getThreadLink(thread)}" class="link-accent">Read the thread →</a>
+              <div class="thread-counter">${index + 1} / ${allThreads.length}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const prevBtn = document.getElementById('thread-prev');
+    const nextBtn = document.getElementById('thread-next');
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', () => {
+        if (currentThreadIndex > 0) {
+          currentThreadIndex -= 1;
+          renderThread(currentThreadIndex);
+        }
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', () => {
+        if (currentThreadIndex < allThreads.length - 1) {
+          currentThreadIndex += 1;
+          renderThread(currentThreadIndex);
+        }
+      });
+    }
+  }
+
+  async function loadThreadsAndBooks() {
+    const threadEl = document.getElementById('thread-feature');
+
+    try {
+      const [threads, books] = await Promise.all([
+        getThreads({ maxRecords: 20 }),
+        getBooks({ maxRecords: 500 })
+      ]);
+
+      allThreads = Array.isArray(threads) ? threads : [];
+      allBooks = Array.isArray(books) ? books : [];
+
+      if (!allThreads.length) {
+        threadEl.innerHTML = '<div class="empty-state">No threads yet.</div>';
+        return;
+      }
+
+      currentThreadIndex = 0;
+      renderThread(currentThreadIndex);
+    } catch (e) {
+      console.error('Thread/books load error:', e);
+      threadEl.innerHTML = '<div class="empty-state">Unable to load thread.</div>';
+    }
+  }
+
+  async function loadBooks() {
+    const el = document.getElementById('books-row');
+
+    try {
+      const books = await getBooks({ maxRecords: 12 });
+
+      if (!books.length) {
+        el.innerHTML = '<div class="empty-state">No books yet.</div>';
+        return;
+      }
+
+      el.innerHTML = books.slice(0, 8).map(b => `
+        <a href="${getBookLink(b)}" class="book-card home-book-card">
+          <div class="book-cover">
+            ${getBookCover(b)
+              ? `<img src="${getBookCover(b)}" alt="${escapeHtml(b.Title || '')}" loading="lazy">`
+              : `<div class="book-cover-fallback"></div>`}
+          </div>
+          <div>
+            <div class="book-meta-title">${escapeHtml(b.Title || '')}</div>
+            <div class="book-meta-author">${escapeHtml(b.Author || '')}</div>
+            ${b.Blurb ? `<div class="book-note">${escapeHtml(truncate(b.Blurb, 220))}</div>` : ''}
+          </div>
+        </a>
+      `).join('');
+    } catch (e) {
+      console.error('Books load error:', e);
+      el.innerHTML = '<div class="empty-state">Unable to load books.</div>';
+    }
+  }
+
+  async function loadEvent() {
+    const el = document.getElementById('event-feature');
+
+    try {
+      const events = await getEvents({ maxRecords: 1 });
+
+      if (!events.length) {
+        el.innerHTML = '<div class="empty-state">No upcoming events. Check back soon.</div>';
+        return;
+      }
+
+      const ev = events[0];
+      const { day, month, year } = formatDateShort(ev.Date);
+
+      el.innerHTML = `
+        <div class="event-date">${day}</div>
+        <div class="event-month">${month} ${year}</div>
+        <div class="event-title">${escapeHtml(ev.Title || '')}</div>
+        <div class="event-details">
+          ${ev.Description ? `${escapeHtml(truncate(ev.Description, 220))}` : ''}
+          ${ev.Venue ? `<br><br>${escapeHtml(ev.Venue)}` : ''}
+          ${ev.Time ? ` · ${escapeHtml(ev.Time)}` : ''}
+          ${ev.Capacity ? ` · ${escapeHtml(ev.Capacity)} places` : ''}
+        </div>
+        ${ev['Ticket URL']
+          ? `<a href="${ev['Ticket URL']}" class="btn btn-primary" target="_blank" rel="noopener">Reserve a place</a>`
+          : ev.Free
+            ? `<a href="events.html" class="btn btn-primary">Free — see details</a>`
+            : `<a href="events.html" class="btn btn-primary">See all events</a>`}
+      `;
+    } catch (e) {
+      console.error('Event load error:', e);
+      el.innerHTML = '<div class="empty-state">Unable to load events.</div>';
+    }
+  }
+
+  async function loadObjects() {
+    const el = document.getElementById('objects-grid');
+
+    try {
+      const objects = await getObjects({ featured: true, maxRecords: 3 });
+
+      if (!objects.length) {
+        el.innerHTML = '<div class="empty-state">No objects yet.</div>';
+        return;
+      }
+
+      el.innerHTML = objects.map(o => `
+        <a href="objects.html" class="object-item home-object-item">
+          ${o['Photo URL']
+            ? `<img src="${o['Photo URL']}" alt="${escapeHtml(o.Name || '')}" loading="lazy">`
+            : `<div style="width:100%;height:100%;background:var(--border);"></div>`}
+          <div class="object-caption">${escapeHtml(o.Origin || o.Name || '')}</div>
+        </a>
+      `).join('');
+    } catch (e) {
+      console.error('Objects load error:', e);
+      el.innerHTML = '<div class="empty-state">Unable to load objects.</div>';
+    }
+  }
+
+  loadThreadsAndBooks();
+  loadBooks();
+  loadEvent();
+  loadObjects();
+</script>
+
+</body>
+</html>
