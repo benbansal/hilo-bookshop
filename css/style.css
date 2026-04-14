@@ -67,12 +67,12 @@ img {
   width: min(calc(100% - 3rem), var(--max-width));
   margin: 0 auto;
 }
-/* ===== INTRO BAND — ALIGNMENT + TIGHTER HEIGHT ===== */
+/* ===== INTRO BAND CLEANUP ===== */
 
 .intro-band {
   background: #171311;
   color: #f4efe8;
-  padding: 28px 36px 26px;   /* much less top and bottom space */
+  padding: 28px 36px 22px;
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
@@ -85,20 +85,14 @@ img {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   opacity: 0.72;
-  margin: 0 0 10px;   /* much closer to headline */
+  margin: 0 0 10px;
 }
 
 .intro-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.28fr) minmax(320px, 0.72fr);
-  gap: 52px;
+  grid-template-columns: minmax(0, 1.22fr) minmax(320px, 0.78fr);
+  gap: 56px;
   align-items: start;
-}
-
-.intro-left,
-.intro-right {
-  padding-top: 0;      /* makes top alignment exact */
-  margin-top: 0;
 }
 
 .intro-title {
@@ -113,16 +107,22 @@ img {
 
 .intro-title em {
   font-style: italic;
-  color: #c3271f;   /* bright red for “threads” */
+  color: #c3271f;
 }
 
 .intro-right {
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.72;
+  max-width: 35ch;
   opacity: 0.86;
-  max-width: 34ch;
-  align-self: start;
-  padding-top: 6px;   /* tiny nudge so first lines sit level visually */
+}
+
+.intro-right p {
+  margin: 0 0 14px;
+}
+
+.intro-right p:last-child {
+  margin-bottom: 0;
 }
 
 .intro-actions {
@@ -130,28 +130,53 @@ img {
   gap: 12px;
   flex-wrap: wrap;
   margin-top: 18px;
-  margin-bottom: 0;   /* remove extra space under buttons */
 }
 
-/* Optional: tighten the buttons a touch */
-.intro-actions .btn {
-  padding: 0.78rem 1.15rem;
+/* ===== THREAD SECTION TIGHTER ENTRY ===== */
+
+.threads-section {
+  padding-top: 18px;
+}
+
+.section-top {
+  margin-bottom: 14px;
+}
+
+.section-label-dark {
+  display: inline-block;
+  background: #171311;
+  color: #f4efe8;
+  padding: 6px 10px 5px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* Slightly smaller thread typography as requested */
+.thread-title {
+  font-size: 24px;
+}
+
+.thread-excerpt {
+  font-size: 12.5px;
+  line-height: 1.65;
+}
+
+.thread-number {
+  font-size: 44px;
 }
 
 /* ===== MOBILE ===== */
 
 @media (max-width: 980px) {
   .intro-band {
-    padding: 24px 22px 22px;
+    padding: 24px 22px 20px;
   }
 
   .intro-grid {
     grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .intro-eyebrow {
-    margin-bottom: 8px;
+    gap: 18px;
   }
 
   .intro-title {
@@ -161,12 +186,15 @@ img {
 
   .intro-right {
     max-width: 100%;
-    padding-top: 0;
-    font-size: 15px;
+    font-size: 14px;
   }
 
   .intro-actions {
     margin-top: 16px;
+  }
+
+  .threads-section {
+    padding-top: 14px;
   }
 }
 
