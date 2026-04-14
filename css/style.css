@@ -72,12 +72,12 @@ img {
 .intro-band {
   background: #171311;
   color: #f4efe8;
-  padding: 28px 36px 22px;
+  padding: 24px 36px 18px;
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
 .intro-inner {
-  max-width: 1180px;
+  max-width: 1240px;
 }
 
 .intro-eyebrow {
@@ -85,13 +85,13 @@ img {
   letter-spacing: 0.14em;
   text-transform: uppercase;
   opacity: 0.72;
-  margin: 0 0 10px;
+  margin: 0 0 12px;
 }
 
 .intro-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.22fr) minmax(320px, 0.78fr);
-  gap: 56px;
+  grid-template-columns: minmax(0, 1.2fr) minmax(420px, 0.8fr);
+  gap: 64px;
   align-items: start;
 }
 
@@ -101,7 +101,7 @@ img {
   line-height: 1.04;
   letter-spacing: -0.03em;
   margin: 0;
-  max-width: 22ch;
+  max-width: 19ch;
   text-wrap: balance;
 }
 
@@ -113,8 +113,9 @@ img {
 .intro-right {
   font-size: 15px;
   line-height: 1.72;
-  max-width: 35ch;
-  opacity: 0.86;
+  max-width: 42ch;
+  opacity: 0.88;
+  padding-top: 4px;
 }
 
 .intro-right p {
@@ -129,24 +130,24 @@ img {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
-  margin-top: 18px;
+  margin-top: 20px;
 }
 
-/* ===== THREAD SECTION TIGHTER ENTRY ===== */
-
+/* latest thread label */
 .threads-section {
   padding-top: 18px;
 }
 
 .section-top {
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .section-label-dark {
   display: inline-block;
   background: #171311;
   color: #f4efe8;
-  padding: 6px 10px 5px;
+  padding: 7px 11px 6px;
+  border-radius: 999px;
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
