@@ -67,65 +67,107 @@ img {
   width: min(calc(100% - 3rem), var(--max-width));
   margin: 0 auto;
 }
-/* ===== INTRO BAND (NEW HERO) ===== */
+/* ===== INTRO BAND — ALIGNMENT + TIGHTER HEIGHT ===== */
 
 .intro-band {
-  background: #1d1a17;
+  background: #171311;
   color: #f4efe8;
-  padding: 70px 40px 60px;
+  padding: 28px 36px 26px;   /* much less top and bottom space */
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
 
 .intro-inner {
-  max-width: 1100px;
-}
-
-.intro-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(300px, 0.8fr);
-  gap: 48px;
-  align-items: start;   /* ← THIS is key (was “end”) */
-}
-
-.intro-left {
-  min-width: 0;
-}
-
-.intro-right {
-  font-size: 16px;   /* ← up from ~14px */
-  line-height: 1.7;
-  opacity: 0.85;
-  max-width: 34ch;
+  max-width: 1180px;
 }
 
 .intro-eyebrow {
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  opacity: 0.7;
-  margin-bottom: 16px;
+  opacity: 0.72;
+  margin: 0 0 10px;   /* much closer to headline */
+}
+
+.intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.28fr) minmax(320px, 0.72fr);
+  gap: 52px;
+  align-items: start;
+}
+
+.intro-left,
+.intro-right {
+  padding-top: 0;      /* makes top alignment exact */
+  margin-top: 0;
 }
 
 .intro-title {
-  font-size: clamp(40px, 4.6vw, 64px);  /* slightly bigger */
-  line-height: 1.02;
-  max-width: 26ch;   /* ← was too tight (16–20ch) */
+  font-family: var(--serif);
+  font-size: clamp(42px, 4.8vw, 68px);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  margin: 0;
+  max-width: 22ch;
+  text-wrap: balance;
 }
 
 .intro-title em {
   font-style: italic;
+  color: #c3271f;   /* bright red for “threads” */
 }
 
-.intro-body {
-  font-size: 15px;
-  line-height: 1.7;
-  max-width: 52ch;
-  margin-bottom: 22px;
-  opacity: 0.85;
+.intro-right {
+  font-size: 16px;
+  line-height: 1.72;
+  opacity: 0.86;
+  max-width: 34ch;
+  align-self: start;
+  padding-top: 6px;   /* tiny nudge so first lines sit level visually */
 }
 
 .intro-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
   margin-top: 18px;
+  margin-bottom: 0;   /* remove extra space under buttons */
+}
+
+/* Optional: tighten the buttons a touch */
+.intro-actions .btn {
+  padding: 0.78rem 1.15rem;
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width: 980px) {
+  .intro-band {
+    padding: 24px 22px 22px;
+  }
+
+  .intro-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .intro-eyebrow {
+    margin-bottom: 8px;
+  }
+
+  .intro-title {
+    font-size: 38px;
+    max-width: none;
+  }
+
+  .intro-right {
+    max-width: 100%;
+    padding-top: 0;
+    font-size: 15px;
+  }
+
+  .intro-actions {
+    margin-top: 16px;
+  }
 }
 
 /* ===== FULL WIDTH IMAGE ===== */
