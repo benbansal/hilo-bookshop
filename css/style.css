@@ -9,12 +9,12 @@
   --paper-2: #efe7de;
   --paper-3: #e5dbcf;
   --ink: #1d1a17;
-  --ink-soft: #5f564d;
-  --ink-faint: #8b7f74;
+  --ink-soft: #2e2820;
+  --ink-faint: #4a3f35;
   --line: rgba(29, 26, 23, 0.14);
   --line-strong: rgba(29, 26, 23, 0.24);
-  --accent: #7a6149;
-  --accent-deep: #5f4b37;
+  --accent: #4a3220;
+  --accent-deep: #2e1f10;
   --max: 1180px;
   --radius-sm: 4px;
   --radius-md: 10px;
